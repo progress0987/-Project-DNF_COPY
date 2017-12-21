@@ -163,6 +163,7 @@
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="loading.h" />
     <ClInclude Include="mainGame.h" />
+    <ClInclude Include="MapBase.h" />
     <ClInclude Include="PixelCollisionTest.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="progressBar.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SaveLoadTest.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="Seria.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="soundTest.h" />
@@ -204,11 +206,13 @@
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="loading.cpp" />
     <ClCompile Include="mainGame.cpp" />
+    <ClCompile Include="MapBase.cpp" />
     <ClCompile Include="PixelCollisionTest.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="SaveLoadTest.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="Seria.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="soundTest.cpp" />
     <ClCompile Include="stdafx.cpp">

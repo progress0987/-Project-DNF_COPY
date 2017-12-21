@@ -2,6 +2,7 @@
 #include "mainGame.h"
 
 
+
 RECT rtemp;
 mainGame::mainGame()
 {
@@ -40,11 +41,26 @@ HRESULT mainGame::init(void)
 		&d3dpp,
 		&g_pd3dDevice
 	);
+
+	D3DXCreateSprite(g_pd3dDevice, &g_pd3dSprite);
 	if (FAILED(g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &g_pd3dSurface))) {
 		return E_FAIL;
 	}
+	mainCam = new Camera;
+	mainCam->x = 0;
+	mainCam->y = 0;
 
 	LoadImages();
+	//////////////////////////////////////로딩끝//////////////////////////////////////////////
+
+
+	seriaRoom = new Seria;
+	seriaRoom->init();
+	seriaRoom->setCam(mainCam);
+	pl = new player;
+	pl->setCurScene(seriaRoom, WINSIZEX / 2, 0);
+	pl->init();
+	pl->linkCam(mainCam);
 
 
 	return S_OK;
@@ -52,11 +68,21 @@ HRESULT mainGame::init(void)
 //해제
  void mainGame::release(void)
  {//사용한 이미지도 릴리즈해줘야함
+	 
+
+	 pl->release();
+
+	 g_pd3dSurface->Release();
+	 g_pd3dSprite->Release();
+	 g_pd3dDevice->Release();
+	 g_pD3D->Release();
+	 
 	 gameNode::release();
  }
  //연산~
  void mainGame::update(void)
  {
+	 pl->update();
 	 gameNode::update();
 
  }
@@ -65,19 +91,14 @@ HRESULT mainGame::init(void)
  {
 	 if (SUCCEEDED(g_pd3dDevice->BeginScene())) {
 		 //3D그리기 시작
-		 g_pd3dDevice->Clear(												//후면 버퍼를 rgb(0,128,255) 로 채워줌
-			 0,
-			 NULL,															//아마 클리어 해줄 범위 렉트인듯 -확인
-			 D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,								//Z버퍼까지 지워준다.
-			 D3DCOLOR_XRGB(0, 128, 255),
-			 1.0f,
-			 0);
-		 PatBlt(hdc, 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
-		 paint();
+		 if (SUCCEEDED(g_pd3dSprite->Begin(D3DXSPRITE_ALPHABLEND))) {
+			 g_pd3dDevice->Clear( 0,NULL,D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,D3DCOLOR_XRGB(0, 128, 255),1.0f,0);
+			 paint();
+			 g_pd3dSprite->End();
+		 }
 		 g_pd3dSurface->GetDC(&hdc);
 		 paintDC();
 		 g_pd3dSurface->ReleaseDC(hdc);
-
 		 g_pd3dDevice->EndScene();
 	 }
 	 g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
@@ -89,53 +110,56 @@ HRESULT mainGame::init(void)
  //모든 이미지들 로드
  void mainGame::LoadImages()
  {
+	 //이미지 처리
+	 for (int i = 0; i < 210; i++) {
+		 char tmp[50];
+		 char tmp2[50];
 
+		 sprintf(tmp, "sprites/character_premade/%d.png", i);
+		 sprintf(tmp2, "캐릭터_%d", i);
+		 IMAGEMANAGER->addImage(tmp2, tmp);
+
+		 //sprintf(tmp, "sprites/weapon/front_0/%d.png", i);
+		 //sprintf(tmp2, "무기앞오라_%d", i);
+		 //IMAGEMANAGER->addImage(tmp2, tmp);
+
+		 //sprintf(tmp, "sprites/weapon/front_1/%d.png", i);
+		 //sprintf(tmp2, "무기앞_%d", i);
+		 //IMAGEMANAGER->addImage(tmp2, tmp);
+
+
+		 //sprintf(tmp, "sprites/weapon/back_0/%d.png", i);
+		 //sprintf(tmp2, "무기뒤오라_%d", i);
+		 //IMAGEMANAGER->addImage(tmp2, tmp);
+
+		 //sprintf(tmp, "sprites/weapon/back_1/%d.png", i);
+		 //sprintf(tmp2, "무기뒤_%d", i);
+		 //IMAGEMANAGER->addImage(tmp2, tmp);
+
+		 sprintf(tmp, "sprites/weapon/back/%d.png", i);
+		 sprintf(tmp2, "무기뒤_%d", i);
+		 IMAGEMANAGER->addImage(tmp2, tmp);
+
+		 sprintf(tmp, "sprites/weapon/front/%d.png", i);
+		 sprintf(tmp2, "무기앞_%d", i);
+		 IMAGEMANAGER->addImage(tmp2, tmp);
+	 }
+	 IMAGEMANAGER->addImage("X표시", "sprites/invalid.png");
  }
 
  //이미지들 처리
  void mainGame::paint()
  {
-	 //test1.framerender(posx, posy,testx, testy);
+	 seriaRoom->render();
+	 pl->render();
+	 seriaRoom->renderz();
  }
 
  //DC단에서 할 일 처리
  void mainGame::paintDC()
  {
+	 seriaRoom->renderdc();
+	 pl->renderdc();
+	 //TIMEMANAGER->render(hdc);
  }
 
- void mainGame::setMatrices()
- {
-	 D3DXMATRIX mat1, mat2;
-
-
-	 //D3DXMATRIXA16 matWorld;
-	 //D3DXMatrixIdentity(&matWorld);
-	 ////D3DXMatrixScaling(&matWorld, 1.f, 1.f, ptScale);
-	 //g_pd3dDevice->SetTransform(D3DTS_WORLD, &matWorld);
-
-	 //D3DXMATRIXA16 matView;
-
-	 //D3DXVECTOR3 vEyePt(0.f, .5f, -ptScale);									//1. 눈의 위치 (0,3,-5)
-	 //D3DXVECTOR3 vLookatPt(0.f, 0.f, 0.f);								//2. 눈이 바라보는 위치(0,0,0)
-	 //D3DXVECTOR3 vUpVec(0.f, 0.f, -1.f);									//3. 천정방향을 나타내는 상방벡터(0,1,0) - 아마도 하늘부분을 설정해주는부분인듯? -확인
-	 //D3DXMatrixLookAtLH(&matView, &vEyePt, &vLookatPt, &vUpVec);			//1,2,3의 값들로 뷰 행렬 생성 - 좌수좌표계(LH)
-
-	 //g_pd3dDevice->SetTransform(D3DTS_VIEW, &matView);					//생성한 뷰 행렬을 디바이스에 설정
-
-		//																////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//																//프로젝션 행렬
-
-		//																//프로젝션 행렬을 정의하기 위해서는 시야각(FOV - Field of View)과 종횡비(aspect ratio), 클리핑 평면의 값이 필요하다.
-	 //D3DXMATRIXA16 matProj;
-	 ///*
-	 //matProj			값이 설정될 행렬
-	 //D3DX_PI/4		FOV(45도)
-	 //1.0f			종횡비
-	 //1.0f			근접 클리핑 평면(near clipping plane)
-	 //100.f			원거리 클리핑 평면(far clipping plane)
-	 //*/
-	 //D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.f, 1.f, 100.f);	//좌수좌표계(LH)
-
-	 //g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &matProj);
-
- }

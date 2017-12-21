@@ -204,6 +204,12 @@
     <ClInclude Include="D2DTextTest.h">
       <Filter>2DGameFramework\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="MapBase.h">
+      <Filter>2DGameFramework\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Seria.h">
+      <Filter>2DGameFramework\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -310,6 +316,12 @@
     </ClCompile>
     <ClCompile Include="D2DTextTest.cpp">
       <Filter>2DGameFramework\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBase.cpp">
+      <Filter>2DGameFramework\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Seria.cpp">
+      <Filter>2DGameFramework\Map</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -19,32 +19,6 @@ HRESULT gameNode::init(void)
 HRESULT gameNode::init(bool managerInit)
 {
 	this->managerInit = managerInit;
-	/////////////////////////테스트중
-	//g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-	//if (g_pD3D == NULL) {			//디바이스를 생성하기 위한 D3D 객체 생성
-	//	return E_FAIL;
-	//}
-	//D3DDISPLAYMODE d3ddm;
-	//g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
-	//D3DPRESENT_PARAMETERS d3dpp;
-	//ZeroMemory(&d3dpp, sizeof(d3dpp));
-	//d3dpp.Windowed = TRUE;
-	//d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	//d3dpp.BackBufferFormat = d3ddm.Format;
-	//d3dpp.EnableAutoDepthStencil = TRUE;
-	//d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-	//d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-	//g_pD3D->CreateDevice(					//출력될 디바이스를 생성하는부분
-	//	D3DADAPTER_DEFAULT,
-	//	D3DDEVTYPE_HAL,
-	//	_hWnd,
-	//	D3DCREATE_HARDWARE_VERTEXPROCESSING,
-	//	&d3dpp,
-	//	&g_pd3dDevice
-	//);
-	////////////////////////////////////////////////////////
-
-	//initD3D(_hWnd);
 	if (managerInit) {
 		SetTimer(_hWnd, 1, 10, NULL);
 		KEYMANAGER->init();

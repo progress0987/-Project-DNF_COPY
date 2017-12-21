@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "imageManager.h"
 
-extern LPDIRECT3DDEVICE9			g_pd3dDevice;
-extern LPDIRECT3D9					g_pD3D;
-extern LPDIRECT3DSURFACE9			g_pd3dSurface;
+
 
 
 imageManager::imageManager()
@@ -15,42 +13,49 @@ imageManager::~imageManager()
 {
 }
 
-HRESULT imageManager::init(void)
+HRESULT imageManager::init()
 {
+
 	return S_OK;
 }
 
 void imageManager::release(void)
 {
+	for (map<string, D2DImage*>::iterator i = ImageList.begin(); i != ImageList.end(); i++) {
+		if (i->second != NULL) i->second->release();
+	}
 }
 
 
-D2DImage * imageManager::addImage(string key, LPDIRECT3DDEVICE9 dev, const char * fileName,bool trans, COLORREF transCol)
+D2DImage * imageManager::addImage(string key,const char * fileName,bool trans, COLORREF transCol)
 {
 	D2DImage* img = findImage(key);
 	if (img) return img;
 	img = new D2DImage;
-	if (FAILED(img->init(dev))) {
+	if (FAILED(img->init(g_pd3dDevice))) {
 		SAFE_DELETE(img);
 		return NULL;
 	}
 	if (trans)img->setImage(fileName, transCol);
 	else img->setImage(fileName);
+
+
 	ImageList.insert(make_pair(key, img));
 	return img;
 }
 
-D2DImage * imageManager::addFrameImage(string key, LPDIRECT3DDEVICE9 dev, const char * fileName, int frameX, int frameY, bool trans, COLORREF transCol)
+D2DImage * imageManager::addFrameImage(string key, const char * fileName, int frameX, int frameY, bool trans, COLORREF transCol)
 {
 	D2DImage* img = findImage(key);
 	if (img) return img;
 	img = new D2DImage;
-	if (FAILED(img->init(dev))) {
+	if (FAILED(img->init(g_pd3dDevice))) {
 		SAFE_DELETE(img);
 		return NULL;
 	}
 	if (trans)img->setImage(fileName, TRUE, frameX, frameY, transCol);
 	else img->setImage(fileName, TRUE, frameX, frameY);
+
 	ImageList.insert(make_pair(key, img));
 	return img;
 }

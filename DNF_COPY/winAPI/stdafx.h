@@ -30,6 +30,7 @@
 #include"randomFuction.h"
 #include"KeyManager.h"
 #include"utils.h"
+#include "collision.h"
 #include"imageManager.h"
 #include "timeManager.h"
 #include "txtData.h"
@@ -52,11 +53,11 @@ using namespace Util;
 //   ##디파인 문 ##(윈도우 초기화 셋팅)
 //====================================
 
-#define WINNAME (LPTSTR)(TEXT("API BASE"))
+#define WINNAME (LPTSTR)(TEXT("DNF_COPY"))
 #define WINSTARTX 100
 #define WINSTARTY 50
-#define WINSIZEX  1280
-#define WINSIZEY  720
+#define WINSIZEX  954
+#define WINSIZEY  560
 #define WINSTYLE  WS_CAPTION|WS_SYSMENU
 
 
@@ -98,6 +99,7 @@ struct Camera {
 extern LPDIRECT3D9					g_pD3D;						//D3D 디바이스를 생성할 D3D 객체 변수
 extern LPDIRECT3DDEVICE9			g_pd3dDevice;				//D3D 디바이스
 extern LPDIRECT3DSURFACE9			g_pd3dSurface;
+extern LPD3DXSPRITE					g_pd3dSprite;
 extern HDC							hdc;						//DC클래스
 
 

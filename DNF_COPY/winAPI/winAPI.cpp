@@ -5,6 +5,12 @@
 HINSTANCE _hInstance;		//어플 고유번호
 HWND _hWnd;					//조작질
 
+LPDIRECT3D9					g_pD3D;					  //D3D 디바이스를 생성할 D3D 객체 변수
+LPDIRECT3DDEVICE9			g_pd3dDevice;			  //D3D 디바이스
+LPDIRECT3DSURFACE9			g_pd3dSurface;
+LPD3DXSPRITE				g_pd3dSprite;
+HDC							hdc;					  //DC클래스
+
 LPTSTR _lpszClass = TEXT("API BASE");
 
 POINT ptMouse;
@@ -74,7 +80,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		{
 			TIMEMANAGER->update(60.0);
 			_mg.update();
-			_mg.render();
 		}
 
 	}
