@@ -31,7 +31,3 @@ void MapBase::renderdc()
 {
 }
 
-FLOAT MapBase::getStandardY()
-{
-	return FLOAT();
-}

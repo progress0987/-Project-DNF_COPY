@@ -41,6 +41,7 @@ public:
 	void linkCam(Camera* camera) { cam = camera; }
 	void setCurScene(MapBase* map, FLOAT x, FLOAT z) { curMap = map; this->x = x; this->z = z; }
 	FLOAT translate(FLOAT zval);
+	MapBase* getCurMap() { return curMap; }
 
 	player();
 	~player();

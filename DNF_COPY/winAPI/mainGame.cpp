@@ -54,10 +54,17 @@ HRESULT mainGame::init(void)
 	//////////////////////////////////////로딩끝//////////////////////////////////////////////
 
 
+	pl = new player;
 	seriaRoom = new Seria;
 	seriaRoom->init();
 	seriaRoom->setCam(mainCam);
-	pl = new player;
+	seriaRoom->setPlayer(pl);
+
+	village = new Village;
+	village->init();
+	village->setCam(mainCam);
+	village->setPlayer(pl);
+
 	pl->setCurScene(seriaRoom, WINSIZEX / 2, 0);
 	pl->init();
 	pl->linkCam(mainCam);
@@ -150,15 +157,15 @@ HRESULT mainGame::init(void)
  //이미지들 처리
  void mainGame::paint()
  {
-	 seriaRoom->render();
+	 pl->getCurMap()->render();
 	 pl->render();
-	 seriaRoom->renderz();
+	 pl->getCurMap()->renderz();
  }
 
  //DC단에서 할 일 처리
  void mainGame::paintDC()
  {
-	 seriaRoom->renderdc();
+	 pl->getCurMap()->renderdc();
 	 pl->renderdc();
 	 //TIMEMANAGER->render(hdc);
  }

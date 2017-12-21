@@ -56,8 +56,8 @@ using namespace Util;
 #define WINNAME (LPTSTR)(TEXT("DNF_COPY"))
 #define WINSTARTX 100
 #define WINSTARTY 50
-#define WINSIZEX  954
-#define WINSIZEY  560
+#define WINSIZEX  900
+#define WINSIZEY  500
 #define WINSTYLE  WS_CAPTION|WS_SYSMENU
 
 

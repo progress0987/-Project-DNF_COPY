@@ -14,6 +14,9 @@ protected:
 	int tileNumX, tileNumY;
 	Camera * Cam;
 	player * pl;
+	int mapWidth, mapHeight;
+	bool peaceful;
+	vector<MapBase*> connectedNodes;
 public:
 	MapBase();
 	~MapBase();
@@ -22,8 +25,12 @@ public:
 	virtual void render();
 	virtual void renderz();
 	virtual void renderdc();
-	virtual FLOAT getStandardY();
+	int getWidth() { return mapWidth; }
+	int getHeight() { return mapHeight; }
+	bool isPeaceful() { return peaceful; }
 	vector<MapTile> getTiles() { return mapTiles; }
+	MapBase* NextMap(int index) { connectedNodes[index]; }
+	void putConnectedMap(MapBase* connect) { connectedNodes.push_back(connect); }
 
 
 	void setCam(Camera* c) { Cam = c; }

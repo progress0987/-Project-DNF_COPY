@@ -135,10 +135,10 @@ namespace Util {
 		}
 		else {
 			if (t.left == rcHold.left) {
-				OffsetRect(&rcMove, interH, 0);
+				OffsetRect(&rcMove, interW, 0);
 			}
 			else {
-				OffsetRect(&rcMove, -interH, 0);
+				OffsetRect(&rcMove, -interW, 0);
 			}
 		}
 		return true;
