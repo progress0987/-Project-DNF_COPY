@@ -213,6 +213,9 @@
     <ClInclude Include="Village.h">
       <Filter>2DGameFramework\Map</Filter>
     </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>MainGame\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -328,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="Village.cpp">
       <Filter>2DGameFramework\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>MainGame\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

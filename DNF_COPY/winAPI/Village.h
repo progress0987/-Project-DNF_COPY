@@ -4,6 +4,11 @@ class Village:public MapBase
 {
 private:
 	int count;
+	int flameframe, smokeframe;
+	int tilewidth;
+	int bgwidth;
+	int floortileNum;
+	int bgtileNum;
 	POINT furnanceLoc;
 public:
 	void init();
@@ -11,6 +16,9 @@ public:
 	void render();
 	void renderz();
 	void renderdc();
+	void showSmoke();
+	void showFlame();
+
 	Village();
 	~Village();
 };

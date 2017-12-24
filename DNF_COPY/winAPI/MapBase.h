@@ -6,17 +6,22 @@ struct player;
 struct MapTile {
 	RECT rc;
 	int type;
+	int moveindex;
 };
 class MapBase
 {
 protected:
+	struct conNodes {
+		MapBase* nextNode;
+		POINT pos;
+	};
 	vector<MapTile> mapTiles;
 	int tileNumX, tileNumY;
 	Camera * Cam;
 	player * pl;
 	int mapWidth, mapHeight;
 	bool peaceful;
-	vector<MapBase*> connectedNodes;
+	vector<conNodes> connectedNodes;
 public:
 	MapBase();
 	~MapBase();
@@ -29,8 +34,9 @@ public:
 	int getHeight() { return mapHeight; }
 	bool isPeaceful() { return peaceful; }
 	vector<MapTile> getTiles() { return mapTiles; }
-	MapBase* NextMap(int index) { connectedNodes[index]; }
-	void putConnectedMap(MapBase* connect) { connectedNodes.push_back(connect); }
+	MapBase* NextMap(int index) { return connectedNodes[index].nextNode; }
+	POINT NextPos(int index) { return connectedNodes[index].pos; }
+	void putConnectedMap(MapBase* connect, POINT pos) { conNodes t; t.nextNode = connect, t.pos = pos; connectedNodes.push_back(t); }
 
 
 	void setCam(Camera* c) { Cam = c; }

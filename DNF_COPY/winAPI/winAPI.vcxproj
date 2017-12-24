@@ -181,6 +181,7 @@
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="txtData.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="Village.h" />
   </ItemGroup>
@@ -225,6 +226,7 @@
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="txtData.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="Village.cpp" />
     <ClCompile Include="winAPI.cpp" />

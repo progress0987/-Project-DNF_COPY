@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "MapBase.h"
+#include "UI.h"
 
 class MapBase;
 enum STANCE {
@@ -17,6 +18,9 @@ enum STANCE {
 	stance_empowered_norm_3,	//강화평타3번
 	stance_upper,				//어퍼슬래시
 };
+struct status {
+
+};
 class player
 {
 private:
@@ -31,7 +35,8 @@ private:
 	bool curDir;
 	FLOAT x, y, z;
 	MapBase* curMap;
-
+	bool onDebug;
+	UI* ui;
 public:
 	HRESULT init(void);
 	void release(void);
@@ -42,6 +47,7 @@ public:
 	void setCurScene(MapBase* map, FLOAT x, FLOAT z) { curMap = map; this->x = x; this->z = z; }
 	FLOAT translate(FLOAT zval);
 	MapBase* getCurMap() { return curMap; }
+	UI* getUI() { return ui; }
 
 	player();
 	~player();

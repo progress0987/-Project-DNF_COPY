@@ -16,56 +16,62 @@ mainGame::~mainGame()
 HRESULT mainGame::init(void) 
 {
 	gameNode::init(true);
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////이하 로딩
+	{
+		g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+		if (g_pD3D == NULL) {			//디바이스를 생성하기 위한 D3D 객체 생성
+			return E_FAIL;
+		}
 
-	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-	if (g_pD3D == NULL) {			//디바이스를 생성하기 위한 D3D 객체 생성
-		return E_FAIL;
+		D3DDISPLAYMODE d3ddm;
+		g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
+		D3DPRESENT_PARAMETERS d3dpp;
+		ZeroMemory(&d3dpp, sizeof(d3dpp));
+		d3dpp.Windowed = TRUE;
+		d3dpp.Flags = D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
+		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+		d3dpp.BackBufferFormat = d3ddm.Format;
+		d3dpp.EnableAutoDepthStencil = TRUE;
+		d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+		d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+		g_pD3D->CreateDevice(					//출력될 디바이스를 생성하는부분
+			D3DADAPTER_DEFAULT,
+			D3DDEVTYPE_HAL,
+			_hWnd,
+			D3DCREATE_HARDWARE_VERTEXPROCESSING,
+			&d3dpp,
+			&g_pd3dDevice
+		);
+
+		D3DXCreateSprite(g_pd3dDevice, &g_pd3dSprite);
+		if (FAILED(g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &g_pd3dSurface))) {
+			return E_FAIL;
+		}
+		mainCam = new Camera;
+		mainCam->x = 0;
+		mainCam->y = 0;
+
+		LoadImages();
 	}
-
-	D3DDISPLAYMODE d3ddm;
-	g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
-	D3DPRESENT_PARAMETERS d3dpp;
-	ZeroMemory(&d3dpp, sizeof(d3dpp));
-	d3dpp.Windowed = TRUE;
-	d3dpp.Flags = D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.BackBufferFormat = d3ddm.Format;
-	d3dpp.EnableAutoDepthStencil = TRUE;
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-	g_pD3D->CreateDevice(					//출력될 디바이스를 생성하는부분
-		D3DADAPTER_DEFAULT,
-		D3DDEVTYPE_HAL,
-		_hWnd,
-		D3DCREATE_HARDWARE_VERTEXPROCESSING,
-		&d3dpp,
-		&g_pd3dDevice
-	);
-
-	D3DXCreateSprite(g_pd3dDevice, &g_pd3dSprite);
-	if (FAILED(g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &g_pd3dSurface))) {
-		return E_FAIL;
-	}
-	mainCam = new Camera;
-	mainCam->x = 0;
-	mainCam->y = 0;
-
-	LoadImages();
 	//////////////////////////////////////로딩끝//////////////////////////////////////////////
 
 
 	pl = new player;
 	seriaRoom = new Seria;
-	seriaRoom->init();
+	village = new Village;
+
+
 	seriaRoom->setCam(mainCam);
+	seriaRoom->init();
 	seriaRoom->setPlayer(pl);
 
-	village = new Village;
-	village->init();
 	village->setCam(mainCam);
+	village->init();
 	village->setPlayer(pl);
+	seriaRoom->putConnectedMap(village, pointMake(712, 378 * 2));
+	village->putConnectedMap(seriaRoom, pointMake(seriaRoom->getWidth() / 2, (seriaRoom->getHeight() - 50) * 2));
 
-	pl->setCurScene(seriaRoom, WINSIZEX / 2, 0);
+	pl->setCurScene(village, WINSIZEX / 2, 0);
 	pl->init();
 	pl->linkCam(mainCam);
 
@@ -90,6 +96,8 @@ HRESULT mainGame::init(void)
  void mainGame::update(void)
  {
 	 pl->update();
+	 pl->getCurMap()->update();
+
 	 gameNode::update();
 
  }
@@ -160,6 +168,7 @@ HRESULT mainGame::init(void)
 	 pl->getCurMap()->render();
 	 pl->render();
 	 pl->getCurMap()->renderz();
+	 pl->getUI()->render();
  }
 
  //DC단에서 할 일 처리
@@ -167,6 +176,6 @@ HRESULT mainGame::init(void)
  {
 	 pl->getCurMap()->renderdc();
 	 pl->renderdc();
-	 //TIMEMANAGER->render(hdc);
+	 TIMEMANAGER->render(hdc);
  }
 
