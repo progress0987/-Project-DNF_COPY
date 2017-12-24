@@ -47,6 +47,12 @@ void player::update(void)
 		}
 		break;
 	case stance_run:
+		if (tick % 15 == 0) {
+			temp++;
+			if (temp > 113) {
+				temp = 105;
+			}
+		}
 		break;
 	case stance_ready:
 		break;
@@ -71,21 +77,17 @@ void player::update(void)
 		temp = 180;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT)) {
-		curStance = stance_walk;
 		x += 2;
 		curDir = true;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
-		curStance = stance_walk;
 		x -= 2;
 		curDir = false;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_UP)) {
-		curStance = stance_walk;
 		z -= 3;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN)) {
-		curStance = stance_walk;
 		z += 3;
 	}
 	if ((!KEYMANAGER->isStayKeyDown(VK_LEFT) && !KEYMANAGER->isStayKeyDown(VK_RIGHT) && !KEYMANAGER->isStayKeyDown(VK_UP) && !KEYMANAGER->isStayKeyDown(VK_DOWN))&&(curStance==stance_walk||curStance == stance_run)) {

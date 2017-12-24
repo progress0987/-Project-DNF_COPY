@@ -2,7 +2,7 @@
 #include "gameNode.h"
 #include "MapBase.h"
 #include "UI.h"
-
+class UI;
 class MapBase;
 enum STANCE {
 	stance_idle,				//기본자세(마을자세)
@@ -37,6 +37,9 @@ private:
 	MapBase* curMap;
 	bool onDebug;
 	UI* ui;
+	list<short> inputqueue;
+
+	long walk;
 public:
 	HRESULT init(void);
 	void release(void);

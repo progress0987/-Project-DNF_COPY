@@ -1,9 +1,11 @@
 #pragma once
 #include "player.h"
+
+class player;
 class UI
 {
 private:
-	player * pl;
+	player* pl;
 public:
 	HRESULT init(void);
 	void release(void);
