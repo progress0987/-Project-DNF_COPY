@@ -147,6 +147,7 @@
     <ClInclude Include="D2DImage.h" />
     <ClInclude Include="D2DTextTest.h" />
     <ClInclude Include="d2dx_test.h" />
+    <ClInclude Include="DungeonBase.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="bullets.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="loading.h" />
+    <ClInclude Include="Mirkwood.h" />
     <ClInclude Include="mainGame.h" />
     <ClInclude Include="MapBase.h" />
     <ClInclude Include="PixelCollisionTest.h" />
@@ -194,6 +196,7 @@
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="D2DImage.cpp" />
     <ClCompile Include="D2DTextTest.cpp" />
+    <ClCompile Include="DungeonBase.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="bullets.cpp" />
@@ -207,6 +210,7 @@
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="loading.cpp" />
+    <ClCompile Include="Mirkwood.cpp" />
     <ClCompile Include="mainGame.cpp" />
     <ClCompile Include="MapBase.cpp" />
     <ClCompile Include="PixelCollisionTest.cpp" />

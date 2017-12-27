@@ -5,7 +5,6 @@ class Village:public MapBase
 private:
 	int count;
 	int flameframe, smokeframe;
-	int tilewidth;
 	int bgwidth;
 	int floortileNum;
 	int bgtileNum;

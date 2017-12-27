@@ -10,6 +10,7 @@ LPDIRECT3DDEVICE9			g_pd3dDevice;			  //D3D 디바이스
 LPDIRECT3DSURFACE9			g_pd3dSurface;
 LPD3DXSPRITE				g_pd3dSprite;
 HDC							hdc;					  //DC클래스
+Camera						cam;
 
 LPTSTR _lpszClass = TEXT("API BASE");
 

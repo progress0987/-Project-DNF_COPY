@@ -26,7 +26,7 @@ void Seria::init()
 		for (int j = 0; j < tileNumX; j++) {
 			if ((i == 7 && (j >= 4 && j <= 15)) || (i == 8 && (j >= 1 && j <= 17)) || (i >= 9)&&!(i==11&&(j>=8&&j<=10)))continue;
 			MapTile tile;
-			tile.rc = RectMake((j * 50)-Cam->x, (i * 50) -Cam->y, 50, 50);
+			tile.rc = RectMake((j * 50)-cam.x, (i * 50) -cam.y, 50, 50);
 			if (i == 11 && (j >= 8 && j <= 10)) {
 				tile.type = 0;
 				tile.moveindex = 0;
@@ -36,6 +36,9 @@ void Seria::init()
 			mapTiles.push_back(tile);
 		}
 	}
+	peaceful = true;
+	runnable = false;
+	attackable = false;
 }
 
 void Seria::update()
@@ -44,9 +47,9 @@ void Seria::update()
 
 void Seria::render()
 {
-	IMAGEMANAGER->findImage("技府酒_2")->render(0,0,Cam->x,Cam->y,WINSIZEX,WINSIZEY);
-	IMAGEMANAGER->findImage("技府酒_3")->render(0,0,Cam->x,Cam->y,WINSIZEX,WINSIZEY);
-	IMAGEMANAGER->findImage("技府酒_4")->render(0,0,Cam->x,Cam->y,WINSIZEX,WINSIZEY);
+	IMAGEMANAGER->findImage("技府酒_2")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
+	IMAGEMANAGER->findImage("技府酒_3")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
+	IMAGEMANAGER->findImage("技府酒_4")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
 	//IMAGEMANAGER->findImage("技府酒_2")->blurredrender(0,0,0x88);
 	//IMAGEMANAGER->findImage("技府酒_3")->blurredrender(0,0,0x88);
 	//IMAGEMANAGER->findImage("技府酒_4")->blurredrender(0,0,0x88);
@@ -55,10 +58,10 @@ void Seria::render()
 
 void Seria::renderz()
 {
-	IMAGEMANAGER->findImage("技府酒_5")->render(0,0,Cam->x,Cam->y,WINSIZEX,WINSIZEY);
+	IMAGEMANAGER->findImage("技府酒_5")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
 	
 	//for (vector<MapTile>::iterator i = mapTiles.begin(); i != mapTiles.end(); i++) {
-	//	IMAGEMANAGER->findImage("X钎矫")->render(i->rc.left -Cam->x, i->rc.top -Cam->y);
+	//	IMAGEMANAGER->findImage("X钎矫")->render(i->rc.left -cam.x, i->rc.top -cam.y);
 	//}
 }
 

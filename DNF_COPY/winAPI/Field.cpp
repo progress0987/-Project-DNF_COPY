@@ -16,7 +16,7 @@
 //	float startx = WINSIZEX/2 - (TILEWIDTH*TILENUMX/2), starty = WINSIZEY/2;
 //	for (int i = 0; i < TILENUMY; i++) {
 //		for(int j = 0; j < TILENUMX; j++) {
-//			map[j][i].pos = pointMake(startx+(TILEWIDTH/2*j) -cam->x,starty-(TILEHEIGHT/2*j)-cam->y);
+//			map[j][i].pos = pointMake(startx+(TILEWIDTH/2*j) -cam.x,starty-(TILEHEIGHT/2*j)-cam.y);
 //			map[j][i].index = pointMake(rand() % (tileset->getFrameMaxX()+1), rand() % (tileset->getFrameMaxY()+1));
 //			map[j][i].rc = RectMakeCenter(map[j][i].pos.x, map[j][i].pos.y, TILEWIDTH / 2, TILEHEIGHT / 2);
 //		}
@@ -29,7 +29,7 @@
 //{
 //	for (int y = 0; y < TILENUMY; y++) {
 //		for (int x = 0; x < TILENUMX; x++) {
-//			if (PtInRect(&RectMakeCenter(map[y][x].pos.x - cam->x, map[y][x].pos.y - cam->y, TILEWIDTH / 2, TILEHEIGHT / 2), ptMouse)) {
+//			if (PtInRect(&RectMakeCenter(map[y][x].pos.x - cam.x, map[y][x].pos.y - cam.y, TILEWIDTH / 2, TILEHEIGHT / 2), ptMouse)) {
 //				if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) {
 //					map[y][x].index = pointMake(0, 0);
 //				}
@@ -37,16 +37,16 @@
 //		}
 //	}
 //	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) {
-//		//cam->offsetX = (ptMouse.x - WINSIZEX / 2) -cam->x;
-//		//cam->offsetY = (ptMouse.y - WINSIZEY / 2) -cam->y;
-//		cam->offsetX = (ptMouse.x - WINSIZEX / 2) - cam->x;
-//		cam->offsetY = (ptMouse.y - WINSIZEY / 2) - cam->y;
+//		//cam.offsetX = (ptMouse.x - WINSIZEX / 2) -cam.x;
+//		//cam.offsetY = (ptMouse.y - WINSIZEY / 2) -cam.y;
+//		cam.offsetX = (ptMouse.x - WINSIZEX / 2) - cam.x;
+//		cam.offsetY = (ptMouse.y - WINSIZEY / 2) - cam.y;
 //	}
 //	if (KEYMANAGER->isStayKeyDown(VK_RBUTTON)) {
-//		//cam->x = (ptMouse.x - WINSIZEX / 2) -cam->offsetX;
-//		//cam->y = (ptMouse.y - WINSIZEY / 2) -cam->offsetY;
-//		cam->x = (ptMouse.x - WINSIZEX / 2) - cam->offsetX;
-//		cam->y = (ptMouse.y - WINSIZEY / 2) - cam->offsetY;
+//		//cam.x = (ptMouse.x - WINSIZEX / 2) -cam.offsetX;
+//		//cam.y = (ptMouse.y - WINSIZEY / 2) -cam.offsetY;
+//		cam.x = (ptMouse.x - WINSIZEX / 2) - cam.offsetX;
+//		cam.y = (ptMouse.y - WINSIZEY / 2) - cam.offsetY;
 //	}
 //}
 //
@@ -59,7 +59,7 @@
 //			for (int x = 0; x < TILENUMX; x++) {
 //				int w = tileset->frameWidth;
 //				int h = tileset->frameHeight;
-//				D3DXVECTOR2 pos(map[x][y].pos.x - cam->x, map[x][y].pos.y - cam->y);							//Áß½É ÁÂÇ¥
+//				D3DXVECTOR2 pos(map[x][y].pos.x - cam.x, map[x][y].pos.y - cam.y);							//Áß½É ÁÂÇ¥
 //				RECT rect = {
 //					map[x][y].index.x * w,
 //					map[x][y].index.y * h,

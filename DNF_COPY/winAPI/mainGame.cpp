@@ -47,9 +47,8 @@ HRESULT mainGame::init(void)
 		if (FAILED(g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &g_pd3dSurface))) {
 			return E_FAIL;
 		}
-		mainCam = new Camera;
-		mainCam->x = 0;
-		mainCam->y = 0;
+		cam.x = 0;
+		cam.y = 0;
 
 		LoadImages();
 	}
@@ -59,21 +58,22 @@ HRESULT mainGame::init(void)
 	pl = new player;
 	seriaRoom = new Seria;
 	village = new Village;
+	mirkwood = new Mirkwood;
 
 
-	seriaRoom->setCam(mainCam);
 	seriaRoom->init();
 	seriaRoom->setPlayer(pl);
 
-	village->setCam(mainCam);
 	village->init();
 	village->setPlayer(pl);
 	seriaRoom->putConnectedMap(village, pointMake(712, 378 * 2));
 	village->putConnectedMap(seriaRoom, pointMake(seriaRoom->getWidth() / 2, (seriaRoom->getHeight() - 50) * 2));
 
-	pl->setCurScene(village, WINSIZEX / 2, 0);
+	mirkwood->init();
+	mirkwood->setPlayer(pl);
+
+	pl->setCurScene(mirkwood);
 	pl->init();
-	pl->linkCam(mainCam);
 
 
 	return S_OK;

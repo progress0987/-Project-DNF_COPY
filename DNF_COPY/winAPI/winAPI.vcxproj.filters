@@ -73,6 +73,12 @@
     <Filter Include="2DGameFramework\Map">
       <UniqueIdentifier>{ce2daf19-fe37-473a-b5ba-c5a049547b1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2DGameFramework\Map\Dungeon">
+      <UniqueIdentifier>{36dca70b-a6a6-43fe-8b0c-80a657af6585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2DGameFramework\Map\Dungeon\Mirkwood">
+      <UniqueIdentifier>{5614f1fc-27b9-4cbe-891d-0aefaaf2e767}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -216,6 +222,12 @@
     <ClInclude Include="UI.h">
       <Filter>MainGame\Player</Filter>
     </ClInclude>
+    <ClInclude Include="DungeonBase.h">
+      <Filter>2DGameFramework\Map\Dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="Mirkwood.h">
+      <Filter>2DGameFramework\Map\Dungeon\Mirkwood</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -334,6 +346,12 @@
     </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>MainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="DungeonBase.cpp">
+      <Filter>2DGameFramework\Map\Dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="Mirkwood.cpp">
+      <Filter>2DGameFramework\Map\Dungeon\Mirkwood</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

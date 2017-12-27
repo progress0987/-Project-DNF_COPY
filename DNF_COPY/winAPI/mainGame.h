@@ -4,16 +4,17 @@
 #include "player.h"
 #include "Seria.h"
 #include "Village.h"
+#include "Mirkwood.h"
 
 
 class mainGame :  public gameNode
 {
 
 private:
-	Camera* mainCam;
 	player* pl;
 	Seria* seriaRoom;
 	Village* village;
+	Mirkwood* mirkwood;
 public:
 
 	HRESULT init(void);

@@ -44,6 +44,12 @@
 
 using namespace std;
 using namespace Util;
+
+struct Camera {
+	DOUBLE x, y;
+	DOUBLE offsetX, offsetY;
+};
+
 //====================================
 // ##내가 만든 헤더파일 요기에 추가!!
 //====================================
@@ -91,11 +97,7 @@ extern HINSTANCE _hInstance;
 extern HWND _hWnd;
 extern POINT ptMouse;
 extern FLOAT ptScale;
-
-struct Camera {
-	DOUBLE x, y;
-	DOUBLE offsetX, offsetY;
-};
+extern Camera cam;
 extern LPDIRECT3D9					g_pD3D;						//D3D 디바이스를 생성할 D3D 객체 변수
 extern LPDIRECT3DDEVICE9			g_pd3dDevice;				//D3D 디바이스
 extern LPDIRECT3DSURFACE9			g_pd3dSurface;
