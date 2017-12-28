@@ -34,6 +34,7 @@ enum SKILLS {
 	skill_NULL,
 	skill_norm_1,
 	skill_norm_2,
+	skill_norm_3,
 	skill_upper,
 };
 
@@ -42,12 +43,15 @@ struct status {//스텟 - 추가할것
 };
 
 struct dmgstruct {
-	int dmg;
-	unsigned long time;
-	int dmgFrame;
-	int maxz, minz;
-	int maxx, minx;
-	int maxy, miny;
+	int dmg;									//대미지
+	unsigned long time;							//공격을 할 때의 시간
+	unsigned int staytime;						//공격 대미지 유지시간
+	bool isProjectile;							//투사체인지
+	bool isOnetime;								//지속적으로 남는건지(필요할지?)
+	int dmgFrame;								//대미지가 들어갈 프레임 - 스킬단에서 쓸 예정(안쓸지도)
+	int maxz, minz;								//최대/최소 z대미지 범위
+	int maxx, minx;								//최대/최소 x대미지 범위
+	int maxy, miny;								//최대/최소 y대미지 범위
 };
 
 struct inputStruct {
@@ -76,6 +80,8 @@ private:
 	STANCE prevStance;
 	STANCE curStance;
 	STANCE nextStance;
+	SKILLS curSkill;
+	SKILLS nextSkill;
 	MapBase* curMap;
 	UI* ui;
 	list<dmgstruct> attackQueue;
@@ -88,12 +94,19 @@ public:
 	void update(void);
 	void render(void);
 	void renderdc(void);
+
+
+
 	void setCurScene(MapBase* map, FLOAT x = 0.f, FLOAT z = 0.f);
 	void setOnCombat(bool oncombat);
+
+
+
+	FLOAT getX() { return x; }
+	FLOAT getY() { return y; }
+	FLOAT getZ() { return z; }
 	list<dmgstruct> getAttackQueue() { return attackQueue; }
-	FLOAT translate(FLOAT zval);
 	MapBase* getCurMap() { return curMap; }
-	list<dmgstruct> getAttacks() { return attackQueue; }
 	UI* getUI() { return ui; }
 
 	player();

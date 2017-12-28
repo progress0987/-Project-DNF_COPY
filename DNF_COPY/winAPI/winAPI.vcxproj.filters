@@ -79,6 +79,12 @@
     <Filter Include="2DGameFramework\Map\Dungeon\Mirkwood">
       <UniqueIdentifier>{5614f1fc-27b9-4cbe-891d-0aefaaf2e767}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Enemy\Monster">
+      <UniqueIdentifier>{60992431-f83f-41b6-9e72-32978201898d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Enemy\Monster\goblin">
+      <UniqueIdentifier>{36a9d931-d990-419c-8b81-846c673bcb43}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -228,6 +234,15 @@
     <ClInclude Include="Mirkwood.h">
       <Filter>2DGameFramework\Map\Dungeon\Mirkwood</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterBase.h">
+      <Filter>MainGame\Enemy\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="goblin_base.h">
+      <Filter>MainGame\Enemy\Monster\goblin</Filter>
+    </ClInclude>
+    <ClInclude Include="green_goblin.h">
+      <Filter>MainGame\Enemy\Monster\goblin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -352,6 +367,15 @@
     </ClCompile>
     <ClCompile Include="Mirkwood.cpp">
       <Filter>2DGameFramework\Map\Dungeon\Mirkwood</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterBase.cpp">
+      <Filter>MainGame\Enemy\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="goblin_base.cpp">
+      <Filter>MainGame\Enemy\Monster\goblin</Filter>
+    </ClCompile>
+    <ClCompile Include="green_goblin.cpp">
+      <Filter>MainGame\Enemy\Monster\goblin</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -73,7 +73,7 @@ void player::update(void)
 			frame = 127;
 		}
 	}
-		break;
+	break;
 	case stance_jump_down:
 		if (tick % 30 == 0) {
 			frame++;
@@ -92,8 +92,10 @@ void player::update(void)
 				}
 				else {
 					curStance = nextStance;
+					curSkill = nextSkill;
 					frame = nextStance;
 					nextStance = stance_NULL;
+					nextSkill = skill_NULL;
 				}
 			}
 		}
@@ -108,8 +110,10 @@ void player::update(void)
 				}
 				else {
 					curStance = nextStance;
+					curSkill = nextSkill;
 					frame = nextStance;
 					nextStance = stance_NULL;
+					nextSkill = skill_NULL;
 				}
 			}
 		}
@@ -119,9 +123,10 @@ void player::update(void)
 			frame++;
 			if (frame > 41) {
 				//if (nextStance < 0) {
-					curStance = stance_ready;
-					frame = stance_ready;
-					nextStance = stance_NULL;
+				curStance = stance_ready;
+				frame = stance_ready;
+				nextStance = stance_NULL;
+				nextSkill = skill_NULL;
 				//}
 				//else {
 				//	curStance = nextStance;
@@ -166,11 +171,28 @@ void player::update(void)
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////상태에 따른 프레임 처리
 
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////키보드 입력부분
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////스킬에따라 대미지 포인트 만들어주기
+	{
+		switch (curSkill) {
+		case skill_norm_1:
 
+			break;
+		case skill_norm_2:
+			break;
+		case skill_norm_3:
+			break;
+		case skill_upper:
+			break;
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////스킬에따라 대미지 포인트 만들어주기
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////키보드 입력부분
 	{
 		if ((KEYMANAGER->isOnceKeyDown(VK_RIGHT) || KEYMANAGER->isOnceKeyDown(VK_LEFT) || KEYMANAGER->isOnceKeyDown(VK_UP) || KEYMANAGER->isOnceKeyDown(VK_DOWN)) && (curStance == stance_idle || curStance == stance_ready)) {
-			if (GetTickCount() - movebegin < 300 && curMap->isRunnable()) {
+			if (GetTickCount() - movebegin < 400 && curMap->isRunnable()) {
 				curStance = stance_run;
 				movestatus = 2;
 				frame = 105;
@@ -197,7 +219,7 @@ void player::update(void)
 		}
 		if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
 			if (curStance == stance_walk || ((curStance == stance_jump_up || curStance == stance_jump_down || curStance == stance_areal_att||curStance == stance_idle) && movestatus == 1)) {
-				if (curStance == stance_idle) curStance = stance_walk;
+				if (curStance == stance_idle)  curStance = stance_walk;
 				x -= 2;
 			}
 			else if (curStance == stance_run || ((curStance == stance_jump_up || curStance == stance_jump_down || curStance == stance_areal_att) && movestatus == 2)) {
@@ -209,9 +231,11 @@ void player::update(void)
 			curDir = false;
 		}
 		if (KEYMANAGER->isStayKeyDown(VK_UP)) {
+			if(curStance == stance_walk ||curStance == stance_run|| curStance == stance_jump_up || curStance == stance_jump_down || curStance == stance_areal_att)
 			z -= 3;
 		}
 		if (KEYMANAGER->isStayKeyDown(VK_DOWN)) {
+			if(curStance == stance_walk ||curStance == stance_run|| curStance == stance_jump_up || curStance == stance_jump_down || curStance == stance_areal_att)
 			z += 3;
 		}
 		if ((!KEYMANAGER->isStayKeyDown(VK_LEFT) && !KEYMANAGER->isStayKeyDown(VK_RIGHT) && !KEYMANAGER->isStayKeyDown(VK_UP) && !KEYMANAGER->isStayKeyDown(VK_DOWN)) && (curStance == stance_walk || curStance == stance_run)) {
@@ -267,11 +291,13 @@ void player::update(void)
 						onAttack = true;
 						curStance = stance_norm_1;
 						frame = stance_norm_1;
+						curSkill = skill_norm_1;
 						nextStance = stance_NULL;
 						inputQueue.pop_front();
 					}
 					else if (curStance == stance_norm_1) {
 						nextStance = stance_norm_2;
+						nextSkill = skill_norm_2;
 						inputQueue.pop_front();
 					}
 					else if (curStance == stance_norm_2) {
@@ -284,7 +310,7 @@ void player::update(void)
 						inputQueue.pop_front();
 					}
 				}
-				if (inputQueue.size() > 0 && inputQueue.front().key == 'Z'&&!onSkill) {
+				if (inputQueue.size() > 0 && inputQueue.front().key == 'Z'&&!onSkill&&!onJump) {
 					onSkill = true;
 					curStance = stance_upper;
 					frame = stance_upper;
@@ -448,6 +474,11 @@ void player::update(void)
 		if (translate(z) + 25 > curMap->getHeight()) z = (curMap->getHeight() - 25) * 2;
 		if (translate(z) - 25 < 0) z = (25) * 2;
 		terColRect = RectMakeCenter(x, translate(z), 50, 50);
+		if (y > 0) {
+			y = 0;
+			jumpPow = 0;
+			onJump = false;
+		}
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////위치보정,충돌
 
@@ -468,14 +499,23 @@ void player::render(void)
 {
 	char tmp[50];
 
+
+
+	//sprintf(tmp, "무기뒤오라_%d", frame);
+	//IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y+translate(z)) - cam.y, curDir);
+
 	sprintf(tmp, "무기뒤_%d", frame);
 	IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y+translate(z)) - cam.y, curDir);
 
 	sprintf(tmp, "캐릭터_%d", frame);
 	IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y + translate(z)) - cam.y, curDir);
 
+	//sprintf(tmp, "무기앞오라_%d", frame);
+	//IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y + translate(z)) - cam.y, curDir);
+
 	sprintf(tmp, "무기앞_%d", frame);
 	IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y + translate(z)) - cam.y, curDir);
+
 }
 
 void player::renderdc(void)
@@ -484,7 +524,11 @@ void player::renderdc(void)
 	char t[100];
 	sprintf(t, "x : %f y : %f z : %f", x, y, z);
 	TextOut(hdc, 50, 100, t, strlen(t));
-	sprintf(t, "cur : %i next : %i", curStance, nextStance);
+
+	POINT tmp;
+	tmp.x = ptMouse.x + cam.x;
+	tmp.y = ptMouse.y + cam.y;
+	sprintf(t, "x : %i y : %i", tmp.x, tmp.y);
 	TextOut(hdc, 50, 150, t, strlen(t));
 	sprintf(t, "queuesize : %d", inputQueue.size());
 	TextOut(hdc, 50, 200, t, strlen(t));
@@ -492,7 +536,12 @@ void player::renderdc(void)
 
 void player::setCurScene(MapBase * map, FLOAT x, FLOAT z)
 {
-	curMap = map;
+	if (map->getCurMap() != nullptr) {
+		curMap = map->getCurMap();
+	}
+	else {
+		curMap = map;
+	}
 	this->x = x;
 	this->y = 0;
 	this->z = z;
@@ -510,18 +559,15 @@ void player::setOnCombat(bool oncombat)
 	}
 }
 
-FLOAT player::translate(FLOAT zval)
-{
-	FLOAT transVal = zval/2;
 
-	return transVal;
-}
 
 player::player()
 {
+	x = y = z = 0.0f;
 }
 
 
 player::~player()
 {
 }
+

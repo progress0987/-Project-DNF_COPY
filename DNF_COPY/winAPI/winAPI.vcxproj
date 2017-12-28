@@ -149,6 +149,8 @@
     <ClInclude Include="d2dx_test.h" />
     <ClInclude Include="DungeonBase.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="goblin_base.h" />
+    <ClInclude Include="green_goblin.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="bullets.h" />
     <ClInclude Include="commonMacroFunction.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="Mirkwood.h" />
     <ClInclude Include="mainGame.h" />
     <ClInclude Include="MapBase.h" />
+    <ClInclude Include="MonsterBase.h" />
     <ClInclude Include="PixelCollisionTest.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="progressBar.h" />
@@ -198,6 +201,8 @@
     <ClCompile Include="D2DTextTest.cpp" />
     <ClCompile Include="DungeonBase.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="goblin_base.cpp" />
+    <ClCompile Include="green_goblin.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="bullets.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -213,6 +218,7 @@
     <ClCompile Include="Mirkwood.cpp" />
     <ClCompile Include="mainGame.cpp" />
     <ClCompile Include="MapBase.cpp" />
+    <ClCompile Include="MonsterBase.cpp" />
     <ClCompile Include="PixelCollisionTest.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="progressBar.cpp" />

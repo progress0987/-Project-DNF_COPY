@@ -4,37 +4,6 @@
 
 void Mirkwood::init()
 {
-	IMAGEMANAGER->addImage("던전_머크우드_배경_뒤", "sprites/maps/dungeons/mirkwood/back_far.img/0.png");
-	IMAGEMANAGER->addImage("던전_머크우드_배경_중간", "sprites/maps/dungeons/mirkwood/back_middle.img/0.png");
-	IMAGEMANAGER->addImage("던전_머크우드_배경_나무길", "sprites/maps/dungeons/mirkwood/tree_backway.img/0.png");
-	
-	IMAGEMANAGER->addImage("던전_머크우드_바닥_0", "sprites/maps/dungeons/mirkwood/tile.img/0.png");
-	IMAGEMANAGER->addImage("던전_머크우드_바닥_1", "sprites/maps/dungeons/mirkwood/tile.img/1.png");
-	IMAGEMANAGER->addImage("던전_머크우드_바닥_2", "sprites/maps/dungeons/mirkwood/tile.img/2.png");
-	IMAGEMANAGER->addImage("던전_머크우드_바닥_3", "sprites/maps/dungeons/mirkwood/tile.img/3.png");
-	IMAGEMANAGER->addImage("던전_머크우드_바닥_덧붙임", "sprites/maps/dungeons/mirkwood/tile_ex.img/0.png");
-
-	IMAGEMANAGER->addImage("던전_머크우드_지형_돌_0", "sprites/maps/dungeons/mirkwood/stone.img/0.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_돌_1", "sprites/maps/dungeons/mirkwood/stone.img/1.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_돌_2", "sprites/maps/dungeons/mirkwood/stone.img/2.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_돌_3", "sprites/maps/dungeons/mirkwood/stone.img/3.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_돌_4", "sprites/maps/dungeons/mirkwood/stone.img/4.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_돌_5", "sprites/maps/dungeons/mirkwood/stone.img/5.png");
-
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_0", "sprites/maps/dungeons/mirkwood/tree.img/0.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_1", "sprites/maps/dungeons/mirkwood/tree.img/1.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_2", "sprites/maps/dungeons/mirkwood/tree.img/2.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_3", "sprites/maps/dungeons/mirkwood/tree.img/3.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_4", "sprites/maps/dungeons/mirkwood/tree.img/4.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_5", "sprites/maps/dungeons/mirkwood/tree.img/5.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_6", "sprites/maps/dungeons/mirkwood/tree.img/6.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_7", "sprites/maps/dungeons/mirkwood/tree.img/7.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_8", "sprites/maps/dungeons/mirkwood/tree.img/8.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_9", "sprites/maps/dungeons/mirkwood/tree.img/9.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_10", "sprites/maps/dungeons/mirkwood/tree.img/10.png");
-	IMAGEMANAGER->addImage("던전_머크우드_지형_나무_11", "sprites/maps/dungeons/mirkwood/tree.img/11.png");
-	
-
 	peaceful = false;
 	runnable = true;
 	attackable = true;
@@ -48,7 +17,7 @@ void Mirkwood::init()
 	tilewidth = IMAGEMANAGER->findImage("던전_머크우드_바닥_0")->getWidth();
 	/////////////////////////////////////////////////////////////////////////1번째 맵 처리
 	{
-
+		m1->setPlayer(pl);
 		int tileNum = 5;
 		for (int i = 0; i < tileNum; i++) {
 			m1->setMap("던전_머크우드_배경_뒤", IMAGEMANAGER->findImage("던전_머크우드_배경_뒤")->getWidth() * i, 0);
@@ -78,9 +47,16 @@ void Mirkwood::init()
 				m1->addMapTile(t);
 			}
 		}
+		for (int i = 0; i < 8; i++) {
+			green_goblin* g = new green_goblin();
+			g->setCurmap(m1);
+			g->init(100+i*50,(WINSIZEY - 50)*2);
+			m1->addMonster(g);
+		}
 	}
 	/////////////////////////////////////////////////////////////////////2번째 맵 처리
 	{
+		m2->setPlayer(pl);
 		int tileNum = 6;
 		for (int i = 0; i < tileNum; i++) {
 			m2->setMap("던전_머크우드_배경_뒤", IMAGEMANAGER->findImage("던전_머크우드_배경_뒤")->getWidth() * i, 0);
@@ -113,6 +89,7 @@ void Mirkwood::init()
 	}
 	/////////////////////////////////////////////////////////////////////////////3번째 맵 처리
 	{
+		m3->setPlayer(pl);
 		int tileNum = 7;
 		for (int i = 0; i < tileNum; i++) {
 			m3->setMap("던전_머크우드_배경_뒤", IMAGEMANAGER->findImage("던전_머크우드_배경_뒤")->getWidth() * i, 0);
@@ -143,9 +120,20 @@ void Mirkwood::init()
 			}
 		}
 	}
-	Maps.push_back(m1);
-	Maps.push_back(m2);
-	Maps.push_back(m3);
+	conNodes node;
+	node.nextNode = m1;
+	node.pos = (pointMake(WINSIZEX/2, (WINSIZEY-50)*2));
+	connectedNodes.push_back(node);
+
+	node.nextNode = m2;
+	node.pos = (pointMake(WINSIZEX / 2, (WINSIZEY - 50) * 2));
+	connectedNodes.push_back(node);
+
+	node.nextNode = m3;
+	node.pos = (pointMake(WINSIZEX / 2, (WINSIZEY - 50) * 2));
+	connectedNodes.push_back(node);
+
+
 	curMap = m1;
 }
 
@@ -185,12 +173,19 @@ void MirkwoodMap::init()
 
 void MirkwoodMap::update()
 {
+	for (vector<MonsterBase*>::iterator i = monsterList.begin(); i!=monsterList.end();i++ ){
+		(*i)->update();
+	}
 }
 
 void MirkwoodMap::render()
 {
 	for (vector<ImgTile>::iterator i = staticTiles.begin(); i != staticTiles.end(); i++) {
 		i->tileImg->render(i->pos.x - cam.x, i->pos.y - cam.y);
+	}
+	
+	for (vector<MonsterBase*>::iterator i = monsterList.begin(); i != monsterList.end(); i++) {
+		(*i)->render();
 	}
 }
 

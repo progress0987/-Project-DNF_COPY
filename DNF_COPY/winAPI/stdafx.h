@@ -105,4 +105,11 @@ extern LPD3DXSPRITE					g_pd3dSprite;
 extern HDC							hdc;						//DC클래스
 
 
+static FLOAT translate(FLOAT zval)
+{
+	FLOAT transVal = zval / 2;
+
+	return transVal;
+}
+
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.

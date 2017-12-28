@@ -1,9 +1,9 @@
 #pragma once
 #include "player.h"
-#include "enemy.h"
+#include "MonsterBase.h"
 struct Camera;
 class player;
-class enemy;
+class MonsterBase;
 
 struct MapTile {
 	RECT rc;
@@ -21,6 +21,7 @@ protected:
 		MapBase* nextNode;
 		POINT pos;
 	};
+	MapBase* curMap;
 	int tileNumX, tileNumY;
 	player * pl;
 	int mapWidth, mapHeight;
@@ -30,8 +31,8 @@ protected:
 	int tilewidth;
 	vector<MapTile> mapTiles;
 	vector<conNodes> connectedNodes;
-	vector<enemy> enemyList;
 	vector<ImgTile> staticTiles;
+	vector<MonsterBase*> monsterList;
 public:
 	MapBase();
 	~MapBase();
@@ -49,10 +50,12 @@ public:
 	virtual int getHeight() { return mapHeight; }
 	virtual int getTileNumX() { return tileNumX; }
 	virtual int getTileNumY() { return tileNumY; }
+	virtual player* getPlayer() { return pl; }
 	virtual MapBase* NextMap(int index) { return connectedNodes[index].nextNode; }
 	virtual POINT NextPos(int index) { return connectedNodes[index].pos; }
-	virtual vector<enemy> getEnemyList() { return enemyList; }
+	virtual vector<MonsterBase*> getMonsterList() { return monsterList; }
 	virtual vector<MapTile> getTiles() { return mapTiles; }
+	virtual MapBase* getCurMap() { return curMap; }
 
 	bool isRunnable() { return runnable; }
 	bool isPeaceful() { return peaceful; }
@@ -65,7 +68,7 @@ public:
 	virtual void setTileNumY(int y) { tileNumY = y; }
 	virtual void putConnectedMap(MapBase* connect, POINT pos) { conNodes t; t.nextNode = connect, t.pos = pos; connectedNodes.push_back(t); }
 	virtual void addMapTile(MapTile t) { mapTiles.push_back(t); }
-	void setPlayer(player* p) { pl = p; }
+	virtual void setPlayer(player* p) { pl = p; }
 	void setPeaceful(bool p) { peaceful = p; }
 	void setRunnable(bool r) { runnable = r; }
 	void setAttackable(bool a) { attackable = a; }

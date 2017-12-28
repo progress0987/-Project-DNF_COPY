@@ -58,6 +58,7 @@ public:
 
 	void DFcharpointrender(int destX, int destY, bool dir = true);
 	void DFpointshadowrender(int destX, int destY, bool dir = true);
+	void DFpointrender(int destX, int destY, int imgRwidth, int stY, bool dir = true);
 
 	void shadowrender(int destX, int destY);
 

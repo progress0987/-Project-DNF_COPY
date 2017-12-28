@@ -22,6 +22,10 @@ void DungeonBase::renderdc()
 {
 }
 
+void DungeonBase::resetMonsters()
+{
+}
+
 DungeonBase::DungeonBase()
 {
 	peaceful = false;

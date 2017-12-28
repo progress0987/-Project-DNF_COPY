@@ -69,8 +69,8 @@ HRESULT mainGame::init(void)
 	seriaRoom->putConnectedMap(village, pointMake(712, 378 * 2));
 	village->putConnectedMap(seriaRoom, pointMake(seriaRoom->getWidth() / 2, (seriaRoom->getHeight() - 50) * 2));
 
-	mirkwood->init();
 	mirkwood->setPlayer(pl);
+	mirkwood->init();
 
 	pl->setCurScene(mirkwood);
 	pl->init();
@@ -126,13 +126,13 @@ HRESULT mainGame::init(void)
  void mainGame::LoadImages()
  {
 	 //이미지 처리
-	 for (int i = 0; i < 210; i++) {
 		 char tmp[50];
-		 char tmp2[50];
+		 char tmp2[100];
+	 for (int i = 0; i < 210; i++) {
 
-		 sprintf(tmp, "sprites/character_premade/%d.png", i);
-		 sprintf(tmp2, "캐릭터_%d", i);
-		 IMAGEMANAGER->addImage(tmp2, tmp);
+		 sprintf(tmp2, "sprites/character_premade/%d.png", i);
+		 sprintf(tmp, "캐릭터_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
 
 		 //sprintf(tmp, "sprites/weapon/front_0/%d.png", i);
 		 //sprintf(tmp2, "무기앞오라_%d", i);
@@ -151,14 +151,96 @@ HRESULT mainGame::init(void)
 		 //sprintf(tmp2, "무기뒤_%d", i);
 		 //IMAGEMANAGER->addImage(tmp2, tmp);
 
-		 sprintf(tmp, "sprites/weapon/back/%d.png", i);
-		 sprintf(tmp2, "무기뒤_%d", i);
-		 IMAGEMANAGER->addImage(tmp2, tmp);
+		 sprintf(tmp2, "sprites/weapon/back/%d.png", i);
+		 sprintf(tmp, "무기뒤_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
 
-		 sprintf(tmp, "sprites/weapon/front/%d.png", i);
-		 sprintf(tmp2, "무기앞_%d", i);
-		 IMAGEMANAGER->addImage(tmp2, tmp);
+		 sprintf(tmp2, "sprites/weapon/front/%d.png", i);
+		 sprintf(tmp, "무기앞_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
 	 }
+
+	 for (int i = 0; i < 17; i++) {
+		 sprintf(tmp2, "sprites/monster/goblin/blue/%d.png", i);
+		 sprintf(tmp, "고블린_파랑_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/darkgreen/%d.png", i);
+		 sprintf(tmp, "고블린_십장_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/green/%d.png", i);
+		 sprintf(tmp, "고블린_초록_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/red/%d.png", i);
+		 sprintf(tmp, "고블린_빨강_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/equipment/belt/belt_norm/%d.png", i);
+		 sprintf(tmp, "고블린_장비_벨트_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/equipment/face/face_blue/%d.png", i);
+		 sprintf(tmp, "고블린_얼굴_파랑_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/equipment/face/face_red/%d.png", i);
+		 sprintf(tmp, "고블린_얼굴_빨강_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/equipment/pants/pants_norm/%d.png", i);
+		 sprintf(tmp, "고블린_장비_바지_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/equipment/wrist/wrist_norm/%d.png", i);
+		 sprintf(tmp, "고블린_장비_팔찌_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/equipment/weapon/weapon_1/%d.png", i);
+		 sprintf(tmp, "고블린_무기_클럽_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/monster/goblin/equipment/weapon/weapon_2/%d.png", i);
+		 sprintf(tmp, "고블린_무기_십장_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+	 }
+
+
+	 //머크우드 타일들
+	 {
+		 IMAGEMANAGER->addImage("던전_머크우드_배경_뒤", "sprites/maps/dungeons/mirkwood/back_far.img/0.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_배경_중간", "sprites/maps/dungeons/mirkwood/back_middle.img/0.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_배경_나무길", "sprites/maps/dungeons/mirkwood/tree_backway.img/0.png");
+
+		 IMAGEMANAGER->addImage("던전_머크우드_바닥_0", "sprites/maps/dungeons/mirkwood/tile.img/0.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_바닥_1", "sprites/maps/dungeons/mirkwood/tile.img/1.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_바닥_2", "sprites/maps/dungeons/mirkwood/tile.img/2.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_바닥_3", "sprites/maps/dungeons/mirkwood/tile.img/3.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_바닥_덧붙임", "sprites/maps/dungeons/mirkwood/tile_ex.img/0.png");
+
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_돌_0", "sprites/maps/dungeons/mirkwood/stone.img/0.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_돌_1", "sprites/maps/dungeons/mirkwood/stone.img/1.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_돌_2", "sprites/maps/dungeons/mirkwood/stone.img/2.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_돌_3", "sprites/maps/dungeons/mirkwood/stone.img/3.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_돌_4", "sprites/maps/dungeons/mirkwood/stone.img/4.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_돌_5", "sprites/maps/dungeons/mirkwood/stone.img/5.png");
+
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_0", "sprites/maps/dungeons/mirkwood/tree.img/0.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_1", "sprites/maps/dungeons/mirkwood/tree.img/1.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_2", "sprites/maps/dungeons/mirkwood/tree.img/2.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_3", "sprites/maps/dungeons/mirkwood/tree.img/3.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_4", "sprites/maps/dungeons/mirkwood/tree.img/4.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_5", "sprites/maps/dungeons/mirkwood/tree.img/5.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_6", "sprites/maps/dungeons/mirkwood/tree.img/6.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_7", "sprites/maps/dungeons/mirkwood/tree.img/7.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_8", "sprites/maps/dungeons/mirkwood/tree.img/8.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_9", "sprites/maps/dungeons/mirkwood/tree.img/9.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_10", "sprites/maps/dungeons/mirkwood/tree.img/10.png");
+		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_11", "sprites/maps/dungeons/mirkwood/tree.img/11.png");
+	 }
+
 	 IMAGEMANAGER->addImage("X표시", "sprites/invalid.png");
  }
 

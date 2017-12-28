@@ -1,7 +1,7 @@
 #pragma once
-#include "DungeonBase.h"
+#include "green_goblin.h"
 
-class Mirkwood :public DungeonBase
+class Mirkwood :public MapBase
 {
 private:
 public:
@@ -25,5 +25,6 @@ public:
 	void render();
 	void renderz();
 	void renderdc();
+	void addMonster(MonsterBase* m) { monsterList.push_back(m); }
 	void setMap(const char* tileName,int x, int y);
 };
