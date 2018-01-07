@@ -7,8 +7,6 @@
 #define KEYDELAY 30
 class UI;
 class MapBase;
-class Skill;
-class wave;
 
 struct Item {
 	int type;							//아이템 종류로 할 것
@@ -123,6 +121,7 @@ private:
 	//////////////////////////스킬들
 	wave* skill_wave;
 	upper* skill_upper;
+	icewave* skill_icewave;
 
 
 	status Stat;
@@ -158,6 +157,11 @@ public:
 	void setCurScene(MapBase* map, FLOAT x = 0.f, FLOAT z = 0.f);
 	void setOnCombat(bool oncombat);
 	void addAttack(effectedOnTime attack) { attackQueue.push_back(attack); }
+	void setSkills();
+	void updateSkills();
+	void printSkillb();
+	void printSkillf();
+
 
 
 

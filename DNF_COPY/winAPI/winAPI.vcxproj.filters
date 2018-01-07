@@ -94,6 +94,9 @@
     <Filter Include="MainGame\Player\skill\upper">
       <UniqueIdentifier>{effe8035-96a8-48c0-9758-4f84381d42ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Player\skill\icewave">
+      <UniqueIdentifier>{36911a06-c83d-4f17-95c3-f012c9533df2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -264,6 +267,9 @@
     <ClInclude Include="skills.h">
       <Filter>MainGame\Player\skill</Filter>
     </ClInclude>
+    <ClInclude Include="icewave.h">
+      <Filter>MainGame\Player\skill\icewave</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -406,6 +412,9 @@
     </ClCompile>
     <ClCompile Include="upper.cpp">
       <Filter>MainGame\Player\skill\upper</Filter>
+    </ClCompile>
+    <ClCompile Include="icewave.cpp">
+      <Filter>MainGame\Player\skill\icewave</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

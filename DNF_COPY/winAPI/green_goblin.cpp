@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "green_goblin.h"
 
-//몬스터 타격관련 다시볼것(뭔가 순서가 이상함)
 HRESULT green_goblin::init()
 {
 	goblin_base::init();
@@ -218,10 +217,10 @@ void green_goblin::render()
 {
 	char tmp[50];
 	sprintf(tmp, "고블린_초록_%d", frame);
-	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y+translate(z)) - cam.y,200,154,curDir);
+	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y+translate(z)) - cam.y,200,154,1.0f,255,curDir);
 
 	sprintf(tmp, "고블린_무기_클럽_%d", frame);
-	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y+translate(z)) - cam.y,200,154,curDir);
+	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y+translate(z)) - cam.y,200,154,1.0f,255,curDir);
 
 	if (printblood) {
 		char tmp[50];

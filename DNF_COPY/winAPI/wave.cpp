@@ -8,12 +8,9 @@ HRESULT wave::init()
 	reqMana  = 15;
 	chargeamount = 10;
 	onCooldown = false;
-	int cooldownTick;
+	cooldownTick=400;
 
-	bool isChargable;
-	int chargemax;
 
-	bool isSpot;
 
 	return S_OK;
 }

@@ -151,6 +151,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="goblin_base.h" />
     <ClInclude Include="green_goblin.h" />
+    <ClInclude Include="icewave.h" />
     <ClInclude Include="skills.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="bullets.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="goblin_base.cpp" />
     <ClCompile Include="green_goblin.cpp" />
+    <ClCompile Include="icewave.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="bullets.cpp" />
     <ClCompile Include="Effect.cpp" />

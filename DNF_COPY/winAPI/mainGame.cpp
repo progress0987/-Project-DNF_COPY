@@ -159,6 +159,9 @@ HRESULT mainGame::init(void)
 		 IMAGEMANAGER->addImage(tmp, tmp2);
 	 }
 
+	 ///몬스터
+
+	 //고블린
 	 for (int i = 0; i < 17; i++) {
 		 sprintf(tmp2, "sprites/monster/goblin/blue/%d.png", i);
 		 sprintf(tmp, "고블린_파랑_%d", i);
@@ -282,7 +285,8 @@ HRESULT mainGame::init(void)
 			 sprintf(tmp, "파동검_빙인_얼음기둥_%d", i);
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
-		 for (int i = 0; i < 68; i++) {
+		 for (int i = 0; i < 64; i++) {
+
 			 sprintf(tmp2, "sprites/skill/icewave/icewaveparticle/%d.png", i);
 			 sprintf(tmp, "파동검_빙인_얼음조각_%d", i);
 			 IMAGEMANAGER->addImage(tmp, tmp2);

@@ -664,7 +664,7 @@ void D2DImage::DFpointshadowrender(int destX, int destY, bool dir)
 
 }
 
-void D2DImage::DFpointrender(int destX, int destY, int imgRwidth, int stY, bool dir)
+void D2DImage::DFpointrender(int destX, int destY, int imgRwidth, int stY,FLOAT sc,int fading, bool dir)
 {
 	//2D그리기 시작
 	int w = c_ImgInfo.Width;
@@ -676,10 +676,10 @@ void D2DImage::DFpointrender(int destX, int destY, int imgRwidth, int stY, bool 
 													//회전은 VECTOR3로
 	D3DXVECTOR3 center(w / 2, h / 2, 0);	//그림의 중심점 - 회전의 중심일듯
 
-	D3DXVECTOR2 scale(1.f, 1.f);						//이미지의 스케일을결정(1이 기본), 중심을 기준으로커짐
-	D3DXVECTOR2 scale2(-1.f, 1.f);						//이미지의 스케일을결정(1이 기본), 중심을 기준으로커짐
+	D3DXVECTOR2 scale(sc, sc);						//이미지의 스케일을결정(1이 기본), 중심을 기준으로커짐
+	D3DXVECTOR2 scale2(-sc, sc);						//이미지의 스케일을결정(1이 기본), 중심을 기준으로커짐
 
-	DWORD color = 0xffffffff;							//색들을 출력해줄 정도로 보임(색을바꾸면 해당 색이 좀 빠짐)ARGB순서, A줄이면 이미지흐려짐
+	DWORD color = 0xffffff + (fading<<24);							//색들을 출력해줄 정도로 보임(색을바꾸면 해당 색이 좀 빠짐)ARGB순서, A줄이면 이미지흐려짐
 
 	D3DXMATRIX mat;
 	if (dir) {

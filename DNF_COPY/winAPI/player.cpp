@@ -24,13 +24,7 @@ HRESULT player::init(void)
 	Weapon = wep;
 	curSkill = nullptr;
 
-
-	skill_upper = new upper;
-	skill_upper->init();
-
-	skill_wave = new wave;
-	skill_wave->init();
-
+	setSkills();
 	test = false;
 	return S_OK;
 }
@@ -178,7 +172,7 @@ void player::update(void)
 	case stance_onSkill:
 		//스킬로부터 프레임을 받아와야한다.
 
-		if (curSkill->finished) { curStance = stance_ready; frame = stance_ready; curSkill = nullptr; }
+		if (!curSkill->oncast) { curStance = stance_ready; frame = stance_ready; curSkill = nullptr; }
 		else { frame = curSkill->getCurAction(); }
 		break;
 	}
@@ -186,15 +180,12 @@ void player::update(void)
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////각 스킬들 업데이트
-	{
-		skill_wave->update();
-		skill_upper->update();
-	}
+	updateSkills();
 
 
 
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////스킬에따라 대미지 포인트 만들어주기
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////평타에따라 대미지 포인트 만들어주기
 	if(onAttack){
 		effectedOnTime atk;
 		switch (curStance) {
@@ -274,7 +265,7 @@ void player::update(void)
 		if (i->time + i->staytime < GetTickCount())i = attackQueue.erase(i);
 		else { i++; }
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////스킬에따라 대미지 포인트 만들어주기
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 평타에따라 대미지 포인트 만들어주기
 
 
 
@@ -304,6 +295,7 @@ void player::update(void)
 			else if (curStance == stance_norm_1 || curStance == stance_norm_2 || curStance == stance_upper) {
 				x += 1;
 			}
+			if(curStance == stance_walk||curStance == stance_idle||curStance == stance_run||curStance == stance_ready)
 			curDir = true;
 		}
 		if (KEYMANAGER->isStayKeyDown(VK_LEFT)) {
@@ -317,6 +309,7 @@ void player::update(void)
 			else if (curStance == stance_norm_1 || curStance == stance_norm_2 || curStance == stance_upper) {
 				x -= 1;
 			}
+			if(curStance == stance_walk||curStance == stance_idle||curStance == stance_run || curStance == stance_ready)
 			curDir = false;
 		}
 		if (KEYMANAGER->isStayKeyDown(VK_UP)) {
@@ -360,6 +353,14 @@ void player::update(void)
 			if (curMap->isAttackable()) {
 				inputStruct t;
 				t.key = 'A';
+				t.time = GetTickCount();
+				inputQueue.push_back(t);
+			}
+		}
+		if (KEYMANAGER->isOnceKeyDown('S')) {
+			if (curMap->isAttackable()) {
+				inputStruct t;
+				t.key = 'S';
 				t.time = GetTickCount();
 				inputQueue.push_back(t);
 			}
@@ -427,6 +428,12 @@ void player::update(void)
 					curStance = stance_onSkill;
 					curSkill = skill_wave;
 					skill_wave->cast(x, y, z);
+					inputQueue.pop_front();
+				}
+				if (inputQueue.size() > 0 && inputQueue.front().key == 'S'&&curStance!=stance_onSkill&&!onJump && !skill_icewave->onCooldown) {
+					curStance = stance_onSkill;
+					curSkill = skill_icewave;
+					skill_icewave->cast(x, y, z);
 					inputQueue.pop_front();
 				}
 			}
@@ -568,11 +575,7 @@ void player::update(void)
 
 void player::render(void)
 {
-
-	{
-		skill_wave->renderb();
-		skill_upper->renderb();
-	}
+	printSkillb();
 	char tmp[50];
 	//sprintf(tmp, "무기뒤오라_%d", frame);
 	//IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y+translate(z)) - cam.y, curDir);
@@ -588,10 +591,7 @@ void player::render(void)
 
 	sprintf(tmp, "무기앞_%d", frame);
 	IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y + translate(z)) - cam.y, curDir);
-	{
-		skill_wave->renderf();
-		skill_upper->renderf();
-	}
+	printSkillf();
 }
 
 void player::renderdc(void)
@@ -633,6 +633,39 @@ void player::setOnCombat(bool oncombat)
 		curStance = stance_idle;
 		frame = 176;
 	}
+}
+
+void player::setSkills()
+{
+	skill_upper = new upper;
+	skill_upper->init();
+
+	skill_wave = new wave;
+	skill_wave->init();
+
+	skill_icewave = new icewave;
+	skill_icewave->init();
+}
+
+void player::updateSkills()
+{
+	skill_wave->update();
+	skill_upper->update();
+	skill_icewave->update();
+}
+
+void player::printSkillb()
+{
+	skill_wave->renderb();
+	skill_upper->renderb();
+	skill_icewave->renderb();
+}
+
+void player::printSkillf()
+{
+	skill_wave->renderf();
+	skill_upper->renderf();
+	skill_icewave->renderf();
 }
 
 

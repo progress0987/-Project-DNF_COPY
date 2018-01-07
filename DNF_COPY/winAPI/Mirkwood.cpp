@@ -47,7 +47,7 @@ void Mirkwood::init()
 				m1->addMapTile(t);
 			}
 		}
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 5; i++) {
 			green_goblin* g = new green_goblin();
 			g->setCurmap(m1);
 			g->init(800+i*150,(WINSIZEY - 50)*2);
@@ -86,6 +86,13 @@ void Mirkwood::init()
 			}
 		}
 
+		for (int i = 0; i < 5; i++) {
+			green_goblin* g = new green_goblin();
+			g->setCurmap(m2);
+			g->init(800 + i * 150, (WINSIZEY - 50) * 2);
+			m2->addMonster(g);
+		}
+
 	}
 	/////////////////////////////////////////////////////////////////////////////3¹øÂ° ¸Ê Ã³¸®
 	{
@@ -119,6 +126,15 @@ void Mirkwood::init()
 				m3->addMapTile(t);
 			}
 		}
+
+
+		for (int i = 0; i < 5; i++) {
+			green_goblin* g = new green_goblin();
+			g->setCurmap(m3);
+			g->init(800 + i * 150, (WINSIZEY - 50) * 2);
+			m3->addMonster(g);
+		}
+
 	}
 	conNodes node;
 	node.nextNode = m1;
