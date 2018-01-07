@@ -45,6 +45,7 @@ void MonsterBase::update()
 
 void MonsterBase::render()
 {
+
 }
 
 void MonsterBase::renderdc()

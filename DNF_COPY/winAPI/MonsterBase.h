@@ -19,10 +19,14 @@ protected:
 	FLOAT x, y, z;
 	FLOAT moveSpeedX, moveSpeedZ;
 	FLOAT moveSpeedMaxX, moveSpeedMaxZ;
+	FLOAT hitXvel, hitYvel;
 	FLOAT probeX, probeZ;
+	DWORD onHitCount;
 	bool onAir;
 	bool found;
 	bool curDir;
+	bool hitAvail;
+	int hitAvailCount;
 	int frame;
 	int actionTick;
 	int actionIndicate;
@@ -32,6 +36,8 @@ protected:
 	RECT terColRect;
 	int idlefrom, attackfrom, hitfrom, wakeupfrom, walkfrom, falldownfrom;
 	int idleto, attackto, hitto, wakeupto, walkto,falldownto;
+	int bloodframe;
+	bool printblood;
 public:
 	virtual HRESULT init();
 	virtual void update();

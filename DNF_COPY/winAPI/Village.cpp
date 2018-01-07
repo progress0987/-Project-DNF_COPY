@@ -151,6 +151,7 @@ void Village::render()
 	IMAGEMANAGER->findImage(temp)->render(1290 - cam.x, -20- cam.y);
 	sprintf(temp, "마을_연기_%d", smokeframe);
 	IMAGEMANAGER->findImage(temp)->render(1290+262 - cam.x, -20-160- cam.y);
+	pl->render();
 }
 
 void Village::renderz()

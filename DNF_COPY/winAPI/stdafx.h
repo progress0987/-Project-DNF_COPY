@@ -38,6 +38,9 @@
 #include "iniDataManager.h"
 #include "effectManager.h"
 
+
+#include "player.h"
+
 #pragma comment(lib,"d3dx9.lib")
 #pragma comment(lib,"d3d9.lib")
 #pragma comment(lib, "winmm.lib")
@@ -103,6 +106,7 @@ extern LPDIRECT3DDEVICE9			g_pd3dDevice;				//D3D 디바이스
 extern LPDIRECT3DSURFACE9			g_pd3dSurface;
 extern LPD3DXSPRITE					g_pd3dSprite;
 extern HDC							hdc;						//DC클래스
+extern player* pl;
 
 
 static FLOAT translate(FLOAT zval)

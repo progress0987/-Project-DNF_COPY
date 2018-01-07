@@ -11,6 +11,7 @@ LPDIRECT3DSURFACE9			g_pd3dSurface;
 LPD3DXSPRITE				g_pd3dSprite;
 HDC							hdc;					  //DCÅ¬·¡½º
 Camera						cam;
+player* pl;
 
 LPTSTR _lpszClass = TEXT("API BASE");
 

@@ -47,10 +47,10 @@ void Mirkwood::init()
 				m1->addMapTile(t);
 			}
 		}
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 1; i++) {
 			green_goblin* g = new green_goblin();
 			g->setCurmap(m1);
-			g->init(100+i*50,(WINSIZEY - 50)*2);
+			g->init(800+i*150,(WINSIZEY - 50)*2);
 			m1->addMonster(g);
 		}
 	}
@@ -173,8 +173,12 @@ void MirkwoodMap::init()
 
 void MirkwoodMap::update()
 {
+	monBack.clear();
+	monFront.clear();
 	for (vector<MonsterBase*>::iterator i = monsterList.begin(); i!=monsterList.end();i++ ){
 		(*i)->update();
+		if ((*i)->getZ() < pl->getZ())monBack.push_back((*i));
+		else if ((*i)->getZ() >= pl->getZ())monFront.push_back((*i));
 	}
 }
 
@@ -184,9 +188,18 @@ void MirkwoodMap::render()
 		i->tileImg->render(i->pos.x - cam.x, i->pos.y - cam.y);
 	}
 	
-	for (vector<MonsterBase*>::iterator i = monsterList.begin(); i != monsterList.end(); i++) {
+	for (vector<MonsterBase*>::iterator i = monBack.begin(); i != monBack.end(); i++) {
 		(*i)->render();
 	}
+
+	pl->render();
+
+	for (vector<MonsterBase*>::iterator i = monFront.begin(); i != monFront.end(); i++) {
+		(*i)->render();
+	}
+
+	renderz();
+	renderdc();
 }
 
 void MirkwoodMap::renderz()
@@ -198,6 +211,16 @@ void MirkwoodMap::renderz()
 
 void MirkwoodMap::renderdc()
 {
+
+
+	for (vector<MonsterBase*>::iterator i = monBack.begin(); i != monBack.end(); i++) {
+		(*i)->renderdc();
+	}
+
+
+	for (vector<MonsterBase*>::iterator i = monFront.begin(); i != monFront.end(); i++) {
+		(*i)->renderdc();
+	}
 }
 
 void MirkwoodMap::setMap(const char* tileName, int x, int y)

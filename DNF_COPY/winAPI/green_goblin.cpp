@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "green_goblin.h"
 
-
+//몬스터 타격관련 다시볼것(뭔가 순서가 이상함)
 HRESULT green_goblin::init()
 {
 	goblin_base::init();
@@ -14,35 +14,32 @@ HRESULT green_goblin::init()
 	actionIndicate = rand() % 500+300;
 	curStatus = mon_Idle;
 	moveSpeedMaxX = moveSpeedMaxZ = 6.0f;
+	hitXvel = hitYvel = 0.f;
 	probeX = 500;
 	probeZ = 600;
-	found = false;
+	found = onAir = false;
+	printblood = bloodframe = false;
+	hitAvail = -1;
 	return S_OK;
 }
 
 HRESULT green_goblin::init(int x, int z)
 {
 	goblin_base::init();
+	green_goblin::init();
 	this->x = x;
 	this->z = z;
 	y = 0;
-	frame = 0;
-	actionTick = 0;
-	actionIndicate = rand() % 500+300;
-	curStatus = mon_Idle;
-	moveSpeedMaxX = moveSpeedMaxZ = 5.0f;
-	probeX = 500;
-	probeZ = 600;
-	found = false;
+
 	return S_OK;
 }
 
 void green_goblin::update()
 {
 	actionTick++;
-	if (actionTick > actionIndicate && !found) {															//동작 변경
+	if (actionTick > actionIndicate && !found&&(curStatus!=mon_Hit||curStatus!=mon_Falldown||curStatus!=mon_Wakeup)) {										//동작 변경
 		int indicate = rand() % 100;
-		if(indicate>60){																		//이동으로 변경
+		if(indicate>30){																		//이동으로 변경
 			curStatus = mon_Walk;
 			moveSpeedX = RND->getFloat(moveSpeedMaxX) - moveSpeedMaxX/2.f;
 			moveSpeedX += moveSpeedX > 0.f ? 1.f : -1.f;
@@ -57,7 +54,8 @@ void green_goblin::update()
 			actionIndicate = rand() % 500 + 300;
 		}
 		actionTick = 0;
-	}else if (isdetected()) {
+	}
+	else if (isdetected()&&curStatus!=mon_Hit) {
 		found = true;
 		if (curMap->getPlayer()->getX() > x) {
 			moveSpeedX = 4.f;
@@ -83,11 +81,65 @@ void green_goblin::update()
 	else {
 		found = false;
 	}
+	//공격시작
+	for (list<effectedOnTime>::iterator i = curMap->getPlayer()->getAttackQueueBegin(); i != curMap->getPlayer()->getAttackQueueEnd(); i++) {
+		if (curMap->getPlayer()->getAttackQueue().size() > 0 && hitAvail) {
+			if (i->area.minx < x&&x < i->area.maxx&&
+				i->area.minz < z&&z < i->area.maxz&&
+				i->area.miny < y&&y <= i->area.maxy) {
+				curStatus = mon_Hit;
+				hitAvail = false;
+				printblood=true;
+				frame = hitfrom;
+				hitXvel = i->pushX;
+				hitYvel = i->pushY;
+				if (hitYvel < 0) {
+					onAir = true; curStatus = mon_Falldown; frame = falldownfrom;
+				}
+				onHitCount = hitAvailCount = GetTickCount();
+			}
+		}
+	}
+	if (hitAvailCount+10 < GetTickCount()&&!hitAvail) {
+		hitAvail = true;
+	}
+	if (hitYvel < 0) { curStatus = mon_Falldown; }
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////맞는상태이면
 
+	if (onAir) {
+		hitYvel += .1f;
+		y += hitYvel;
+		x += hitXvel;
+		if (y > 0) {
+			y = 0;
+			hitYvel = 0;
+			onAir = false;
+			onHitCount = GetTickCount();
+		}
+	}
+	if (curStatus == mon_Hit || curStatus == mon_Falldown) {
+		if (hitXvel != 0.f&&!onAir) {
+			x += hitXvel;
+			hitXvel *= 0.8f;
+			if (-0.5f < hitXvel&&hitXvel < 0.5f) hitXvel = 0.f;
+		}
+		if (!onAir && onHitCount + 300< GetTickCount() && hitXvel == 0.f) {
+			if (curStatus == mon_Falldown) {
+				curStatus = mon_Wakeup;
+				frame = wakeupfrom;
+			}
+			else if (curStatus == mon_Hit) {
+				curStatus = mon_Idle;
+				frame = idlefrom;
+			}
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////맞는상태이면
 	if (curStatus == mon_Idle) {
 		moveSpeedX = moveSpeedZ = 0;
 		tick = 0;
 	}
+	//상태에 따른 처리
 	switch (curStatus) {																		//프레임이미지 처리부분
 	case mon_Walk:
 		tick++;
@@ -134,10 +186,24 @@ void green_goblin::update()
 				frame = falldownto;			//계속 쓰러져있는 상태로 유지
 			}
 		}
+		break;
+	case mon_Wakeup:
+		tick++;
+		if (tick % 30 == 0) {
+			frame++;
+			if (frame > wakeupto) {
+				curStatus = mon_Idle;
+				frame = idlefrom;
+			}
+		}
+		break;
 	}
 
+	if (printblood) {
+		bloodframe++;
+	}
 
-	if (tick % 5 == 0 && mon_Walk) {
+	if (tick % 5 == 0 && curStatus == mon_Walk) {														//걷기(이동)
 		x += moveSpeedX;
 		z += moveSpeedZ;
 	}
@@ -157,10 +223,20 @@ void green_goblin::render()
 	sprintf(tmp, "고블린_무기_클럽_%d", frame);
 	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y+translate(z)) - cam.y,200,154,curDir);
 
+	if (printblood) {
+		char tmp[50];
+		if (bloodframe/4 > 6) {
+			bloodframe = 0;
+			printblood = false;
+		}
+		sprintf(tmp, "혈흔_%d", bloodframe/4);
+		IMAGEMANAGER->findImage(tmp)->render(x - 50 -cam.x, (y + translate(z) - 80) -cam.y);
+	}
 }
 
 void green_goblin::renderdc()
 {
+	//Rectangle(hdc, terColRect.left -cam.x, terColRect.top -cam.y, terColRect.right -cam.x, terColRect.bottom -cam.y);
 }
 
 green_goblin::green_goblin()

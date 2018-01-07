@@ -33,6 +33,8 @@ protected:
 	vector<conNodes> connectedNodes;
 	vector<ImgTile> staticTiles;
 	vector<MonsterBase*> monsterList;
+	vector<MonsterBase*> monBack;
+	vector<MonsterBase*> monFront;
 public:
 	MapBase();
 	~MapBase();

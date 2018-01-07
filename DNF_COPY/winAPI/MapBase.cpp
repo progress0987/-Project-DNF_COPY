@@ -4,6 +4,7 @@
 
 MapBase::MapBase()
 {
+	curMap = nullptr;
 }
 
 

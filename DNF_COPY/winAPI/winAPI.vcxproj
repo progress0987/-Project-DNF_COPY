@@ -151,6 +151,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="goblin_base.h" />
     <ClInclude Include="green_goblin.h" />
+    <ClInclude Include="skills.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="bullets.h" />
     <ClInclude Include="commonMacroFunction.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="Seria.h" />
     <ClInclude Include="singletonBase.h" />
+    <ClInclude Include="Skill.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="soundTest.h" />
     <ClInclude Include="stdafx.h" />
@@ -187,8 +189,10 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="upper.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="Village.h" />
+    <ClInclude Include="wave.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action.cpp" />
@@ -225,6 +229,7 @@
     <ClCompile Include="SaveLoadTest.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="Seria.cpp" />
+    <ClCompile Include="Skill.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="soundTest.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -237,8 +242,10 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="upper.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="Village.cpp" />
+    <ClCompile Include="wave.cpp" />
     <ClCompile Include="winAPI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -53,6 +53,7 @@ void Seria::render()
 	//IMAGEMANAGER->findImage("技府酒_2")->blurredrender(0,0,0x88);
 	//IMAGEMANAGER->findImage("技府酒_3")->blurredrender(0,0,0x88);
 	//IMAGEMANAGER->findImage("技府酒_4")->blurredrender(0,0,0x88);
+	pl->render();
 
 }
 

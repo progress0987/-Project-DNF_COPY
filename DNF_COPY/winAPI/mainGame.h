@@ -11,7 +11,6 @@ class mainGame :  public gameNode
 {
 
 private:
-	player* pl;
 	Seria* seriaRoom;
 	Village* village;
 	Mirkwood* mirkwood;

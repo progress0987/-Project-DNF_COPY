@@ -85,6 +85,15 @@
     <Filter Include="MainGame\Enemy\Monster\goblin">
       <UniqueIdentifier>{36a9d931-d990-419c-8b81-846c673bcb43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Player\skill">
+      <UniqueIdentifier>{3a80e7e0-b3a7-46d0-92f1-eede21d7d311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Player\skill\wave">
+      <UniqueIdentifier>{86bebbec-4159-4966-8d1d-5995c1a36cc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Player\skill\upper">
+      <UniqueIdentifier>{effe8035-96a8-48c0-9758-4f84381d42ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -243,6 +252,18 @@
     <ClInclude Include="green_goblin.h">
       <Filter>MainGame\Enemy\Monster\goblin</Filter>
     </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>MainGame\Player\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="wave.h">
+      <Filter>MainGame\Player\skill\wave</Filter>
+    </ClInclude>
+    <ClInclude Include="upper.h">
+      <Filter>MainGame\Player\skill\upper</Filter>
+    </ClInclude>
+    <ClInclude Include="skills.h">
+      <Filter>MainGame\Player\skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -376,6 +397,15 @@
     </ClCompile>
     <ClCompile Include="green_goblin.cpp">
       <Filter>MainGame\Enemy\Monster\goblin</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>MainGame\Player\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="wave.cpp">
+      <Filter>MainGame\Player\skill\wave</Filter>
+    </ClCompile>
+    <ClCompile Include="upper.cpp">
+      <Filter>MainGame\Player\skill\upper</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

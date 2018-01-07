@@ -2,7 +2,6 @@
 #include "mainGame.h"
 
 
-
 RECT rtemp;
 mainGame::mainGame()
 {
@@ -127,7 +126,7 @@ HRESULT mainGame::init(void)
  {
 	 //이미지 처리
 		 char tmp[50];
-		 char tmp2[100];
+		 char tmp2[255];
 	 for (int i = 0; i < 210; i++) {
 
 		 sprintf(tmp2, "sprites/character_premade/%d.png", i);
@@ -208,7 +207,7 @@ HRESULT mainGame::init(void)
 	 }
 
 
-	 //머크우드 타일들
+	 ///머크우드 타일들
 	 {
 		 IMAGEMANAGER->addImage("던전_머크우드_배경_뒤", "sprites/maps/dungeons/mirkwood/back_far.img/0.png");
 		 IMAGEMANAGER->addImage("던전_머크우드_배경_중간", "sprites/maps/dungeons/mirkwood/back_middle.img/0.png");
@@ -241,6 +240,63 @@ HRESULT mainGame::init(void)
 		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_11", "sprites/maps/dungeons/mirkwood/tree.img/11.png");
 	 }
 
+	 ///효과 이펙트
+
+	 //혈흔
+
+	 for (int i = 0; i < 7; i++) {
+		 sprintf(tmp2, "sprites/effects/game/hit/bloodlarge.img/%d.png", i);
+		 sprintf(tmp, "혈흔_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+
+	 ///스킬 이미지들 가져오기
+	 
+	 //어퍼슬래시
+	 for (int i = 0; i < 9; i++) {
+		 sprintf(tmp2, "sprites/skill/upperslash/%d.png", i);
+		 sprintf(tmp, "어퍼슬래시_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+
+
+	 //파동검
+	 for (int i = 0; i < 5; i++) {
+		 sprintf(tmp2, "sprites/skill/wave/hadouken_hadou.img/%d.png", i);
+		 sprintf(tmp, "파동검_공격_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/skill/wave/hadouken_ken.img/%d.png", i);
+		 sprintf(tmp, "파동검_효과_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+
+	 //파동검 빙인
+	 {
+		 for (int i = 0; i < 6; i++) {
+			 sprintf(tmp2, "sprites/skill/icewave/icewave1.img/%d.png", i);
+			 sprintf(tmp, "파동검_빙인_시작효과_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 for (int i = 0; i < 11; i++) {
+			 sprintf(tmp2, "sprites/skill/icewave/icewave2.img/%d.png", i);
+			 sprintf(tmp, "파동검_빙인_얼음기둥_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 for (int i = 0; i < 68; i++) {
+			 sprintf(tmp2, "sprites/skill/icewave/icewaveparticle/%d.png", i);
+			 sprintf(tmp, "파동검_빙인_얼음조각_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 for (int i = 0; i < 3; i++) {
+			 sprintf(tmp2, "sprites/skill/icewave/icewaveparticlesmoke/%d.png", i);
+			 sprintf(tmp, "파동검_빙인_얼음구름_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
+	 
+	 //살의의 파동
+
+	 //기타 이미지
 	 IMAGEMANAGER->addImage("X표시", "sprites/invalid.png");
  }
 
@@ -248,8 +304,6 @@ HRESULT mainGame::init(void)
  void mainGame::paint()
  {
 	 pl->getCurMap()->render();
-	 pl->render();
-	 pl->getCurMap()->renderz();
 	 pl->getUI()->render();
  }
 
