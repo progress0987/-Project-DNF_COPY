@@ -126,6 +126,7 @@ private:
 	upper* skill_upper;
 	icewave* skill_icewave;
 	firewave* skill_firewave;
+	vacslash* skill_vacslash;
 
 
 	status Stat;

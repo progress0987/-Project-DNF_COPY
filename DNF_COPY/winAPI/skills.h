@@ -4,3 +4,4 @@
 #include "upper.h"
 #include "icewave.h"
 #include "firewave.h"
+#include "vacslash.h"

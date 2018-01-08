@@ -365,7 +365,49 @@ HRESULT mainGame::init(void)
 			 IMAGEMANAGER->addImage(tmp, tmp2,true,RGB(0,0,0));
 		 }
 	 }
+
+	 //진공참
+	 {
+			 sprintf(tmp2,"sprites/skill/vaccumslash/grandwave.img/0.png");
+			 sprintf(tmp, "진공참_뒤");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/vaccumslash/grandwave.img/1.png");
+			 sprintf(tmp, "진공참_앞");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/skill/vaccumslash/surajin.img/0.png");
+			 sprintf(tmp, "수라진공참_뒤");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/vaccumslash/surajin.img/1.png");
+			 sprintf(tmp, "수라진공참_앞");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 for (int i = 0; i < 4; i++) {
+			 sprintf(tmp2, "sprites/skill/vaccumslash/grandwaveblade.img/%d.png", i);
+			 sprintf(tmp, "진공참_모션_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/vaccumslash/grandwavefullcharge.img/%d.png", i);
+			 sprintf(tmp, "진공참_풀차지_뒤_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/vaccumslash/grandwavefullcharge.img/%d.png", i+5);
+			 sprintf(tmp, "진공참_풀차지_앞_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 for (int i = 0; i < 13; i++) {
+			 sprintf(tmp2, "sprites/skill/vaccumslash/grandwaveoncharge.img/%d.png", i+13);
+			 sprintf(tmp, "진공참_차지중_뒤_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/vaccumslash/grandwaveoncharge.img/%d.png", i);
+			 sprintf(tmp, "진공참_차지중_앞_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
+
+
+
 	 //살의의 파동
+
+
 
 	 //기타 이미지
 	 IMAGEMANAGER->addImage("X표시", "sprites/invalid.png");

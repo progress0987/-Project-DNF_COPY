@@ -109,6 +109,11 @@ void green_goblin::update()
 						abnormalFrame = 0;
 						onAbnormal = true;
 						break;
+					case 10://È­¿°
+						if (abnormalType == 0) {
+							abnormalType = -1;
+							onAbnormal = false;
+						}
 					}
 				}
 			}

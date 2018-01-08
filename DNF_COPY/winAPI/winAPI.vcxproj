@@ -193,6 +193,7 @@
     <ClInclude Include="UI.h" />
     <ClInclude Include="upper.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="vacslash.h" />
     <ClInclude Include="Village.h" />
     <ClInclude Include="wave.h" />
   </ItemGroup>
@@ -248,6 +249,7 @@
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="upper.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="vacslash.cpp" />
     <ClCompile Include="Village.cpp" />
     <ClCompile Include="wave.cpp" />
     <ClCompile Include="winAPI.cpp" />

@@ -100,6 +100,9 @@
     <Filter Include="MainGame\Player\skill\firewave">
       <UniqueIdentifier>{f94751a6-0d33-4122-9386-f79736e2332b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Player\skill\vacslash">
+      <UniqueIdentifier>{e713704e-c458-447b-88fa-1433ef387675}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -276,6 +279,9 @@
     <ClInclude Include="firewave.h">
       <Filter>MainGame\Player\skill\firewave</Filter>
     </ClInclude>
+    <ClInclude Include="vacslash.h">
+      <Filter>MainGame\Player\skill\vacslash</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -424,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="firewave.cpp">
       <Filter>MainGame\Player\skill\firewave</Filter>
+    </ClCompile>
+    <ClCompile Include="vacslash.cpp">
+      <Filter>MainGame\Player\skill\vacslash</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

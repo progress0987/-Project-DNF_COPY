@@ -465,12 +465,12 @@ void player::update(void)
 					skill_firewave->cast(x, y, z);
 					inputQueue.pop_front();
 				}
-				//if (inputQueue.size() > 0 && inputQueue.front().key == 'F'&&curStance != stance_onSkill && !onJump && !skill_icewave->onCooldown) {
-				//	curStance = stance_onSkill;
-				//	curSkill = skill_icewave;
-				//	skill_icewave->cast(x, y, z);
-				//	inputQueue.pop_front();
-				//}
+				if (inputQueue.size() > 0 && inputQueue.front().key == 'F'&&curStance != stance_onSkill && !onJump && !skill_vacslash->onCooldown) {
+					curStance = stance_onSkill;
+					curSkill = skill_vacslash;
+					skill_vacslash->cast(x, y, z);
+					inputQueue.pop_front();
+				}
 			}
 			else {
 				inputQueue.pop_front();
@@ -646,7 +646,7 @@ void player::renderdc(void)
 
 	//대미지 렉트 그려주기
 	for (list<effectedOnTime>::iterator i = attackQueue.begin(); i != attackQueue.end(); i++) {
-		Rectangle(hdc, i->area.minx - cam.x, translate(i->area.minz) - cam.y, i->area.maxx -cam.x, translate(i->area.maxz) - cam.y);
+		Rectangle(hdc, i->area.minx - cam.x, translate(i->area.minz)+y - cam.y, i->area.maxx -cam.x, translate(i->area.maxz)+y - cam.y);
 	}
 
 }
@@ -689,6 +689,9 @@ void player::setSkills()
 
 	skill_firewave = new firewave;
 	skill_firewave->init();
+
+	skill_vacslash = new vacslash;
+	skill_vacslash->init();
 }
 
 void player::updateSkills()
@@ -697,6 +700,7 @@ void player::updateSkills()
 	skill_upper->update();
 	skill_icewave->update();
 	skill_firewave->update();
+	skill_vacslash->update();
 }
 
 void player::printSkillb()
@@ -705,6 +709,7 @@ void player::printSkillb()
 	skill_upper->renderb();
 	skill_icewave->renderb();
 	skill_firewave->renderb();
+	skill_vacslash->renderb();
 }
 
 void player::printSkillf()
@@ -713,6 +718,7 @@ void player::printSkillf()
 	skill_upper->renderf();
 	skill_icewave->renderf();
 	skill_firewave->renderf();
+	skill_vacslash->renderf();
 }
 
 

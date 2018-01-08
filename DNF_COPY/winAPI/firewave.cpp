@@ -70,12 +70,14 @@ void firewave::update()
 
 			effectedOnTime atk;
 			atk.dmg = 5;
+			atk.isAbnormal = true;
+			atk.abnormal = 10;
 			atk.isOnetime = true;
 			atk.isProjectile = false;
 			atk.area.miny = -170; atk.area.maxy = 0;
 			atk.area.minz = f.z - 50; atk.area.maxz = f.z + 50;
-			atk.area.maxx = f.x + 200;
-			atk.area.minx = f.x ;
+			atk.area.maxx = head ? f.x + 200 : f.x;
+			atk.area.minx = head ? f.x : f.x - 200;
 			atk.pushX = head? 1.5f : -1.5f;
 			atk.pushY = -7.f;												//ÃßÈÄ ½ºÅ³·¹º§¿¡µû¶ó ¶ç¿ì±â´É·Âº¯°æ
 			atk.staytime = 20;
@@ -128,17 +130,17 @@ void firewave::renderb()
 	for (list<flame>::iterator i = flameEffects.begin(); i != flameEffects.end();i++) {
 		if (i->curStatus == 0) {
 			sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_¹Ù´Ú_¿¬±â");
-			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + (head?0:-300) - cam.x,i->y + translate(i->z)+30 - cam.y,421,489);
+			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + (head?-20:-320) - cam.x,i->y + translate(i->z)+30 - cam.y,421,489);
 			sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_¹Ù´Ú_È­¿°");
-			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + (head?0:-300) - cam.x,i->y + translate(i->z)+23 - cam.y,408,481);
+			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + (head?-20:-320) - cam.x,i->y + translate(i->z)+23 - cam.y,408,481);
 			sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_¹Ù´Ú_Æø¹ß");
-			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x+(head?50:-225) - cam.x,i->y + translate(i->z)+30 - cam.y,502,500);
+			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x+(head?30:-245) - cam.x,i->y + translate(i->z)+30 - cam.y,502,500);
 		}
 		else if (i->curStatus == 1) {
 			sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_¹Ù´Ú_¿¬±â");
-			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + (head?0:-300) - cam.x, i->y + translate(i->z)+30 - cam.y, 421, 489, 1.f, i->fade);
+			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + (head?-20:-320) - cam.x, i->y + translate(i->z)+30 - cam.y, 421, 489, 1.f, i->fade);
 			sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_¹Ù´Ú_È­¿°");
-			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + (head?0:-300) - cam.x, i->y + translate(i->z)+23 - cam.y, 408, 481, 1.f, i->fade);
+			IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + (head?-20:-320) - cam.x, i->y + translate(i->z)+23 - cam.y, 408, 481, 1.f, i->fade);
 		}
 		if (0<i->curFrame&&i->curFrame<10) {
 			sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_%d", i->curFrame);
