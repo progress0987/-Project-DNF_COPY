@@ -40,7 +40,6 @@ HRESULT gameNode::init(bool managerInit)
 		 IMAGEMANAGER->deleteAll();
 		 IMAGEMANAGER->releaseSingleton();
 		 KEYMANAGER->releaseSingleton();
-		 IMAGEMANAGER->releaseSingleton();
 		 SOUNDMANAGER->releaseSingleton();
 		 INIDATAMANAGER->releaseSingleton();
 		 EFFECTMANAGER->releaseSingleton();

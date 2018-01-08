@@ -43,6 +43,9 @@ struct effectedOnTime {
 
 	bool isProjectile;							//투사체인지
 	bool isOnetime;								//지속적으로 남는건지(필요할지?)
+	bool isHold;								//홀딩상태로 만드는건지
+	bool isAbnormal;							//상태이상인지
+	int abnormal;								//어떤 상태이상인지 0-빙결
 
 	FLOAT pushX, pushY;							//각 축으로 밀어내는 정도
 };
@@ -122,6 +125,7 @@ private:
 	wave* skill_wave;
 	upper* skill_upper;
 	icewave* skill_icewave;
+	firewave* skill_firewave;
 
 
 	status Stat;

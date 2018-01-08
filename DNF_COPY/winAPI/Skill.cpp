@@ -21,6 +21,7 @@ void Skill::renderf()
 {
 }
 
+
 Skill::Skill()
 {
 }

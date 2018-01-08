@@ -13,11 +13,13 @@ HRESULT green_goblin::init()
 	actionIndicate = rand() % 500+300;
 	curStatus = mon_Idle;
 	moveSpeedMaxX = moveSpeedMaxZ = 6.0f;
+	onAbnormal = false;
+	abnormalCount = abnormalFrame = abnormalStage = abnormalType = -1;
 	hitXvel = hitYvel = 0.f;
 	probeX = 500;
 	probeZ = 600;
 	found = onAir = false;
-	printblood = bloodframe = false;
+	printblood = bloodframe = onAbnormal = false;
 	hitAvail = -1;
 	return S_OK;
 }
@@ -80,7 +82,7 @@ void green_goblin::update()
 	else {
 		found = false;
 	}
-	//공격시작
+	//맞기시작
 	for (list<effectedOnTime>::iterator i = curMap->getPlayer()->getAttackQueueBegin(); i != curMap->getPlayer()->getAttackQueueEnd(); i++) {
 		if (curMap->getPlayer()->getAttackQueue().size() > 0 && hitAvail) {
 			if (i->area.minx < x&&x < i->area.maxx&&
@@ -96,6 +98,19 @@ void green_goblin::update()
 					onAir = true; curStatus = mon_Falldown; frame = falldownfrom;
 				}
 				onHitCount = hitAvailCount = GetTickCount();
+				if (i->isAbnormal) {
+					switch (i->abnormal) {
+					case 0://빙결
+						frame = hitfrom;
+						abnormalType = 0;
+						abnormalStage = 0;
+						abnormalCount = 0;
+						if(!onAbnormal)
+						abnormalFrame = 0;
+						onAbnormal = true;
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -106,9 +121,11 @@ void green_goblin::update()
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////맞는상태이면
 
 	if (onAir) {
-		hitYvel += .1f;
-		y += hitYvel;
-		x += hitXvel;
+		if (!onAbnormal&& abnormalType != 0) {
+			hitYvel += .1f;
+			y += hitYvel;
+			x += hitXvel;
+		}
 		if (y > 0) {
 			y = 0;
 			hitYvel = 0;
@@ -117,7 +134,7 @@ void green_goblin::update()
 		}
 	}
 	if (curStatus == mon_Hit || curStatus == mon_Falldown) {
-		if (hitXvel != 0.f&&!onAir) {
+		if (hitXvel != 0.f&&!onAir && abnormalType !=0) {
 			x += hitXvel;
 			hitXvel *= 0.8f;
 			if (-0.5f < hitXvel&&hitXvel < 0.5f) hitXvel = 0.f;
@@ -198,6 +215,36 @@ void green_goblin::update()
 		break;
 	}
 
+	if (onAbnormal) {																							////상태이상 처리
+		switch (abnormalType) {
+		case 0:
+			printblood = false;
+			y = 0;
+			moveSpeedX = moveSpeedZ = hitYvel = hitXvel = 0;
+			onAir = false;
+			abnormalCount++;
+			if (abnormalStage == 0) {
+				if (abnormalFrame < 3&& abnormalCount%5==0) {
+					abnormalFrame++;
+				}
+				if (abnormalCount >= 500) {
+					abnormalStage = 1;
+					abnormalFrame = 0;
+				}
+			}
+			else if (abnormalStage == 1) {
+				if (abnormalFrame < 5 && abnormalCount % 5 == 0) {
+					abnormalFrame++;
+				}if (abnormalFrame == 5) {
+					onAbnormal = false;
+					curStatus = mon_Idle;
+					frame = idlefrom;
+					abnormalType = -1;
+				}
+			}
+			break;
+		}
+	}
 	if (printblood) {
 		bloodframe++;
 	}
@@ -207,7 +254,7 @@ void green_goblin::update()
 		z += moveSpeedZ;
 	}
 
-	if (curStatus != mon_Hit&& curStatus != mon_Falldown) {
+	if (curStatus != mon_Hit&& curStatus != mon_Falldown&&abnormalType!=0) {
 		curDir = curMap->getPlayer()->getX() > x ? true : false;
 	}
 	MonsterBase::update();
@@ -217,11 +264,28 @@ void green_goblin::render()
 {
 	char tmp[50];
 	sprintf(tmp, "고블린_초록_%d", frame);
-	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y+translate(z)) - cam.y,200,154,1.0f,255,curDir);
+	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y + translate(z)) - cam.y, 200, 154, 1.0f, 255, curDir);
 
 	sprintf(tmp, "고블린_무기_클럽_%d", frame);
-	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y+translate(z)) - cam.y,200,154,1.0f,255,curDir);
+	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y + translate(z)) - cam.y, 200, 154, 1.0f, 255, curDir);
 
+	if (onAbnormal) {
+		switch (abnormalType) {
+		case 0:
+			frame = hitfrom;
+			switch (abnormalStage) {
+			case 0:
+				sprintf(tmp, "빙결_%d", abnormalFrame);
+				IMAGEMANAGER->findImage(tmp)->DFscaledrender(x - cam.x + (curDir?-15:15), (y + translate(z) -5) - cam.y, 200, 154, 0.4f, 0.4f, 255, curDir);
+				break;
+			case 1:
+				sprintf(tmp, "빙결_해제_%d", abnormalFrame);
+				IMAGEMANAGER->findImage(tmp)->DFscaledrender(x - cam.x + (curDir?-15:15), (y + translate(z) -5) - cam.y, 200, 154, 0.4f, 0.4f, 255, curDir);
+				break;
+			}
+			break;
+		}
+	}
 	if (printblood) {
 		char tmp[50];
 		if (bloodframe/4 > 6) {

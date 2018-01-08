@@ -253,6 +253,40 @@ HRESULT mainGame::init(void)
 		 IMAGEMANAGER->addImage(tmp, tmp2);
 	 }
 
+	 //ºù°á
+	 {
+		 sprintf(tmp2, "sprites/status/freeze/4.png");
+		 sprintf(tmp, "ºù°á_0");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/5.png");
+		 sprintf(tmp, "ºù°á_1");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/6.png");
+		 sprintf(tmp, "ºù°á_2");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/7.png");
+		 sprintf(tmp, "ºù°á_3");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/18.png");
+		 sprintf(tmp, "ºù°á_ÇØÁ¦_0");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/19.png");
+		 sprintf(tmp, "ºù°á_ÇØÁ¦_1");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/20.png");
+		 sprintf(tmp, "ºù°á_ÇØÁ¦_2");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/21.png");
+		 sprintf(tmp, "ºù°á_ÇØÁ¦_3");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/22.png");
+		 sprintf(tmp, "ºù°á_ÇØÁ¦_4");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/status/freeze/23.png");
+		 sprintf(tmp, "ºù°á_ÇØÁ¦_5");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+
 	 ///½ºÅ³ ÀÌ¹ÌÁöµé °¡Á®¿À±â
 	 
 	 //¾îÆÛ½½·¡½Ã
@@ -287,17 +321,50 @@ HRESULT mainGame::init(void)
 		 }
 		 for (int i = 0; i < 64; i++) {
 
-			 sprintf(tmp2, "sprites/skill/icewave/icewaveparticle/%d.png", i);
+			 sprintf(tmp2, "sprites/skill/icewave/icewaveparticle.img/%d.png", i);
 			 sprintf(tmp, "ÆÄµ¿°Ë_ºùÀÎ_¾óÀ½Á¶°¢_%d", i);
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
 		 for (int i = 0; i < 3; i++) {
-			 sprintf(tmp2, "sprites/skill/icewave/icewaveparticlesmoke/%d.png", i);
+			 sprintf(tmp2, "sprites/skill/icewave/icewaveparticlesmoke.img/%d.png", i);
 			 sprintf(tmp, "ÆÄµ¿°Ë_ºùÀÎ_¾óÀ½±¸¸§_%d", i);
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
 	 }
 	 
+	 //ÆÄµ¿°Ë Æø¿°
+	 {
+		 for (int i = 0; i < 10; i++) {
+			 sprintf(tmp2, "sprites/skill/firewave/flame_dodge.img/%d.png", i);
+			 sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/firewave/flame_normal.img/%d.png", i);
+			 sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_¿¬±â_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+
+		 sprintf(tmp2, "sprites/skill/firewave/flame_ground.img/0.png");
+		 sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_¹Ù´Ú_È­¿°");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/skill/firewave/flame_ground.img/1.png");
+		 sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_¹Ù´Ú_¿¬±â");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/skill/firewave/flame_line.img/0.png");
+		 sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_È­¿°_¹Ù´Ú_Æø¹ß");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 for (int i = 0; i < 10; i++) {
+			 sprintf(tmp2, "sprites/skill/firewave/sword_effect.img/%d.png", i);
+			 sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_Ä®_È­¿°_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2,true,RGB(0,0,0));
+			 sprintf(tmp2, "sprites/skill/firewave/sword_dodge.img/%d.png", i);
+			 sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_Ä®_ÀÜ¿µ_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2,true,RGB(0,0,0));
+			 sprintf(tmp2, "sprites/skill/firewave/sword_normal.img/%d.png", i);
+			 sprintf(tmp, "ÆÄµ¿°Ë_Æø¿°_Ä®_¿¬±â_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2,true,RGB(0,0,0));
+		 }
+	 }
 	 //»ìÀÇÀÇ ÆÄµ¿
 
 	 //±âÅ¸ ÀÌ¹ÌÁö

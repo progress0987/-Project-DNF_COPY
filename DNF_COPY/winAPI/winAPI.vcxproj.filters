@@ -97,6 +97,9 @@
     <Filter Include="MainGame\Player\skill\icewave">
       <UniqueIdentifier>{36911a06-c83d-4f17-95c3-f012c9533df2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Player\skill\firewave">
+      <UniqueIdentifier>{f94751a6-0d33-4122-9386-f79736e2332b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -270,6 +273,9 @@
     <ClInclude Include="icewave.h">
       <Filter>MainGame\Player\skill\icewave</Filter>
     </ClInclude>
+    <ClInclude Include="firewave.h">
+      <Filter>MainGame\Player\skill\firewave</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -415,6 +421,9 @@
     </ClCompile>
     <ClCompile Include="icewave.cpp">
       <Filter>MainGame\Player\skill\icewave</Filter>
+    </ClCompile>
+    <ClCompile Include="firewave.cpp">
+      <Filter>MainGame\Player\skill\firewave</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -25,8 +25,8 @@ public:
 	UINT				maxFrameY;					//프레임 끝번호(세로)
 
 	HRESULT init(LPDIRECT3DDEVICE9 dev) { curDev = dev; return S_OK; }
-	HRESULT setImage(const char* fileName, DWORD tr=NULL);
-	HRESULT setImage(const char* fileName,BOOL framed,unsigned int frameX,unsigned int frameY, DWORD tr=NULL);
+	HRESULT setImage(const char* fileName,bool trans = false, DWORD tr=NULL);
+	HRESULT setImage(const char* fileName,BOOL framed,unsigned int frameX,unsigned int frameY,bool trans, DWORD tr=NULL);
 	LPDIRECT3DDEVICE9 getDev() { return curDev; }
 
 	void release();
@@ -59,6 +59,7 @@ public:
 	void DFcharpointrender(int destX, int destY, bool dir = true);
 	void DFpointshadowrender(int destX, int destY, bool dir = true);
 	void DFpointrender(int destX, int destY, int imgRwidth, int stY, FLOAT scale = 1.f,int fading = 0xFF, bool dir = true);
+	void DFscaledrender(int destX, int destY, int imgRwidth, int stY, FLOAT scaleX = 1.f,FLOAT scaleY = 1.f, int fading = 0xFF, bool dir = true);
 
 	void shadowrender(int destX, int destY);
 

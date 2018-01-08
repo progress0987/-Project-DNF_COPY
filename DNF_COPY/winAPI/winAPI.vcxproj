@@ -149,6 +149,7 @@
     <ClInclude Include="d2dx_test.h" />
     <ClInclude Include="DungeonBase.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="firewave.h" />
     <ClInclude Include="goblin_base.h" />
     <ClInclude Include="green_goblin.h" />
     <ClInclude Include="icewave.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="D2DTextTest.cpp" />
     <ClCompile Include="DungeonBase.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="firewave.cpp" />
     <ClCompile Include="goblin_base.cpp" />
     <ClCompile Include="green_goblin.cpp" />
     <ClCompile Include="icewave.cpp" />

@@ -23,6 +23,13 @@ protected:
 	FLOAT probeX, probeZ;
 	DWORD onHitCount;
 	bool onAir;
+	bool onHold;
+	bool onAbnormal;
+	int abnormalType;
+	int abnormalStage;
+	int abnormalCount;
+	int abnormalFrame;
+
 	bool found;
 	bool curDir;
 	bool hitAvail;

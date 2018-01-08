@@ -365,6 +365,29 @@ void player::update(void)
 				inputQueue.push_back(t);
 			}
 		}
+		if (KEYMANAGER->isOnceKeyDown('D')) {
+			if (curMap->isAttackable()) {
+				inputStruct t;
+				t.key = 'D';
+				t.time = GetTickCount();
+				inputQueue.push_back(t);
+			}
+		}if (KEYMANAGER->isOnceKeyDown('F')) {
+			if (curMap->isAttackable()) {
+				inputStruct t;
+				t.key = 'F';
+				t.time = GetTickCount();
+				inputQueue.push_back(t);
+			}
+		}
+		if (KEYMANAGER->isOnceKeyDown('G')) {
+			if (curMap->isAttackable()) {
+				inputStruct t;
+				t.key = 'G';
+				t.time = GetTickCount();
+				inputQueue.push_back(t);
+			}
+		}
 		if (KEYMANAGER->isOnceKeyDown('C')) {
 			if (curMap->isRunnable()) {
 				if (curStance == stance_walk || curStance == stance_run || curStance == stance_idle || curStance == stance_ready) {
@@ -436,6 +459,18 @@ void player::update(void)
 					skill_icewave->cast(x, y, z);
 					inputQueue.pop_front();
 				}
+				if (inputQueue.size() > 0 && inputQueue.front().key == 'D'&&curStance != stance_onSkill && !onJump && !skill_firewave->onCooldown) {
+					curStance = stance_onSkill;
+					curSkill = skill_firewave;
+					skill_firewave->cast(x, y, z);
+					inputQueue.pop_front();
+				}
+				//if (inputQueue.size() > 0 && inputQueue.front().key == 'F'&&curStance != stance_onSkill && !onJump && !skill_icewave->onCooldown) {
+				//	curStance = stance_onSkill;
+				//	curSkill = skill_icewave;
+				//	skill_icewave->cast(x, y, z);
+				//	inputQueue.pop_front();
+				//}
 			}
 			else {
 				inputQueue.pop_front();
@@ -608,6 +643,12 @@ void player::renderdc(void)
 	TextOut(hdc, 50, 150, t, strlen(t));
 	sprintf(t, "queuesize : %d", inputQueue.size());
 	TextOut(hdc, 50, 200, t, strlen(t));
+
+	//대미지 렉트 그려주기
+	for (list<effectedOnTime>::iterator i = attackQueue.begin(); i != attackQueue.end(); i++) {
+		Rectangle(hdc, i->area.minx - cam.x, translate(i->area.minz) - cam.y, i->area.maxx -cam.x, translate(i->area.maxz) - cam.y);
+	}
+
 }
 
 void player::setCurScene(MapBase * map, FLOAT x, FLOAT z)
@@ -645,6 +686,9 @@ void player::setSkills()
 
 	skill_icewave = new icewave;
 	skill_icewave->init();
+
+	skill_firewave = new firewave;
+	skill_firewave->init();
 }
 
 void player::updateSkills()
@@ -652,6 +696,7 @@ void player::updateSkills()
 	skill_wave->update();
 	skill_upper->update();
 	skill_icewave->update();
+	skill_firewave->update();
 }
 
 void player::printSkillb()
@@ -659,6 +704,7 @@ void player::printSkillb()
 	skill_wave->renderb();
 	skill_upper->renderb();
 	skill_icewave->renderb();
+	skill_firewave->renderb();
 }
 
 void player::printSkillf()
@@ -666,6 +712,7 @@ void player::printSkillf()
 	skill_wave->renderf();
 	skill_upper->renderf();
 	skill_icewave->renderf();
+	skill_firewave->renderf();
 }
 
 

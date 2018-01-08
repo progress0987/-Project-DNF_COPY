@@ -36,7 +36,7 @@ D2DImage * imageManager::addImage(string key,const char * fileName,bool trans, C
 		SAFE_DELETE(img);
 		return NULL;
 	}
-	if (trans)img->setImage(fileName, transCol);
+	if (trans)img->setImage(fileName,trans, transCol);
 	else img->setImage(fileName);
 
 
@@ -53,8 +53,8 @@ D2DImage * imageManager::addFrameImage(string key, const char * fileName, int fr
 		SAFE_DELETE(img);
 		return NULL;
 	}
-	if (trans)img->setImage(fileName, TRUE, frameX, frameY, transCol);
-	else img->setImage(fileName, TRUE, frameX, frameY);
+	if (trans)img->setImage(fileName, TRUE, frameX, frameY,trans, transCol);
+	else img->setImage(fileName, TRUE, frameX,trans, frameY);
 
 	ImageList.insert(make_pair(key, img));
 	return img;
