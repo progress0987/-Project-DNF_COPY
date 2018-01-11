@@ -5,3 +5,5 @@
 #include "icewave.h"
 #include "firewave.h"
 #include "vacslash.h"
+#include "releasewave.h"
+#include "wavespin.h"

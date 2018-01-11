@@ -60,6 +60,7 @@ public:
 	void DFpointshadowrender(int destX, int destY, bool dir = true);
 	void DFpointrender(int destX, int destY, int imgRwidth, int stY, FLOAT scale = 1.f,int fading = 0xFF, bool dir = true);
 	void DFscaledrender(int destX, int destY, int imgRwidth, int stY, FLOAT scaleX = 1.f,FLOAT scaleY = 1.f, int fading = 0xFF, bool dir = true);
+	void DFpointedcirclerender(int destX, int destY,FLOAT scX=1.f,FLOAT scY=1.f, int fading = 0xFF);
 
 	void shadowrender(int destX, int destY);
 

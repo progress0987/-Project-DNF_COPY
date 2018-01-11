@@ -14,12 +14,14 @@ namespace Util {
 		float y = y2 - y1;
 		float dist = sqrtf(x*x + y*y);
 		//탄젠트 각도
-		float angle = atanf(y / x);
+		//float angle = atanf(y / x);
+		//코사인 각도
+		float angle = acosf(x / dist);
 
 		//코사인쓸때사용
-		/*if(y2 > y1) {
+		if(y2 > y1) {
 			angle = PI * 2 - angle;
-		}*/
+		}
 		return angle;
 	}
 }

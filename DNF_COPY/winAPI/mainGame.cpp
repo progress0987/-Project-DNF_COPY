@@ -125,8 +125,12 @@ HRESULT mainGame::init(void)
  void mainGame::LoadImages()
  {
 	 //이미지 처리
-		 char tmp[50];
-		 char tmp2[255];
+	 char tmp[100];
+	 char tmp2[255];
+
+
+	 ///플레이어
+
 	 for (int i = 0; i < 210; i++) {
 
 		 sprintf(tmp2, "sprites/character_premade/%d.png", i);
@@ -209,8 +213,9 @@ HRESULT mainGame::init(void)
 
 	 }
 
+	 ///맵 타일
 
-	 ///머크우드 타일들
+	 //머크우드 타일
 	 {
 		 IMAGEMANAGER->addImage("던전_머크우드_배경_뒤", "sprites/maps/dungeons/mirkwood/back_far.img/0.png");
 		 IMAGEMANAGER->addImage("던전_머크우드_배경_중간", "sprites/maps/dungeons/mirkwood/back_middle.img/0.png");
@@ -242,6 +247,7 @@ HRESULT mainGame::init(void)
 		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_10", "sprites/maps/dungeons/mirkwood/tree.img/10.png");
 		 IMAGEMANAGER->addImage("던전_머크우드_지형_나무_11", "sprites/maps/dungeons/mirkwood/tree.img/11.png");
 	 }
+
 
 	 ///효과 이펙트
 
@@ -403,7 +409,72 @@ HRESULT mainGame::init(void)
 		 }
 	 }
 
+	 //파동해제
+	 {
+		 for (int i = 0; i < 5; i++) {
+			 sprintf(tmp2, "sprites/skill/releasewave/releasewave1.img/%d.png", i);
+			 sprintf(tmp, "파동해제_해골_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/releasewave/releasewave2.img/%d.png", i);
+			 sprintf(tmp, "파동해제_효과_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
 
+		 sprintf(tmp2, "sprites/skill/releasewave/releasewave1.img/5.png");
+		 sprintf(tmp, "파동해제_해골_5");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+
+	 //부동명왕진
+	 {
+		 for (int i = 0; i < 6; i++) {
+			 sprintf(tmp2, "sprites/skill/wavespin/1-dodge.img/%d.png", i);
+			 sprintf(tmp, "부동_폭발_1_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/wavespin/2-dodge.img/%d.png", i);
+			 sprintf(tmp, "부동_폭발_2_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/wavespin/3-dodge.img/%d.png", i);
+			 sprintf(tmp, "부동_폭발_3_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/wavespin/effect.img/%d.png", i);
+			 sprintf(tmp, "부동_구체_효과_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/wavespin/target-effect.img/%d.png", i);
+			 sprintf(tmp, "부동_구속_효과_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/wavespin/target-effect-dodge.img/%d.png", i);
+			 sprintf(tmp, "부동_구속_효과_배경_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 for (int i = 0; i < 5; i++) {
+			 sprintf(tmp2, "sprites/skill/wavespin/action.img/%d.png", i);
+			 sprintf(tmp, "부동_시동_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 for (int i = 0; i < 3; i++) {
+			 sprintf(tmp2, "sprites/skill/wavespin/bead_disappear_dodge.img/%d.png", i);
+			 sprintf(tmp, "부동_소멸이펙트_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 sprintf(tmp2, "sprites/skill/wavespin/bead-dodge.img/1.png");
+		 sprintf(tmp, "부동_구체");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/skill/wavespin/bead-dodge.img/2.png");
+		 sprintf(tmp, "부동_구체_오라");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/skill/wavespin/mg-circle.img/0.png");
+		 sprintf(tmp, "부동_마법진");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 for (int i = 0; i < 9; i++) {
+			 sprintf(tmp2, "sprites/skill/wavespin/mg-circle-back.img/%d.png", i);
+			 sprintf(tmp, "부동_마법진_이펙트_뒤_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/skill/wavespin/mg-circle-front.img/%d.png", i);
+			 sprintf(tmp, "부동_마법진_이펙트_앞_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
 
 	 //살의의 파동
 

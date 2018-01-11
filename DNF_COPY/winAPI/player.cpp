@@ -388,6 +388,14 @@ void player::update(void)
 				inputQueue.push_back(t);
 			}
 		}
+		if (KEYMANAGER->isOnceKeyDown('Q')) {
+			if (curMap->isAttackable()) {
+				inputStruct t;
+				t.key = 'Q';
+				t.time = GetTickCount();
+				inputQueue.push_back(t);
+			}
+		}
 		if (KEYMANAGER->isOnceKeyDown('C')) {
 			if (curMap->isRunnable()) {
 				if (curStance == stance_walk || curStance == stance_run || curStance == stance_idle || curStance == stance_ready) {
@@ -469,6 +477,18 @@ void player::update(void)
 					curStance = stance_onSkill;
 					curSkill = skill_vacslash;
 					skill_vacslash->cast(x, y, z);
+					inputQueue.pop_front();
+				}
+				if (inputQueue.size() > 0 && inputQueue.front().key == 'G'&&curStance != stance_onSkill && !onJump && !skill_wavespin->onCooldown) {
+					curStance = stance_onSkill;
+					curSkill = skill_wavespin;
+					skill_wavespin->cast(x, y, z);
+					inputQueue.pop_front();
+				}
+				if (inputQueue.size() > 0 && inputQueue.front().key == 'Q'&&curStance != stance_onSkill && !onJump && !skill_releasewave->onCooldown) {
+					curStance = stance_onSkill;
+					curSkill = skill_releasewave;
+					skill_releasewave->cast(x, y, z);
 					inputQueue.pop_front();
 				}
 			}
@@ -680,45 +700,55 @@ void player::setSkills()
 {
 	skill_upper = new upper;
 	skill_upper->init();
+	skills.push_back(skill_upper);
 
 	skill_wave = new wave;
 	skill_wave->init();
+	skills.push_back(skill_wave);
 
 	skill_icewave = new icewave;
 	skill_icewave->init();
+	skills.push_back(skill_icewave);
 
 	skill_firewave = new firewave;
 	skill_firewave->init();
+	skills.push_back(skill_firewave);
 
 	skill_vacslash = new vacslash;
 	skill_vacslash->init();
+	skills.push_back(skill_vacslash);
+
+	skill_releasewave = new releasewave;
+	skill_releasewave->init();
+	skills.push_back(skill_releasewave);
+	
+	skill_wavespin = new wavespin;
+	skill_wavespin->init();
+	skills.push_back(skill_wavespin);
 }
 
 void player::updateSkills()
 {
-	skill_wave->update();
-	skill_upper->update();
-	skill_icewave->update();
-	skill_firewave->update();
-	skill_vacslash->update();
+	for (vector<Skill*>::iterator i = skills.begin(); i != skills.end(); i++)
+	{
+		(*i)->update();
+	}
 }
 
 void player::printSkillb()
 {
-	skill_wave->renderb();
-	skill_upper->renderb();
-	skill_icewave->renderb();
-	skill_firewave->renderb();
-	skill_vacslash->renderb();
+	for (vector<Skill*>::iterator i = skills.begin(); i != skills.end(); i++)
+	{
+		(*i)->renderb();
+	}
 }
 
 void player::printSkillf()
 {
-	skill_wave->renderf();
-	skill_upper->renderf();
-	skill_icewave->renderf();
-	skill_firewave->renderf();
-	skill_vacslash->renderf();
+	for (vector<Skill*>::iterator i = skills.begin(); i != skills.end(); i++)
+	{
+		(*i)->renderf();
+	}
 }
 
 

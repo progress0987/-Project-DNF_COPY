@@ -20,7 +20,7 @@ HRESULT gameNode::init(bool managerInit)
 {
 	this->managerInit = managerInit;
 	if (managerInit) {
-		SetTimer(_hWnd, 1, 10, NULL);
+		//SetTimer(_hWnd, 1, 10, NULL);
 		KEYMANAGER->init();
 		IMAGEMANAGER->init();
 		TIMEMANAGER->init();
@@ -35,7 +35,7 @@ HRESULT gameNode::init(bool managerInit)
  void gameNode::release(void)
  {
 	 if (managerInit) {
-		 KillTimer(_hWnd, 1);
+		 //KillTimer(_hWnd, 1);
 		 //키매니저 릴리즈
 		 IMAGEMANAGER->deleteAll();
 		 IMAGEMANAGER->releaseSingleton();

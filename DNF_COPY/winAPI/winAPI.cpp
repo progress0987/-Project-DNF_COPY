@@ -80,7 +80,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		}
 		else
 		{
-			TIMEMANAGER->update(60.0);
+			TIMEMANAGER->update(120.0);
 			_mg.update();
 		}
 

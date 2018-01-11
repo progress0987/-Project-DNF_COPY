@@ -153,6 +153,7 @@
     <ClInclude Include="goblin_base.h" />
     <ClInclude Include="green_goblin.h" />
     <ClInclude Include="icewave.h" />
+    <ClInclude Include="releasewave.h" />
     <ClInclude Include="skills.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="bullets.h" />
@@ -196,6 +197,8 @@
     <ClInclude Include="vacslash.h" />
     <ClInclude Include="Village.h" />
     <ClInclude Include="wave.h" />
+    <ClInclude Include="wavehold.h" />
+    <ClInclude Include="wavespin.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action.cpp" />
@@ -231,6 +234,7 @@
     <ClCompile Include="PixelCollisionTest.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="progressBar.cpp" />
+    <ClCompile Include="releasewave.cpp" />
     <ClCompile Include="SaveLoadTest.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="Seria.cpp" />
@@ -252,6 +256,8 @@
     <ClCompile Include="vacslash.cpp" />
     <ClCompile Include="Village.cpp" />
     <ClCompile Include="wave.cpp" />
+    <ClCompile Include="wavehold.cpp" />
+    <ClCompile Include="wavespin.cpp" />
     <ClCompile Include="winAPI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -72,6 +72,7 @@ void firewave::update()
 			atk.dmg = 5;
 			atk.isAbnormal = true;
 			atk.abnormal = 10;
+			atk.isHold = false;
 			atk.isOnetime = true;
 			atk.isProjectile = false;
 			atk.area.miny = -170; atk.area.maxy = 0;

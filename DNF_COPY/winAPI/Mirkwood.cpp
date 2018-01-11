@@ -50,7 +50,7 @@ void Mirkwood::init()
 		for (int i = 0; i < 5; i++) {
 			green_goblin* g = new green_goblin();
 			g->setCurmap(m1);
-			g->init(800+i*150,(WINSIZEY - 50)*2);
+			g->init(800+i*100,(WINSIZEY - 50)*2);
 			m1->addMonster(g);
 		}
 	}

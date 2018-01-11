@@ -44,10 +44,13 @@ struct effectedOnTime {
 	bool isProjectile;							//투사체인지
 	bool isOnetime;								//지속적으로 남는건지(필요할지?)
 	bool isHold;								//홀딩상태로 만드는건지
+	bool isMove;								//강제로 이동시키는지
 	bool isAbnormal;							//상태이상인지
-	int abnormal;								//어떤 상태이상인지 0-빙결
+	int abnormal;								//어떤 상태이상인지 0-빙결 9-홀딩 10-화염 50-거리로 이동시키기
 
-	FLOAT pushX, pushY;							//각 축으로 밀어내는 정도
+	FLOAT pushX, pushY,pushZ;							//각 축으로 밀어내는 정도
+	FLOAT attr1,attr2,attr3,attr4;						//받아오는 정보
+	vector<string> effectNames;							//홀딩시 프린트시킬 이름
 };
 
 enum STANCE {
@@ -122,11 +125,14 @@ private:
 
 	
 	//////////////////////////스킬들
+	vector<Skill*> skills;
 	wave* skill_wave;
 	upper* skill_upper;
 	icewave* skill_icewave;
 	firewave* skill_firewave;
 	vacslash* skill_vacslash;
+	releasewave* skill_releasewave;
+	wavespin* skill_wavespin;
 
 
 	status Stat;

@@ -24,7 +24,6 @@ public:
 	void update();
 	void renderb();
 	void renderf();
-	void renderdc();
 
 
 	firewave();

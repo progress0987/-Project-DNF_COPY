@@ -10,16 +10,25 @@ enum monStatus {
 	mon_Wakeup,
 	mon_Walk,
 };
+struct monStat {
+	int dmg;
+	int HP;
+
+};
+
 class MonsterBase
 {
 protected:
+	monStat stat;
 	char *name;
 	int level;
 	int maxHP, curHP;
 	FLOAT x, y, z;
+	FLOAT destX, destY, destZ;
 	FLOAT moveSpeedX, moveSpeedZ;
 	FLOAT moveSpeedMaxX, moveSpeedMaxZ;
-	FLOAT hitXvel, hitYvel;
+	FLOAT hitXvel, hitYvel, hitZvel;
+	FLOAT monHeight;
 	FLOAT probeX, probeZ;
 	DWORD onHitCount;
 	bool onAir;
@@ -45,6 +54,9 @@ protected:
 	int idleto, attackto, hitto, wakeupto, walkto,falldownto;
 	int bloodframe;
 	bool printblood;
+	vector<string> effectNames;
+	int effectframeMax;
+	int effectframe1;
 public:
 	virtual HRESULT init();
 	virtual void update();

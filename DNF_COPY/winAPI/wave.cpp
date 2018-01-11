@@ -41,6 +41,7 @@ void wave::update()
 				atk.dmg = 5;
 				atk.isOnetime = true;
 				atk.isProjectile = false;
+				atk.isHold = false;
 				atk.area.miny = -180; atk.area.maxy = 0;
 				atk.area.minz = z - 50; atk.area.maxz = z + 50;
 				atk.area.maxx = pl->getCurDir() ? x + pl->getWeapon()->reachx + 100 : x - 10;

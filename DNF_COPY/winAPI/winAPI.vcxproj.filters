@@ -103,6 +103,15 @@
     <Filter Include="MainGame\Player\skill\vacslash">
       <UniqueIdentifier>{e713704e-c458-447b-88fa-1433ef387675}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Player\skill\wavespin">
+      <UniqueIdentifier>{4721a797-bc73-4868-b8ce-ac5c75c3be42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Player\skill\releasewave">
+      <UniqueIdentifier>{8502b4e8-1d67-43c0-b27c-457d8c996003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Player\skill\wavehold">
+      <UniqueIdentifier>{0b19ff3c-4b1b-4968-9418-c07f9cd57850}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -282,6 +291,15 @@
     <ClInclude Include="vacslash.h">
       <Filter>MainGame\Player\skill\vacslash</Filter>
     </ClInclude>
+    <ClInclude Include="releasewave.h">
+      <Filter>MainGame\Player\skill\releasewave</Filter>
+    </ClInclude>
+    <ClInclude Include="wavespin.h">
+      <Filter>MainGame\Player\skill\wavespin</Filter>
+    </ClInclude>
+    <ClInclude Include="wavehold.h">
+      <Filter>MainGame\Player\skill\wavehold</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -433,6 +451,15 @@
     </ClCompile>
     <ClCompile Include="vacslash.cpp">
       <Filter>MainGame\Player\skill\vacslash</Filter>
+    </ClCompile>
+    <ClCompile Include="releasewave.cpp">
+      <Filter>MainGame\Player\skill\releasewave</Filter>
+    </ClCompile>
+    <ClCompile Include="wavespin.cpp">
+      <Filter>MainGame\Player\skill\wavespin</Filter>
+    </ClCompile>
+    <ClCompile Include="wavehold.cpp">
+      <Filter>MainGame\Player\skill\wavehold</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -779,6 +779,87 @@ void D2DImage::DFscaledrender(int destX, int destY, int imgRwidth, int stY, FLOA
 		color);
 }
 
+void D2DImage::DFpointedcirclerender(int destX, int destY, FLOAT scX , FLOAT scY, int fading)
+{
+	//2D그리기 시작
+	int w = c_ImgInfo.Width*2;
+	int h = c_ImgInfo.Height*2;
+	D3DXVECTOR2 pos(destX, destY);					//좌상단 좌표
+	RECT rect = { 0,0,w*scX,h*scY };						//그림의 크기
+	float radian = 0.0f;							//회전각도(직각을 기준으로함
+													//회전은 VECTOR3로
+	D3DXVECTOR3 center(w / 2, h / 2, 0);	//그림의 중심점 - 회전의 중심일듯
+
+	D3DXVECTOR2 scale1(-scX, scY);	
+	D3DXVECTOR2 scale2(scX, scY);
+	D3DXVECTOR2 scale3(scX, -scY);
+	D3DXVECTOR2 scale4(-scX, -scY);
+
+	DWORD color = 0xffffff + (fading << 24);							//색들을 출력해줄 정도로 보임(색을바꾸면 해당 색이 좀 빠짐)ARGB순서, A줄이면 이미지흐려짐
+
+	D3DXMATRIX mat;
+	D3DXMatrixTransformation2D(
+		&mat,						//출력
+		NULL,						//스케일링의 중심
+		0.0f,						//스케일링 회전률(???) -확인
+		&scale1,						//스케일링
+		NULL,						//회전의 중심
+		radian,						//회전률
+		&pos);						//위치(트랜슬레이션)
+	g_pd3dSprite->SetTransform(&mat);
+	g_pd3dSprite->Draw(
+		c_pd3dTex,
+		&rect,
+		&center,
+		NULL,
+		color);
+	D3DXMatrixTransformation2D(
+		&mat,						//출력
+		NULL,						//스케일링의 중심
+		0.0f,						//스케일링 회전률(???) -확인
+		&scale2,						//스케일링
+		NULL,						//회전의 중심
+		radian,						//회전률
+		&pos);						//위치(트랜슬레이션)
+	g_pd3dSprite->SetTransform(&mat);
+	g_pd3dSprite->Draw(
+		c_pd3dTex,
+		&rect,
+		&center,
+		NULL,
+		color);
+	D3DXMatrixTransformation2D(
+		&mat,						//출력
+		NULL,						//스케일링의 중심
+		0.0f,						//스케일링 회전률(???) -확인
+		&scale3,						//스케일링
+		NULL,						//회전의 중심
+		radian,						//회전률
+		&pos);						//위치(트랜슬레이션)
+	g_pd3dSprite->SetTransform(&mat);
+	g_pd3dSprite->Draw(
+		c_pd3dTex,
+		&rect,
+		&center,
+		NULL,
+		color);
+	D3DXMatrixTransformation2D(
+		&mat,						//출력
+		NULL,						//스케일링의 중심
+		0.0f,						//스케일링 회전률(???) -확인
+		&scale4,						//스케일링
+		NULL,						//회전의 중심
+		radian,						//회전률
+		&pos);						//위치(트랜슬레이션)
+	g_pd3dSprite->SetTransform(&mat);
+	g_pd3dSprite->Draw(
+		c_pd3dTex,
+		&rect,
+		&center,
+		NULL,
+		color);
+}
+
 void D2DImage::shadowrender(int destX, int destY)
 {
 	//2D그리기 시작
