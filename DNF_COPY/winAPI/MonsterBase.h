@@ -2,6 +2,7 @@
 #include "MapBase.h"
 
 class MapBase;
+extern struct HitQueue;
 enum monStatus {
 	mon_Idle,
 	mon_Attack,
@@ -11,18 +12,16 @@ enum monStatus {
 	mon_Walk,
 };
 struct monStat {
+	int maxHP, curHP;
+	char *name;
+	int level;
 	int dmg;
-	int HP;
-
 };
 
 class MonsterBase
 {
 protected:
 	monStat stat;
-	char *name;
-	int level;
-	int maxHP, curHP;
 	FLOAT x, y, z;
 	FLOAT destX, destY, destZ;
 	FLOAT moveSpeedX, moveSpeedZ;
@@ -57,6 +56,9 @@ protected:
 	vector<string> effectNames;
 	int effectframeMax;
 	int effectframe1;
+	list<HitQueue> hitQueue;
+
+	void printNumber(HitQueue h);
 public:
 	virtual HRESULT init();
 	virtual void update();
@@ -64,11 +66,12 @@ public:
 	virtual void renderdc();
 	virtual bool isdetected();
 
+
 	//////////////////////////////////////////////////////Getter
-	const char* getName() { return name; }
-	int getLvl() { return level; }
-	int getCurHP() { return curHP; }
-	int getMaxHP() { return maxHP; }
+	const char* getName() { return stat.name; }
+	int getLvl() { return stat.level; }
+	int getCurHP() { return stat.curHP; }
+	int getMaxHP() { return stat.maxHP; }
 	FLOAT getX() { return x; }
 	FLOAT getY() { return y; }
 	FLOAT getZ() { return z; }

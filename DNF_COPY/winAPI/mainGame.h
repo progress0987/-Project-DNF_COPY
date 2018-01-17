@@ -11,6 +11,7 @@ class mainGame :  public gameNode
 {
 
 private:
+	void initItems();
 	Seria* seriaRoom;
 	Village* village;
 	Mirkwood* mirkwood;

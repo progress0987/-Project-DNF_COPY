@@ -5,10 +5,10 @@
 HRESULT firewave::init()
 {
 
-	reqMana = 15;
+	reqMana = 200;
 	chargeamount = 10;
 	onCooldown = false;
-	cooldownTick = 400;
+	cooldownTick = 5000;
 	waveBegin = false;
 	numofWave = 3;
 	curWave = 0;
@@ -69,12 +69,14 @@ void firewave::update()
 			curWave++;
 
 			effectedOnTime atk;
-			atk.dmg = 5;
+			atk.mindmg = (pl->getStatus().intel+pl->getStatus().a_intel)*2 + pl->getWeapon()->magdmgmin*2;
+			atk.maxdmg = (pl->getStatus().intel+pl->getStatus().a_intel)*2 + pl->getWeapon()->magdmgmax*2;
 			atk.isAbnormal = true;
 			atk.abnormal = 10;
 			atk.isHold = false;
 			atk.isOnetime = true;
 			atk.isProjectile = false;
+			atk.isCrit = rand() % 100 > 70 ? true : false;
 			atk.area.miny = -170; atk.area.maxy = 0;
 			atk.area.minz = f.z - 50; atk.area.maxz = f.z + 50;
 			atk.area.maxx = head ? f.x + 200 : f.x;

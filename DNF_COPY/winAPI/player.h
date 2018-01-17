@@ -7,26 +7,35 @@
 #define KEYDELAY 30
 class UI;
 class MapBase;
-
-struct Item {
-	int type;							//아이템 종류로 할 것
-	int dmg;
-	int def;
-
-	int reachx;							//무기에 한정됨
-	int reachz;							//무기에 한정됨
-
-	int reqStr;
-	int reqInt;
-	int reqDex;
-
-	int gainStr;
-	int gainInt;
-	int gainDex;
-
-	string name;
-	string description;
+struct Item;
+enum itemType {
+	item_weapon,
+	item_coat,
+	item_shoulder,
+	item_belt,
+	item_pants,
+	item_shoes,
+	item_ring,
+	item_necklace,
+	item_braclet,
+	item_consume,
 };
+
+enum WeaponType {
+	wp_empty,			//없음
+	wp_sswd,			//소검
+	wp_gswd,			//대검
+	wp_kat,				//도
+	//이후 더 추가
+};
+enum ArmorType {
+	arm_cloth,			//천갑옷
+	arm_leather,		//가죽
+	arm_larmor,			//경갑
+	arm_harmor,			//중갑
+	arm_plate			//판금
+};
+
 
 struct effected {
 	FLOAT maxx, minx;
@@ -34,7 +43,8 @@ struct effected {
 	FLOAT maxz, minz;
 };
 struct effectedOnTime {
-	int dmg;									//대미지
+	int mindmg;									//대미지
+	int maxdmg;
 	int dmgTick;								//대미지가 얼마마다 들어올지(틱/시간)
 	effected area;								//대미지 타격 범위
 
@@ -46,6 +56,7 @@ struct effectedOnTime {
 	bool isHold;								//홀딩상태로 만드는건지
 	bool isMove;								//강제로 이동시키는지
 	bool isAbnormal;							//상태이상인지
+	bool isCrit;								//크리티컬인지
 	int abnormal;								//어떤 상태이상인지 0-빙결 9-홀딩 10-화염 50-거리로 이동시키기
 
 	FLOAT pushX, pushY,pushZ;							//각 축으로 밀어내는 정도
@@ -84,33 +95,34 @@ enum SKILLS {
 	skill_areal_Atk,
 };
 
-struct status {//스텟 - 추가할것
-
+struct status {			//스텟, a붙은건 추가분
+	int maxHP, curHP;
+	int a_maxHP;
+	int maxMP, curMP;
+	int a_maxMP;
+	int str, intel, health, spirit;
+	int a_str, a_intel, a_health, a_spirit;
+	int phyAtt, magAtt;
+	int a_phyAtt, a_magAtt;
+	int phyDef, magDef;
+	int a_phyDef, a_magDef;
+	float phycritrate, magcritrate;//안쓸거임
 };
-
-//struct dmgstruct {
-//	int dmg;									//대미지
-//	unsigned long time;							//공격을 할 때의 시간
-//	unsigned int staytime;						//공격 대미지 유지시간
-//	bool isProjectile;							//투사체인지
-//	bool isOnetime;								//지속적으로 남는건지(필요할지?)
-//	int dmgFrame;								//대미지가 들어갈 프레임 - 스킬단에서 쓸 예정(안쓸지도)
-//	FLOAT pushX, pushY;							//각 축으로 밀어내는 정도
-//	int maxz, minz;								//최대/최소 z대미지 범위
-//	int maxx, minx;								//최대/최소 x대미지 범위
-//	int maxy, miny;								//최대/최소 y대미지 범위
-//};
 
 struct inputStruct {
 	short key;
 	long time;
 };
+
 class player
 {
 private:
+	Item * emptyWeapon;
+	Item * empty;
 	RECT terColRect;
 
 	int frame;
+	bool onSuperarmor;
 	DWORD Time;
 	DWORD tick;
 	
@@ -121,9 +133,7 @@ private:
 	int movestatus;							//가만히있을시 : 0 걷기 : 1 뛰기 : 2
 	float jumpPow;
 	FLOAT x, y, z;
-	bool onDebug;
 
-	
 	//////////////////////////스킬들
 	vector<Skill*> skills;
 	wave* skill_wave;
@@ -135,7 +145,7 @@ private:
 	wavespin* skill_wavespin;
 
 
-	status Stat;
+
 	STANCE prevStance;
 	STANCE curStance;
 	STANCE nextStance;
@@ -147,16 +157,25 @@ private:
 	list<effectedOnTime> attackQueue;
 	list<inputStruct> inputQueue;
 
+
 	/////////////////////////////////장비///////////////////////
+
 	Item* Weapon;
+	Item* Armor;
+	Item* Shoulder;
+	Item* Pants;
+	Item* Belt;
+	Item* Boots;
+	Item* Necklece;
+	Item* Ring;
+	Item* Bracelet;
+
 
 	long movebegin;
-
-
-
-
-	bool test;
 public:
+	status Stat;									//스텟
+
+	Item* equipments[8][4];
 	HRESULT init(void);
 	void release(void);
 	void update(void);
@@ -172,7 +191,12 @@ public:
 	void updateSkills();
 	void printSkillb();
 	void printSkillf();
+	void hitDmg(int amount);
 
+
+	void useItem(int tab, int x,int y);
+	void rootItem(Item it);
+	void unequip(int);
 
 
 
@@ -180,12 +204,25 @@ public:
 	FLOAT getY() { return y; }
 	FLOAT getZ() { return z; }
 	bool getCurDir() { return curDir; }
+	
 	Item* getWeapon() { return Weapon; }
+	Item* getArmor() { return Armor; }
+	Item* getCoat() { return Armor; }
+	Item* getShoulder() { return Shoulder; }
+	Item* getPants() { return Pants; }
+	Item* getBelt() { return Belt; }
+	Item* getBoots() { return Boots; }
+	Item* getShoes() { return Boots; }
+
+
 	list<effectedOnTime> getAttackQueue() { return attackQueue; }
 	list<effectedOnTime>::iterator getAttackQueueBegin() { return attackQueue.begin(); }
 	list<effectedOnTime>::iterator getAttackQueueEnd() { return attackQueue.end(); }
+
+
 	MapBase* getCurMap() { return curMap; }
 	UI* getUI() { return ui; }
+	status getStatus() { return Stat; }
 
 	player();
 	~player();

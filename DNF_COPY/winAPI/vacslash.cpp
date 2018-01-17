@@ -4,12 +4,12 @@
 
 HRESULT vacslash::init()
 {
-	reqMana = 15;
+	reqMana = 200;
 	onCooldown = false;
 	cooldownTick = 500;			//쿨타임
 	isChargable = true;
 	chargemax = 1000;
-	chargeamount = 100;
+	chargeamount = 500;
 	chargetick = 10;
 	travelDist = 500;			//사정거리
 	sl.onshow = false;
@@ -112,12 +112,13 @@ void vacslash::update()
 		sl.x += (head?7:-7);
 		if (sl.dmgtick % 20 == 0) {
 			effectedOnTime atk;
-			atk.dmg = 5;
+			atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon()->magdmgmin*2;
+			atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon()->magdmgmax*2;
 			atk.isOnetime = true;
 			atk.isProjectile = true;
 			atk.isAbnormal = false;
 			atk.isHold = false;
-
+			atk.isCrit = rand() % 100 > 80 ? true : false;
 			atk.area.miny = (chargeStatus>0?-200:-100); atk.area.maxy = 0;
 			atk.area.minz = sl.z + (chargeStatus>0?-150:-90); atk.area.maxz = sl.z + (chargeStatus>0?+150:+90);
 			atk.area.maxx = sl.x + 100;

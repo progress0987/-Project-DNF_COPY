@@ -49,6 +49,7 @@ HRESULT mainGame::init(void)
 		cam.x = 0;
 		cam.y = 0;
 
+		initItems();
 		LoadImages();
 	}
 	//////////////////////////////////////로딩끝//////////////////////////////////////////////
@@ -130,37 +131,165 @@ HRESULT mainGame::init(void)
 
 
 	 ///플레이어
-
 	 for (int i = 0; i < 210; i++) {
 
 		 sprintf(tmp2, "sprites/character_premade/%d.png", i);
 		 sprintf(tmp, "캐릭터_%d", i);
 		 IMAGEMANAGER->addImage(tmp, tmp2);
 
-		 //sprintf(tmp, "sprites/weapon/front_0/%d.png", i);
-		 //sprintf(tmp2, "무기앞오라_%d", i);
-		 //IMAGEMANAGER->addImage(tmp2, tmp);
-
-		 //sprintf(tmp, "sprites/weapon/front_1/%d.png", i);
-		 //sprintf(tmp2, "무기앞_%d", i);
-		 //IMAGEMANAGER->addImage(tmp2, tmp);
-
-
-		 //sprintf(tmp, "sprites/weapon/back_0/%d.png", i);
-		 //sprintf(tmp2, "무기뒤오라_%d", i);
-		 //IMAGEMANAGER->addImage(tmp2, tmp);
-
-		 //sprintf(tmp, "sprites/weapon/back_1/%d.png", i);
-		 //sprintf(tmp2, "무기뒤_%d", i);
-		 //IMAGEMANAGER->addImage(tmp2, tmp);
-
-		 sprintf(tmp2, "sprites/weapon/back/%d.png", i);
-		 sprintf(tmp, "무기뒤_%d", i);
+		 sprintf(tmp2, "sprites/item/empty/emptyB/%d_p7.png", i);
+		 sprintf(tmp, "빈손뒤_%d", i);
 		 IMAGEMANAGER->addImage(tmp, tmp2);
 
-		 sprintf(tmp2, "sprites/weapon/front/%d.png", i);
-		 sprintf(tmp, "무기앞_%d", i);
+		 sprintf(tmp2, "sprites/item/empty/emptyF/%d_p7.png", i);
+		 sprintf(tmp, "빈손앞_%d", i);
 		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+
+	 ///아이템
+	 //장착시 모습(무기)
+	 for (vector<string>::iterator i = itemNames.begin(); i != itemNames.end(); i++) {
+		 map<string, Item>::iterator f = itemList.find((*i));
+		 if (f != itemList.end()&& f->second.id!=-1) {
+			 for (int a = 0; a < 210; a++) {
+				 switch (f->second.type) {
+				 case itemType::item_weapon:
+					 if (f->second.branch > 0) {
+						 sprintf(tmp2, "sprites/item/equipment/weapon/%sb.img/%d_p%d.png", f->second.imgName, a,f->second.branch);
+					 }
+					 else {
+						 sprintf(tmp2, "sprites/item/equipment/weapon/%sb.img/%d.png", f->second.imgName, a);
+					 }
+					 sprintf(tmp, "%s_뒤_%d", (*i).c_str(), a);
+					 IMAGEMANAGER->addImage(tmp, tmp2);
+
+					 if (f->second.branch > 0) {
+						 sprintf(tmp2, "sprites/item/equipment/weapon/%sc.img/%d_p%d.png", f->second.imgName, a, f->second.branch);
+					 }
+					 else {
+						 sprintf(tmp2, "sprites/item/equipment/weapon/%sc.img/%d.png", f->second.imgName, a);
+					 }
+					 sprintf(tmp, "%s_앞_%d", (*i).c_str(), a);
+					 IMAGEMANAGER->addImage(tmp, tmp2);
+					 break;
+				 case itemType::item_coat:
+					 break;
+
+				 }
+			 }
+		 }
+	 }
+	 //인벤슬롯 이미지
+	 
+	 //갑옷부분
+	 {
+		 for (int i = 0; i < 70; i++) {
+			 if (i < 63) {
+				 sprintf(tmp2, "sprites/item/icons/plate_belt.img/%d.png", i);
+				 sprintf(tmp, "판금_벨트_%d", i);
+				 IMAGEMANAGER->addImage(tmp, tmp2);
+			 }
+			 if (i < 64) {
+				 sprintf(tmp2, "sprites/item/icons/plate_neck.img/%d.png", i);
+				 sprintf(tmp, "판금_어깨_%d", i);
+				 IMAGEMANAGER->addImage(tmp, tmp2);
+			 }
+			 if (i < 65) {
+				 sprintf(tmp2, "sprites/item/icons/plate_shoes.img/%d.png", i);
+				 sprintf(tmp, "판금_신발_%d", i);
+				 IMAGEMANAGER->addImage(tmp, tmp2);
+			 }
+			 if (i < 67) {
+				 sprintf(tmp2, "sprites/item/icons/plate_pants.img/%d.png", i);
+				 sprintf(tmp, "판금_바지_%d", i);
+				 IMAGEMANAGER->addImage(tmp, tmp2);
+			 }
+			 sprintf(tmp2, "sprites/item/icons/plate_coat.img/%d.png", i);
+			 sprintf(tmp, "판금_상의_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
+
+	 //무기부분
+	 {
+		 for (int i = 0; i < 169; i++) {
+			 if (i < 160) {
+				 sprintf(tmp2, "sprites/item/icons/sswd.img/%d.png", i);
+				 sprintf(tmp, "소검_%d", i);
+				 IMAGEMANAGER->addImage(tmp, tmp2);
+			 }
+			 sprintf(tmp2, "sprites/item/icons/katana.img/%d.png", i);
+			 sprintf(tmp, "도_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
+
+	 //팔찌
+	 {
+		 for (int i = 0; i < 197; i++) {
+			 sprintf(tmp2, "sprites/item/icons/bracelet.img/%d.png", i);
+			 sprintf(tmp, "팔찌_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
+	 //반지
+	 {
+		 for (int i = 0; i < 249; i++) {
+			 sprintf(tmp2, "sprites/item/icons/ring.img/%d.png", i);
+			 sprintf(tmp, "반지_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
+	 //목걸이
+	 {
+		 for (int i = 0; i < 204; i++) {
+			 sprintf(tmp2, "sprites/item/icons/necklace.img/%d.png", i);
+			 sprintf(tmp, "목걸이_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
+
+
+
+	 ///UI
+	 {
+		 IMAGEMANAGER->addImage("UI_하단_기본창", "sprites/UI/hud.img/0.png");
+		 IMAGEMANAGER->addImage("UI_하단_기본창_확장", "sprites/UI/hud.img/133.png");
+		 IMAGEMANAGER->addImage("UI_하단_기본창_조각", "sprites/UI/hud.img/134.png");
+		 IMAGEMANAGER->addImage("UI_HP", "sprites/UI/hud.img/1.png");
+		 IMAGEMANAGER->addImage("UI_MP", "sprites/UI/hud.img/2.png");
+
+
+
+		 IMAGEMANAGER->addImage("UI_인벤토리_기본창", "sprites/UI/inventory.img/0.png");
+		 IMAGEMANAGER->addImage("UI_인벤토리_활성탭", "sprites/UI/inventory.img/31.png");
+		 IMAGEMANAGER->addImage("UI_인벤토리_비활성탭", "sprites/UI/inventory.img/29.png");
+		 IMAGEMANAGER->addImage("UI_인벤토리_장비베이스", "sprites/UI/inventory.img/21.png");
+		 //IMAGEMANAGER->addImage("UI_인벤토리_아이템_라인베이스", "sprites/UI/inventory.img/39.png");
+		 IMAGEMANAGER->addImage("UI_인벤토리_아이템_개별", "sprites/UI/inventory.img/49.png");
+		 //IMAGEMANAGER->addImage("UI_인벤토리_기본창", "sprites/UI/inventory.img/0.png");
+		 for (int i = 0; i < 9; i++) {
+			 sprintf(tmp2, "sprites/UI/windowcommon.img/%d.png", i);
+			 sprintf(tmp, "창_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+
+		 IMAGEMANAGER->addImage("UI_스텟_기본", "sprites/UI/profile.img/15.png");
+
+		 for (int i = 0; i < 10; i++) {
+			 sprintf(tmp2, "sprites/effects/game/combo_big.img/%d.png", i+11);
+			 sprintf(tmp, "대미지_일반_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/effects/game/combo_big.img/%d.png", i + 22);
+			 sprintf(tmp, "대미지_크리티컬_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/effects/game/combo_big.img/%d.png", i + 88);
+			 sprintf(tmp, "플레이어_대미지_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 IMAGEMANAGER->addImage("크리티컬_표시", "sprites/effects/game/combo_big.img/84.png");
 	 }
 
 	 ///몬스터

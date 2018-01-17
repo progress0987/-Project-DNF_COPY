@@ -11,6 +11,7 @@ HRESULT green_goblin::init()
 	frame = 0;
 	actionTick = 0;
 	actionIndicate = rand() % 500+300;
+	monHeight = 51;
 	curStatus = mon_Idle;
 	moveSpeedMaxX = moveSpeedMaxZ = 6.0f;
 	onAbnormal = false;
@@ -21,6 +22,9 @@ HRESULT green_goblin::init()
 	found = onAir = onHold = false;
 	printblood = bloodframe = onAbnormal = false;
 	hitAvail = -1;
+	stat.maxHP = stat.curHP = 500;
+	stat.dmg = 30;
+
 	return S_OK;
 }
 
@@ -81,11 +85,17 @@ void green_goblin::render()
 		sprintf(tmp, "Ç÷Èç_%d", bloodframe/4);
 		IMAGEMANAGER->findImage(tmp)->render(x - 50 -cam.x, (y + translate(z) - 80) -cam.y);
 	}
+	
+	MonsterBase::render();
 }
 
 void green_goblin::renderdc()
 {
-	Rectangle(hdc, terColRect.left -cam.x, terColRect.top -cam.y, terColRect.right -cam.x, terColRect.bottom -cam.y);
+	char tmp[200];
+	sprintf(tmp, "%d / %d", stat.curHP, stat.maxHP);
+
+	TextOut(hdc, 500, 500, tmp, strlen(tmp));
+	//Rectangle(hdc, terColRect.left -cam.x, terColRect.top -cam.y, terColRect.right -cam.x, terColRect.bottom -cam.y);
 }
 
 green_goblin::green_goblin()

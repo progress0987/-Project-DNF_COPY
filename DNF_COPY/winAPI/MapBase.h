@@ -60,7 +60,7 @@ public:
 	virtual MapBase* getCurMap() { return curMap; }
 
 	bool isRunnable() { return runnable; }
-	bool isPeaceful() { return peaceful; }
+	bool isPeaceful() { if (curMap != nullptr) return curMap->isPeaceful(); else return peaceful; }
 	bool isAttackable() { return attackable; }	
 	
 	/////////////////////////////////////setter

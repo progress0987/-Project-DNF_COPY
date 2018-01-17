@@ -34,7 +34,9 @@ public:
 	///////////////////////////////////·»´õµé
 	void render();
 	void render(int destX, int destY);
-	void render(int destX, int destY,int sourX,int sourY,int sourW, int sourH);
+	void render(int destX, int destY, FLOAT sourX, FLOAT sourY, FLOAT sourW, FLOAT sourH);
+
+	void scaledrender(int destX, int destY, FLOAT sizeX =1.f, FLOAT sizeY =1.f);
 
 	void blurredrender(int destX, int destY,BYTE alpha);
 
@@ -61,6 +63,7 @@ public:
 	void DFpointrender(int destX, int destY, int imgRwidth, int stY, FLOAT scale = 1.f,int fading = 0xFF, bool dir = true);
 	void DFscaledrender(int destX, int destY, int imgRwidth, int stY, FLOAT scaleX = 1.f,FLOAT scaleY = 1.f, int fading = 0xFF, bool dir = true);
 	void DFpointedcirclerender(int destX, int destY,FLOAT scX=1.f,FLOAT scY=1.f, int fading = 0xFF);
+	void DFuirender(int destX, int destY,int fromX=0, int fromY=0, int Width=-1, int Height=-1, FLOAT scX =1.0f, FLOAT scY = 1.0f, int fade = 0xFF);
 
 	void shadowrender(int destX, int destY);
 

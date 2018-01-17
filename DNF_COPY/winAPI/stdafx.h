@@ -52,7 +52,47 @@ struct Camera {
 	DOUBLE x, y;
 	DOUBLE offsetX, offsetY;
 };
+struct Item {
+	string name;
+	char imgName[50];
+	int branch;							//내부에서 몇개까지 갈라져있는지, 갈라져있으면 몇번인지(없으면 0);
+	int id;								//아이템 이미지 id
+	int type;							//아이템 종류로 할 것
+	int detail;							//아이템 세부사항
 
+	int phydmgmin;							//무기한정
+	int magdmgmin;
+	int phydmgmax;
+	int magdmgmax;
+
+	int phydef;
+	int magdef;
+
+	int reachx;							//무기에 한정됨
+	int reachz;							//무기에 한정됨
+
+	int gainStr;
+	int gainInt;
+	int gainHealth;
+	int gainSpirit;
+
+	int gainHP;
+	int gainMP;
+	
+	int reqlvl;
+
+	bool equipped;
+
+	string description;
+};
+
+
+struct HitQueue {
+	bool isCrit;
+	FLOAT x, y;
+	int dmg;
+	DWORD time;
+};
 //====================================
 // ##내가 만든 헤더파일 요기에 추가!!
 //====================================
@@ -106,7 +146,10 @@ extern LPDIRECT3DDEVICE9			g_pd3dDevice;				//D3D 디바이스
 extern LPDIRECT3DSURFACE9			g_pd3dSurface;
 extern LPD3DXSPRITE					g_pd3dSprite;
 extern HDC							hdc;						//DC클래스
-extern player* pl;
+extern player*						pl;
+extern map<string, Item>			itemList;
+extern vector<string>				itemNames;
+extern bool							onDebug;
 
 
 static FLOAT translate(FLOAT zval)

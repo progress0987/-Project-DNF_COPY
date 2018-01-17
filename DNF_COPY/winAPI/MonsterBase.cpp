@@ -2,12 +2,51 @@
 #include "MonsterBase.h"
 
 
+void MonsterBase::printNumber(HitQueue h)
+{
+	int digit;
+	bool odd;
+	DWORD now = GetTickCount();
+	///////////////////자릿수 설정
+	if (h.dmg / 1000000 > 0) digit = 7;
+	else if (h.dmg / 100000 > 0)digit = 6;
+	else if (h.dmg / 10000 > 0)digit = 5;
+	else if (h.dmg / 1000 > 0)digit = 4;
+	else if (h.dmg / 100 > 0)digit = 3;
+	else if (h.dmg / 10 > 0)digit = 2;
+	else digit = 1;
+	odd = digit % 2;
+	int mod=1;
+	for (int i = 0; i < digit; i++) {
+		mod *= 10;
+	}
+	//글자는 30x27로
+	char t[50];
+	int left =h.x- ((digit / 2) * 30 + odd ? 15 : 0);
+	for (int i = 0; i < digit; i++) {//프린트
+		if (h.isCrit) {					//크리티컬이면
+			if(mod/10>0) sprintf(t, "대미지_크리티컬_%d", h.dmg% mod / (mod/10));
+			else sprintf(t, "대미지_크리티컬_%d", h.dmg % mod);
+			IMAGEMANAGER->findImage(t)->blurredrender(left + i * 30 - cam.x, h.y -cam.y,(h.time - now)<0xff?h.time-now:0xff);
+			mod /= 10;
+		}
+		else {							//일반이면
+			if(mod/10>0) sprintf(t, "대미지_일반_%d", h.dmg% mod/ (mod/ 10));
+			else sprintf(t, "대미지_일반_%d", h.dmg % mod);
+			IMAGEMANAGER->findImage(t)->blurredrender(left + i * 30 -cam.x, h.y -cam.y,(h.time - GetTickCount())<0xff?h.time-GetTickCount():0xff);
+			mod /= 10;
+
+		}
+	}
+
+}
+
 HRESULT MonsterBase::init()
 {
 	return S_OK;
 }
 
-void MonsterBase::update()
+void MonsterBase::update()//두대씩 맞는거 체크?? 왜지??
 {
 	actionTick++;
 	if (!onHold) {
@@ -61,7 +100,7 @@ void MonsterBase::update()
 		if (curMap->getPlayer()->getAttackQueue().size() > 0 && hitAvail) {
 			if (i->area.minx < x&&x < i->area.maxx&&
 				i->area.minz < z&&z < i->area.maxz&&
-				i->area.miny < y&&y <= i->area.maxy) {
+				i->area.miny < y &&y <= i->area.maxy) {
 				float tempangle = getAngle(pl->getX(), pl->getZ(), x, z);
 				curStatus = mon_Hit;
 				hitAvail = false;
@@ -70,6 +109,23 @@ void MonsterBase::update()
 				frame = hitfrom;
 				hitXvel = i->pushX;
 				hitYvel = i->pushY;
+				if (i->mindmg > 0) {////////////////////////////////////공격받았을경우 대미지가 1이상이라면
+					int hitdmg = RND->getFromIntTo(i->mindmg, i->maxdmg);
+					if (i->isCrit) {
+						stat.curHP -= hitdmg*1.5f;
+					}
+					else {
+						stat.curHP -= hitdmg;
+					}
+					////////////////////////////////대미지 프린트할 구조체만들기
+					HitQueue hit;
+					hit.dmg = hitdmg;
+					hit.isCrit = i->isCrit;
+					hit.time = GetTickCount();
+					hit.x = x;
+					hit.y = y + translate(z)-100;//머리위쪽으로 출력하기위함
+					hitQueue.push_back(hit);
+				}
 				if (hitYvel < 0) {
 					onAir = true; curStatus = mon_Falldown; frame = falldownfrom;
 				}
@@ -126,9 +182,32 @@ void MonsterBase::update()
 			}
 		}
 	}
-	if (hitAvailCount + 10 < GetTickCount() && !hitAvail) {
+	if (hitAvailCount + 20 < GetTickCount() && !hitAvail) {
 		hitAvail = true;
 	}
+	/*
+	해야할것 : 대미지 큐 업데이트하면서 위로 올라가게 만들기.
+	렌더부분에서 해당이미지를 출력하도록 만들기
+	*/
+	for (list<HitQueue>::iterator i = hitQueue.begin(); i != hitQueue.end();) {
+		DWORD now = GetTickCount();
+		if (now<i->time+300) {////////////////////////// 맞아서 300ms까지는 위로올라감
+			i->y -= (1.f / 2.f);
+		}
+		else if (i->time+300<now&&now<i->time+600) {
+			i->y -= (1.f / 500.f);
+		}
+		else if (i->time + 600 < now&&now<i->time + 900 ) {
+			i->y -= (1.f / 2.f);
+		}
+		else if (i->time + 900 < now) {
+			i=hitQueue.erase(i);
+			continue;
+		}
+		i++;
+	}
+
+
 	if (hitYvel < 0 && !onHold) { curStatus = mon_Falldown; }
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////맞는상태이면
 
@@ -363,7 +442,9 @@ void MonsterBase::update()
 
 void MonsterBase::render()
 {
-
+	for (list<HitQueue>::iterator i = hitQueue.begin(); i != hitQueue.end();i++) {
+		printNumber(*i);
+	}
 }
 
 void MonsterBase::renderdc()

@@ -57,11 +57,13 @@ void wavespin::update()
 					stage = 1;
 				}
 				if (curAction == 77) {
-					atk.dmg = 0;
+					atk.mindmg = 0;
+					atk.maxdmg = 0;
 					atk.isOnetime = true;
 					atk.isProjectile = false;
 					atk.isHold = true;
 					atk.isAbnormal = true;
+					atk.isCrit = rand() % 100 > 80 ? true : false;
 					atk.attr1 = skilldiameter;
 					atk.attr2 = ballHeight;
 					atk.attr3 = 6;
@@ -99,7 +101,8 @@ void wavespin::update()
 					balls[i].effect = 0;
 
 				if (count % 3 == 0) {
-					atk.dmg = 15;
+					atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon()->magdmgmin*2;
+					atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon()->magdmgmax*2;
 					atk.isOnetime = true;
 					atk.isProjectile = false;
 					atk.isHold = true;
@@ -148,7 +151,8 @@ void wavespin::update()
 				//}
 				if (curAction == 166) {
 					for (int i = 0; i < 5; i++) {
-						atk.dmg = 30;
+						atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel)*4 + pl->getWeapon()->magdmgmin;
+						atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel)*4 + pl->getWeapon()->magdmgmax;
 						atk.isOnetime = true;
 						atk.isProjectile = false;
 						atk.isHold = false;

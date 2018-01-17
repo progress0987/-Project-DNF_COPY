@@ -4,10 +4,10 @@
 
 HRESULT releasewave::init()
 {
-	reqMana = 15;
+	reqMana = 100;
 	onCooldown = false;
 	oncast = false;
-	cooldownTick = 1000;
+	cooldownTick = 4000;
 	return S_OK;
 }
 
@@ -37,10 +37,12 @@ void releasewave::update()
 			curAction++;
 			if (curAction == 81) {//°ø°İ
 				effectedOnTime atk;
-				atk.dmg = 5;
+				atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon()->magdmgmin*1.5f;
+				atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon()->magdmgmax*1.5f;
 				atk.isOnetime = true;
 				atk.isProjectile = false;
 				atk.isHold = false;
+				atk.isCrit = rand() % 100 > 90 ? true : false;
 				atk.area.miny = -200; atk.area.maxy = 0;
 				atk.area.minz = z - 200; atk.area.maxz = z + 200;
 				atk.area.maxx = x +200;

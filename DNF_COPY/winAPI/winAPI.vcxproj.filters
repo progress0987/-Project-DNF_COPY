@@ -70,15 +70,6 @@
     <Filter Include="2DGameFramework\loading">
       <UniqueIdentifier>{a9e9b8e4-d6dd-436e-ba8f-a3f0e868f44e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2DGameFramework\Map">
-      <UniqueIdentifier>{ce2daf19-fe37-473a-b5ba-c5a049547b1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\Map\Dungeon">
-      <UniqueIdentifier>{36dca70b-a6a6-43fe-8b0c-80a657af6585}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2DGameFramework\Map\Dungeon\Mirkwood">
-      <UniqueIdentifier>{5614f1fc-27b9-4cbe-891d-0aefaaf2e767}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\Enemy\Monster">
       <UniqueIdentifier>{60992431-f83f-41b6-9e72-32978201898d}</UniqueIdentifier>
     </Filter>
@@ -111,6 +102,15 @@
     </Filter>
     <Filter Include="MainGame\Player\skill\wavehold">
       <UniqueIdentifier>{0b19ff3c-4b1b-4968-9418-c07f9cd57850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Map">
+      <UniqueIdentifier>{ce2daf19-fe37-473a-b5ba-c5a049547b1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Map\Dungeon">
+      <UniqueIdentifier>{36dca70b-a6a6-43fe-8b0c-80a657af6585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Map\Dungeon\Mirkwood">
+      <UniqueIdentifier>{5614f1fc-27b9-4cbe-891d-0aefaaf2e767}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -235,31 +235,31 @@
       <Filter>2DGameFramework\Image</Filter>
     </ClInclude>
     <ClInclude Include="Astar.h">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClInclude>
     <ClInclude Include="Field.h">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClInclude>
     <ClInclude Include="D2DTextTest.h">
       <Filter>2DGameFramework\Tests</Filter>
     </ClInclude>
     <ClInclude Include="MapBase.h">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClInclude>
     <ClInclude Include="Seria.h">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClInclude>
     <ClInclude Include="Village.h">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>MainGame\Player</Filter>
     </ClInclude>
     <ClInclude Include="DungeonBase.h">
-      <Filter>2DGameFramework\Map\Dungeon</Filter>
+      <Filter>MainGame\Map\Dungeon</Filter>
     </ClInclude>
     <ClInclude Include="Mirkwood.h">
-      <Filter>2DGameFramework\Map\Dungeon\Mirkwood</Filter>
+      <Filter>MainGame\Map\Dungeon\Mirkwood</Filter>
     </ClInclude>
     <ClInclude Include="MonsterBase.h">
       <Filter>MainGame\Enemy\Monster</Filter>
@@ -399,31 +399,31 @@
       <Filter>2DGameFramework\Image</Filter>
     </ClCompile>
     <ClCompile Include="Astar.cpp">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClCompile>
     <ClCompile Include="Field.cpp">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClCompile>
     <ClCompile Include="D2DTextTest.cpp">
       <Filter>2DGameFramework\Tests</Filter>
     </ClCompile>
     <ClCompile Include="MapBase.cpp">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClCompile>
     <ClCompile Include="Seria.cpp">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClCompile>
     <ClCompile Include="Village.cpp">
-      <Filter>2DGameFramework\Map</Filter>
+      <Filter>MainGame\Map</Filter>
     </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>MainGame\Player</Filter>
     </ClCompile>
     <ClCompile Include="DungeonBase.cpp">
-      <Filter>2DGameFramework\Map\Dungeon</Filter>
+      <Filter>MainGame\Map\Dungeon</Filter>
     </ClCompile>
     <ClCompile Include="Mirkwood.cpp">
-      <Filter>2DGameFramework\Map\Dungeon\Mirkwood</Filter>
+      <Filter>MainGame\Map\Dungeon\Mirkwood</Filter>
     </ClCompile>
     <ClCompile Include="MonsterBase.cpp">
       <Filter>MainGame\Enemy\Monster</Filter>
@@ -460,6 +460,9 @@
     </ClCompile>
     <ClCompile Include="wavehold.cpp">
       <Filter>MainGame\Player\skill\wavehold</Filter>
+    </ClCompile>
+    <ClCompile Include="initItems.cpp">
+      <Filter>MainGame\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

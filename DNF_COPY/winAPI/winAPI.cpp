@@ -2,6 +2,7 @@
 #include"mainGame.h"
 //API : Application Programming Interface
 
+
 HINSTANCE _hInstance;		//어플 고유번호
 HWND _hWnd;					//조작질
 
@@ -18,6 +19,9 @@ LPTSTR _lpszClass = TEXT("API BASE");
 POINT ptMouse;
 FLOAT ptScale;			//스케일 값(마우스로함)
 mainGame _mg;
+map<string, Item> itemList;
+vector<string> itemNames;
+bool onDebug;
 
 
 void setWindowsSize(int x, int y, int width, int height);

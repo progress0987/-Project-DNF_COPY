@@ -4,7 +4,7 @@
 
 HRESULT icewave::init()
 {
-	reqMana = 15;
+	reqMana = 150;
 	chargeamount = 10;
 	onCooldown = false;
 	cooldownTick = 7000;			//ÄðÅ¸ÀÓ
@@ -63,8 +63,10 @@ void icewave::update()
 			needle.staytime = 1000;
 			needles.push_back(needle);
 			effectedOnTime atk;
-			atk.dmg = 5;
+			atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel)/2 + pl->getWeapon()->magdmgmin/2;
+			atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel)/2 + pl->getWeapon()->magdmgmax/2;
 			atk.isOnetime = false;
+			atk.isCrit = rand() % 100 > 80 ? true : false;
 			atk.isProjectile = false;
 			atk.isAbnormal = true;
 			atk.isHold = false;

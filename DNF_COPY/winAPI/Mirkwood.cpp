@@ -18,6 +18,7 @@ void Mirkwood::init()
 	/////////////////////////////////////////////////////////////////////////1번째 맵 처리
 	{
 		m1->setPlayer(pl);
+		m1->setPeaceful(false);
 		int tileNum = 5;
 		for (int i = 0; i < tileNum; i++) {
 			m1->setMap("던전_머크우드_배경_뒤", IMAGEMANAGER->findImage("던전_머크우드_배경_뒤")->getWidth() * i, 0);
@@ -47,7 +48,7 @@ void Mirkwood::init()
 				m1->addMapTile(t);
 			}
 		}
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 1; i++) {
 			green_goblin* g = new green_goblin();
 			g->setCurmap(m1);
 			g->init(800+i*100,(WINSIZEY - 50)*2);
@@ -57,6 +58,7 @@ void Mirkwood::init()
 	/////////////////////////////////////////////////////////////////////2번째 맵 처리
 	{
 		m2->setPlayer(pl);
+		m2->setPeaceful(false);
 		int tileNum = 6;
 		for (int i = 0; i < tileNum; i++) {
 			m2->setMap("던전_머크우드_배경_뒤", IMAGEMANAGER->findImage("던전_머크우드_배경_뒤")->getWidth() * i, 0);
@@ -97,6 +99,7 @@ void Mirkwood::init()
 	/////////////////////////////////////////////////////////////////////////////3번째 맵 처리
 	{
 		m3->setPlayer(pl);
+		m3->setPeaceful(false);
 		int tileNum = 7;
 		for (int i = 0; i < tileNum; i++) {
 			m3->setMap("던전_머크우드_배경_뒤", IMAGEMANAGER->findImage("던전_머크우드_배경_뒤")->getWidth() * i, 0);
@@ -220,9 +223,9 @@ void MirkwoodMap::render()
 
 void MirkwoodMap::renderz()
 {
-	for (vector<MapTile>::iterator i = mapTiles.begin(); i != mapTiles.end(); i++) {
-		IMAGEMANAGER->findImage("X표시")->render(i->rc.left -cam.x, i->rc.top -cam.y);
-	}
+	//for (vector<MapTile>::iterator i = mapTiles.begin(); i != mapTiles.end(); i++) {
+	//	IMAGEMANAGER->findImage("X표시")->render(i->rc.left -cam.x, i->rc.top -cam.y);
+	//}
 }
 
 void MirkwoodMap::renderdc()

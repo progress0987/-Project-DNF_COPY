@@ -14,7 +14,6 @@ protected:
 
 	int curAction;													//현재 취하고있는 액션의 프레임
 	
-	int reqMana;
 
 	bool isbuff;
 
@@ -36,8 +35,10 @@ protected:
 
 
 public:
+	int reqMana;
 	bool oncast,finished;
 	bool onCooldown;
+	bool isSuperArmor;
 	virtual HRESULT init();
 	virtual void cast(FLOAT x, FLOAT y, FLOAT z);
 	virtual void update();

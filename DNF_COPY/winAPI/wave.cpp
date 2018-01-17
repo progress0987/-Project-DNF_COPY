@@ -5,7 +5,7 @@
 HRESULT wave::init()
 {
 
-	reqMana  = 15;
+	reqMana  = 50;
 	chargeamount = 10;
 	onCooldown = false;
 	cooldownTick=400;
@@ -38,10 +38,12 @@ void wave::update()
 			curAction++;
 			if (curAction == 35) {//АјАн
 				effectedOnTime atk;
-				atk.dmg = 5;
+				atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel) * 3 + pl->getWeapon()->magdmgmin*1.5f;
+				atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel) * 3 + pl->getWeapon()->magdmgmax*1.5f;
 				atk.isOnetime = true;
 				atk.isProjectile = false;
 				atk.isHold = false;
+				atk.isCrit = rand() % 100 > 60 ? true : false;
 				atk.area.miny = -180; atk.area.maxy = 0;
 				atk.area.minz = z - 50; atk.area.maxz = z + 50;
 				atk.area.maxx = pl->getCurDir() ? x + pl->getWeapon()->reachx + 100 : x - 10;
