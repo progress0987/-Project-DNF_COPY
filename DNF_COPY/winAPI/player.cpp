@@ -2,12 +2,12 @@
 #include "player.h"
 #include "enemyManager.h"
 
-
-//플레이어가 두대씩 때리는거 필수로 확인
+///////////////////////인벤토리 효율화
 HRESULT player::init(void)
 {
-	int inputindex=0;
-	Time = 0;
+	empty = itemList.find("없음")->second;
+	emptyWeapon = itemList.find("무기없음")->second;
+	Time = onHeal = onHealFrame = 0;
 	frame = 176;
 	onSuperarmor = false;
 	x = curMap->getWidth() / 2;
@@ -17,73 +17,38 @@ HRESULT player::init(void)
 	onDebug = onJump = onSkill = false;
 	ui = new UI;
 	ui->init();
+	gold = 1000000;
 	movebegin = 0;
 	setOnCombat(!curMap->isPeaceful());
-	Item it = itemList.find("없음")->second;
-	empty = new Item;
-	memcpy(empty, &it, sizeof(Item));
 
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 8; j++) {
-			equipments[j][i] = new Item;
-			equipments[j][i] = empty;
-		}
-	}
-	it = itemList.find("무기없음")->second;
-	it.equipped = true;
-	emptyWeapon = new Item;
-	memcpy(emptyWeapon, &it, sizeof(Item));
+	Weapon = emptyWeapon;
 	Armor = Shoulder = Pants = Belt = Boots = Necklece = Ring = Bracelet = empty;
 	
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 8; j++) {
+			equipments.push_back(empty);
+			consume.push_back(empty);
+		}
+	}
 
+	rootItem(itemList.find("일반검")->second);
+	rootItem(itemList.find("창성의 구원자 - 소검")->second);
+	rootItem(itemList.find("메탈라인 아머 상의")->second);
+	rootItem(itemList.find("메탈라인 아머 하의")->second);
+	rootItem(itemList.find("메탈라인 아머 어깨")->second);
+	rootItem(itemList.find("메탈라인 아머 벨트")->second);
+	rootItem(itemList.find("메탈라인 아머 신발")->second);
 
+	for (int i = 0; i < 10; i++) {
+		rootItem(itemList.find("블루베리")->second);
+		rootItem(itemList.find("라미화 잎")->second);
+		rootItem(itemList.find("타코야끼")->second);
+		rootItem(itemList.find("샴페인")->second);
+		rootItem(itemList.find("하트쿠키")->second);
+		rootItem(itemList.find("마나에이드")->second);
+	}
 
-
-
-	Item* wp1;
-
-	wp1 = new Item;
-	memcpy(wp1,&itemList.find("일반검")->second,sizeof(Item));
-	wp1->equipped = false;
-	equipments[inputindex % 8][inputindex / 8] = wp1;
-	inputindex++;
-
-	wp1 = new Item;
-	memcpy(wp1,&itemList.find("창성의 구원자 - 소검")->second,sizeof(Item));
-	wp1->equipped = false;
-	equipments[inputindex % 8][inputindex / 8] = wp1;
-	inputindex++;
-
-	wp1 = new Item;
-	memcpy(wp1, &itemList.find("메탈라인 아머 상의")->second, sizeof(Item));
-	wp1->equipped = false;
-	equipments[inputindex % 8][inputindex / 8] = wp1;
-	inputindex++;
-
-	wp1 = new Item;
-	memcpy(wp1, &itemList.find("메탈라인 아머 하의")->second, sizeof(Item));
-	wp1->equipped = false;
-	equipments[inputindex % 8][inputindex / 8] = wp1;
-	inputindex++;
-
-	wp1 = new Item;
-	memcpy(wp1, &itemList.find("메탈라인 아머 어깨")->second, sizeof(Item));
-	wp1->equipped = false;
-	equipments[inputindex % 8][inputindex / 8] = wp1;
-	inputindex++;
-
-	wp1 = new Item;
-	memcpy(wp1, &itemList.find("메탈라인 아머 벨트")->second, sizeof(Item));
-	wp1->equipped = false;
-	equipments[inputindex % 8][inputindex / 8] = wp1;
-	inputindex++;
-
-	wp1 = new Item;
-	memcpy(wp1, &itemList.find("메탈라인 아머 신발")->second, sizeof(Item));
-	wp1->equipped = false;
-	equipments[inputindex % 8][inputindex / 8] = wp1;
-	inputindex++;
-
+	q1 = q2 = q3 = q4 = q5 = q6 = empty;
 	Weapon = emptyWeapon;
 	curSkill = nullptr;
 	Stat.str = 5;
@@ -97,14 +62,17 @@ HRESULT player::init(void)
 	Stat.magAtt = (Stat.intel + Stat.a_intel) * 10;
 
 	Stat.phyDef = (Stat.health + Stat.a_health) * 2 + (Stat.str + Stat.a_str);
-	Stat.a_phyDef = Armor->phydef + Shoulder->phydef + Belt->phydef + Pants->phydef + Boots->phydef;
+	Stat.a_phyDef = Armor.phydef + Shoulder.phydef + Belt.phydef + Pants.phydef + Boots.phydef;
 	Stat.magDef = (Stat.spirit + Stat.a_spirit) * 10 + (Stat.intel + Stat.a_intel);
-	Stat.a_magDef = Armor->magdef + Shoulder->magdef + Belt->magdef + Pants->magdef + Boots->magdef;
+	Stat.a_magDef = Armor.magdef + Shoulder.magdef + Belt.magdef + Pants.magdef + Boots.magdef;
 
-	Stat.a_phyAtt = Weapon->phydmgmin;
-	Stat.a_magAtt = Weapon->magdmgmin;
+	Stat.a_phyAtt = Weapon.phydmgmin;
+	Stat.a_magAtt = Weapon.magdmgmin;
 
 	setSkills();
+	for (int i = equipments.size(); i < 32; i++) {
+		equipments.push_back(empty);
+	}
 	return S_OK;
 }
 
@@ -117,7 +85,8 @@ void player::update(void)
 {
 	tick++;
 	Time++;
-	/////////////////////////////////////////////////////////////////////////////////////////////////////체력/마력 적을때 회복
+	effectedOnTime atk;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////체력/마력 적을때 회복, 회복효과
 	{
 		if (!curMap->isPeaceful()) {
 			if (Stat.curMP < Stat.maxMP) {
@@ -133,6 +102,16 @@ void player::update(void)
 		}
 		if (Stat.curHP > Stat.maxHP) Stat.curHP = Stat.maxHP;
 		if (Stat.curMP > Stat.maxMP) Stat.curMP = Stat.maxMP;
+
+		if (onHeal > 0) {
+			if (tick % 5 == 0) {
+				onHealFrame++;
+				if (onHealFrame > 11) {
+					onHealFrame = 0;
+					onHeal = 0;
+				}
+			}
+		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////상태에 따른 프레임 처리
 	switch (curStance) {
@@ -189,6 +168,24 @@ void player::update(void)
 	case stance_norm_1:
 		if (tick % 5 == 0) {
 			frame++;
+
+			if (frame == 3&&onAttack) {
+				atk.isCrit = rand() % 100 > 80 ? true : false;
+				atk.mindmg = (pl->getStatus().str + pl->getStatus().a_str) + pl->getWeapon().phydmgmin;
+				atk.maxdmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon().phydmgmax;
+				atk.isOnetime = true;
+				atk.isProjectile = false;
+				atk.area.miny = -50; atk.area.maxy = 0;
+				atk.area.minz = z - Weapon.reachz; atk.area.maxz = z + Weapon.reachz;
+				atk.area.maxx = curDir ? x + Weapon.reachx : x + 50;
+				atk.area.minx = curDir ? x - 50 : x - Weapon.reachx;
+				atk.pushX = curDir ? 3.f : -3.f;
+				atk.pushY = 0.f;
+				atk.staytime = 10;
+				atk.time = Time;
+				atk.time = GetTickCount();
+				attackQueue.push_back(atk);
+			}
 			if (frame > 8) {
 				if (nextStance < 0) {
 					curStance = stance_ready;
@@ -205,6 +202,23 @@ void player::update(void)
 	case stance_norm_2:
 		if (tick % 5 == 0) {
 			frame++;
+			if (frame == 12 && onAttack) {
+				atk.isCrit = rand() % 100 > 80 ? true : false;
+				atk.mindmg = (Stat.str + Stat.a_str) + Weapon.phydmgmin;
+				atk.maxdmg = (Stat.str + Stat.a_str) * 2 + Weapon.phydmgmax;
+				atk.isOnetime = true;
+				atk.isProjectile = false;
+				atk.area.miny = -50; atk.area.maxy = 0;
+				atk.area.minz = z - Weapon.reachz; atk.area.maxz = z + Weapon.reachz;
+				atk.area.maxx = curDir ? x + Weapon.reachx : x + 50;
+				atk.area.minx = curDir ? x - 50 : x - Weapon.reachx;
+				atk.pushX = curDir ? 3.f : -3.f;
+				atk.pushY = 0.f;
+				atk.staytime = 10;
+				atk.time = Time;
+				atk.time = GetTickCount();
+				attackQueue.push_back(atk);
+			}
 			if (frame > 20) {
 				if (nextStance < 0) {
 					curStance = stance_ready;
@@ -221,6 +235,23 @@ void player::update(void)
 	case stance_norm_3:
 		if (tick % 5 == 0) {
 			frame++;
+			if (frame == 35&&onAttack) {
+				atk.isCrit = rand() % 100 > 80 ? true : false;
+				atk.mindmg = (Stat.str + Stat.a_str) + Weapon.phydmgmin;
+				atk.maxdmg = (Stat.str + Stat.a_str) * 2 + Weapon.phydmgmax;
+				atk.isOnetime = true;
+				atk.isProjectile = false;
+				atk.area.miny = -100; atk.area.maxy = 0;
+				atk.area.minz = z - Weapon.reachz / 2; atk.area.maxz = z + Weapon.reachz / 2;
+				atk.area.maxx = curDir ? x + Weapon.reachx : x - 10;
+				atk.area.minx = curDir ? x + 10 : x - Weapon.reachx;
+				atk.pushX = curDir ? 1.f : -1.f;
+				atk.pushY = -5.f;												//추후 스킬레벨에따라 띄우기능력변경
+				atk.staytime = 10;
+				atk.time = Time;
+				atk.time = GetTickCount();
+				attackQueue.push_back(atk);
+			}
 			if (frame > 41) {
 				//if (nextStance < 0) {
 				curStance = stance_ready;
@@ -254,6 +285,25 @@ void player::update(void)
 	case stance_areal_att:
 		if (tick % 10 == 0) {
 			frame++;
+
+			if (frame == 134&&onAttack) {
+				atk.isCrit = rand() % 100 > 80 ? true : false;
+				atk.mindmg = (Stat.str + Stat.a_str) + Weapon.phydmgmin;
+				atk.maxdmg = (Stat.str + Stat.a_str) * 2 + Weapon.phydmgmax;
+				atk.isOnetime = true;
+				atk.isProjectile = false;
+				atk.area.miny = y - 100; atk.area.maxy = y + 30;
+				atk.area.minz = z - Weapon.reachz / 2; atk.area.maxz = z + Weapon.reachz / 2;
+				atk.area.maxx = curDir ? x + Weapon.reachx : x - 10;
+				atk.area.minx = curDir ? x + 10 : x - Weapon.reachx;
+				atk.pushX = curDir ? 1.f : -1.f;
+				atk.pushY = 0;
+				atk.staytime = 10;
+				atk.time = Time;
+				atk.time = GetTickCount();
+				attackQueue.push_back(atk);											//추후 스킬레벨에따라 띄우기능력변경
+
+			}
 			if (frame > 137) {
 				if (jumpPow > 0) {
 					curStance = stance_jump_down;
@@ -278,85 +328,6 @@ void player::update(void)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////슈퍼아머 처리(나중에 슈퍼아머중에 맞아도 스킬 안풀리게)
 	if (skill_wavespin->finished&&skill_releasewave->finished && onSuperarmor) {
 		onSuperarmor = false;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////평타에따라 대미지 포인트 만들어주기
-	if(onAttack){
-		effectedOnTime atk;
-		switch (curStance) {
-		case stance_norm_1:
-			if (frame == 3) {
-				atk.mindmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmin;
-				atk.maxdmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmax;
-				atk.isOnetime = true;
-				atk.isProjectile = false;
-				atk.area.miny = -50; atk.area.maxy = 0;
-				atk.area.minz = z - Weapon->reachz; atk.area.maxz = z + Weapon->reachz;
-				atk.area.maxx = curDir ? x + Weapon->reachx : x+50;
-				atk.area.minx = curDir ? x-50 : x - Weapon->reachx;
-				atk.pushX = curDir ? 3.f : -3.f;
-				atk.pushY = 0.f;
-				atk.staytime = 10;
-				atk.time = Time;
-				atk.time = GetTickCount();
-				attackQueue.push_back(atk);
-			}
-			break;
-		case stance_norm_2:
-			if (frame == 12) {
-				atk.mindmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmin;
-				atk.maxdmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmax;
-				atk.isOnetime = true;
-				atk.isProjectile = false;
-				atk.area.miny = -50; atk.area.maxy = 0;
-				atk.area.minz = z - Weapon->reachz; atk.area.maxz = z + Weapon->reachz;
-				atk.area.maxx = curDir ? x + Weapon->reachx : x - 10;
-				atk.area.minx = curDir ? x + 10 : x - Weapon->reachx;
-				atk.pushX = curDir ? 3.f : -3.f;
-				atk.pushY = 0.f;
-				atk.staytime = 10;
-				atk.time = Time;
-				atk.time = GetTickCount();
-				attackQueue.push_back(atk);
-			}
-			break;
-		case stance_norm_3:
-			if (frame == 35) {
-				atk.mindmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmin;
-				atk.maxdmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmax;
-				atk.isOnetime = true;
-				atk.isProjectile = false;
-				atk.area.miny = -100; atk.area.maxy = 0;
-				atk.area.minz = z - Weapon->reachz/2; atk.area.maxz = z + Weapon->reachz/2;
-				atk.area.maxx = curDir ? x + Weapon->reachx : x - 10;
-				atk.area.minx = curDir ? x + 10 : x - Weapon->reachx;
-				atk.pushX = curDir ? 1.f : -1.f;
-				atk.pushY = -5.f;												//추후 스킬레벨에따라 띄우기능력변경
-				atk.staytime = 10;
-				atk.time = Time;
-				atk.time = GetTickCount();
-				attackQueue.push_back(atk);
-			}
-			break;
-		case stance_areal_att:
-			if (frame == 134) {
-				atk.mindmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmin;
-				atk.maxdmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmax;
-				atk.isOnetime = true;
-				atk.isProjectile = false;
-				atk.area.miny = y -100; atk.area.maxy = y+30;
-				atk.area.minz = z - Weapon->reachz/2; atk.area.maxz = z + Weapon->reachz/2;
-				atk.area.maxx = curDir ? x + Weapon->reachx : x - 10;
-				atk.area.minx = curDir ? x + 10 : x - Weapon->reachx;
-				atk.pushX = curDir ? 1.f : -1.f;
-				atk.pushY = 0;
-				atk.staytime = 10;
-				atk.time = Time;
-				atk.time = GetTickCount();
-				attackQueue.push_back(atk);											//추후 스킬레벨에따라 띄우기능력변경
-
-			}
-			break;
-		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////지속시간이 끝난 대미지렉트 제거
 	for (list<effectedOnTime>::iterator i = attackQueue.begin(); i != attackQueue.end();) {
@@ -510,11 +481,28 @@ void player::update(void)
 		if (KEYMANAGER->isOnceKeyDown('P')) {
 			ui->showstat();
 		}
+		if (KEYMANAGER->isOnceKeyDown('1')) {
+			useItem(-1, 1, -1);
+		}
+		if (KEYMANAGER->isOnceKeyDown('2')) {
+			useItem(-1, 2, -1);
+		}
+		if (KEYMANAGER->isOnceKeyDown('3')) {
+			useItem(-1, 3, -1);
+		}
+		if (KEYMANAGER->isOnceKeyDown('4')) {
+			useItem(-1, 4, -1);
+		}
+		if (KEYMANAGER->isOnceKeyDown('5')) {
+			useItem(-1, 5, -1);
+		}
+		if (KEYMANAGER->isOnceKeyDown('6')) {
+			useItem(-1, 6, -1);
+		}
 
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE)) {
 			//onDebug = !onDebug;
-			hitDmg(500);
-			
+			ui->setCurActiveTab(1);
 		}
 		//if (KEYMANAGER->isOnceKeyDown('V')) {
 		//	test = !test;
@@ -758,8 +746,8 @@ void player::render(void)
 {
 	printSkillb();
 	char tmp[50];
-	sprintf(tmp, "%s_뒤_%d",Weapon->name.c_str(), frame);
-	if (Weapon->id == -1) {
+	sprintf(tmp, "%s_뒤_%d",Weapon.name.c_str(), frame);
+	if (Weapon.id == -1) {
 		sprintf(tmp, "빈손뒤_%d", frame);
 	}
 	IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y + translate(z)) - cam.y, curDir);
@@ -767,33 +755,49 @@ void player::render(void)
 	sprintf(tmp, "캐릭터_%d", frame);
 	IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y + translate(z)) - cam.y, curDir);
 	
-	sprintf(tmp, "%s_앞_%d",Weapon->name.c_str(), frame);
-	if (Weapon->id == -1) {
+	sprintf(tmp, "%s_앞_%d",Weapon.name.c_str(), frame);
+	if (Weapon.id == -1) {
 		sprintf(tmp, "빈손앞_%d", frame);
 	}
 	IMAGEMANAGER->findImage(tmp)->DFcharpointrender(x - cam.x, (y + translate(z)) - cam.y, curDir);
+
+	if (onHeal > 0) {
+		switch (onHeal) {
+		case 1:
+			sprintf(tmp, "체력회복_%d", onHealFrame);
+			IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y + translate(z)) - cam.y - 100,240,160);
+			break;
+		case 2:
+			sprintf(tmp, "마나회복_%d", onHealFrame);
+			IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y + translate(z)) - cam.y - 100,240,160);
+			break;
+		case 3:
+			break;
+		}
+	}
+
 	printSkillf();
 }
 
 void player::renderdc(void)
 {
 	//Rectangle(hdc, terColRect.left -cam.x, terColRect.top -cam.y, terColRect.right -cam.x, terColRect.bottom-cam.y);
-	/*char t[100];
-	sprintf(t, "x : %f y : %f z : %f", x, y, z);
-	TextOut(hdc, 50, 100, t, strlen(t));
+	char t[100];
+	//sprintf(t, "x : %f y : %f z : %f", x, y, z);
+	//TextOut(hdc, 50, 100, t, strlen(t));
 
-	POINT tmp;
-	tmp.x = ptMouse.x + cam.x;
-	tmp.y = ptMouse.y + cam.y;
-	sprintf(t, "x : %i y : %i", tmp.x, tmp.y);
+	//POINT tmp;
+	//tmp.x = ptMouse.x + cam.x;
+	//tmp.y = ptMouse.y + cam.y;
+	sprintf(t, "x : %i y : %i", ptMouse.x, ptMouse.y);
 	TextOut(hdc, 50, 150, t, strlen(t));
-	sprintf(t, "queuesize : %d", inputQueue.size());
-	TextOut(hdc, 50, 200, t, strlen(t));*/
+	//sprintf(t, "queuesize : %d", inputQueue.size());
+	//TextOut(hdc, 50, 200, t, strlen(t));
 
 	//대미지 렉트 그려주기
-	for (list<effectedOnTime>::iterator i = attackQueue.begin(); i != attackQueue.end(); i++) {
-		Rectangle(hdc, i->area.minx - cam.x, translate(i->area.minz)+y - cam.y, i->area.maxx -cam.x, translate(i->area.maxz)+y - cam.y);
-	}
+	//for (list<effectedOnTime>::iterator i = attackQueue.begin(); i != attackQueue.end(); i++) {
+	//	Rectangle(hdc, i->area.minx - cam.x, translate(i->area.minz)+y - cam.y, i->area.maxx -cam.x, translate(i->area.maxz)+y - cam.y);
+	//}
 	ui->renderdc();
 
 }
@@ -886,76 +890,249 @@ void player::hitDmg(int amount)
 	}
 }
 
-void player::useItem(int tab, int y, int x)
+void player::useItem(int tab, int x, int y)
 {
+	int index = y * 8 + x;
+	int amount;
 	switch (tab) {
+	case -1:						//퀵슬롯에서 사용
+		switch (x) {				//몇번째 슬롯인지
+		case 1:
+			if (q1.id > 0) {
+				switch (q1.detail) {
+				case 1:											//퍼센트단위로 체력회복시키는거
+					amount = (Stat.maxHP * ((float)q1.gainHP / 100.f));
+					Stat.curHP += amount;
+					amount = (Stat.maxMP * ((float)q1.gainMP / 100.f));
+					Stat.curMP += amount;
+					break;
+				default:										//수치로 체력회복
+					Stat.curHP += q1.gainHP;
+					Stat.curMP += q1.gainMP;
+					break;
+				}
+				onHeal = q1.gainHP > 0 ? (q1.gainMP > 0 ? 3 : 1) : (q1.gainMP > 0 ? 2 : 0);
+				q1.stack--;
+				if (q1.stack <= 0) {
+					q1 = empty;
+				}
+			}
+			break;
+		case 2:
+			if (q2.id > 0) {
+				switch (q2.detail) {
+				case 1:											//퍼센트단위로 체력회복시키는거
+					amount = (Stat.maxHP * ((float)q2.gainHP / 100.f));
+					Stat.curHP += amount;
+					amount = (Stat.maxMP * ((float)q2.gainMP / 100.f));
+					Stat.curMP += amount;
+					break;
+				default:										//수치로 체력회복
+					Stat.curHP += q2.gainHP;
+					Stat.curMP += q2.gainMP;
+					break;
+				}
+				onHeal = q2.gainHP > 0 ? (q2.gainMP > 0 ? 3 : 1) : (q2.gainMP > 0 ? 2 : 0);
+				q2.stack--;
+				if (q2.stack <= 0) {
+					q2 = empty;
+				}
+			}
+			break;
+		case 3:
+			if (q3.id > 0) {
+				switch (q3.detail) {
+				case 1:											//퍼센트단위로 체력회복시키는거
+					amount = (Stat.maxHP * ((float)q3.gainHP / 100.f));
+					Stat.curHP += amount;
+					amount = (Stat.maxMP * ((float)q3.gainMP / 100.f));
+					Stat.curMP += amount;
+					break;
+				default:										//수치로 체력회복
+					Stat.curHP += q3.gainHP;
+					Stat.curMP += q3.gainMP;
+					break;
+				}
+				onHeal = q3.gainHP > 0 ? (q3.gainMP > 0 ? 3 : 1) : (q3.gainMP > 0 ? 2 : 0);
+				q3.stack--;
+				if (q3.stack <= 0) {
+					q3 = empty;
+				}
+			}
+			break;
+		case 4:
+			if (q4.id > 0) {
+				switch (q4.detail) {
+				case 1:											//퍼센트단위로 체력회복시키는거
+					amount = (Stat.maxHP * ((float)q4.gainHP / 100.f));
+					Stat.curHP += amount;
+					amount = (Stat.maxMP * ((float)q4.gainMP / 100.f));
+					Stat.curMP += amount;
+					break;
+				default:										//수치로 체력회복
+					Stat.curHP += q4.gainHP;
+					Stat.curMP += q4.gainMP;
+					break;
+				}
+				onHeal = q4.gainHP > 0 ? (q4.gainMP > 0 ? 3 : 1) : (q4.gainMP > 0 ? 2 : 0);
+				q4.stack--;
+				if (q4.stack <= 0) {
+					q4 = empty;
+				}
+			}
+			break;
+		case 5:
+			if (q5.id > 0) {
+				switch (q5.detail) {
+				case 1:											//퍼센트단위로 체력회복시키는거
+					amount = (Stat.maxHP * ((float)q5.gainHP / 100.f));
+					Stat.curHP += amount;
+					amount = (Stat.maxMP * ((float)q5.gainMP / 100.f));
+					Stat.curMP += amount;
+					break;
+				default:										//수치로 체력회복
+					Stat.curHP += q5.gainHP;
+					Stat.curMP += q5.gainMP;
+					break;
+				}
+				onHeal = q5.gainHP > 0 ? (q5.gainMP > 0 ? 3 : 1) : (q5.gainMP > 0 ? 2 : 0);
+				q5.stack--;
+				if (q5.stack <= 0) {
+					q5 = empty;
+				}
+			}
+			break;
+		case 6:
+			if (q6.id > 0) {
+				switch (q6.detail) {
+				case 1:											//퍼센트단위로 체력회복시키는거
+					amount = (Stat.maxHP * ((float)q6.gainHP / 100.f));
+					Stat.curHP += amount;
+					amount = (Stat.maxMP * ((float)q6.gainMP / 100.f));
+					Stat.curMP += amount;
+					break;
+				default:										//수치로 체력회복
+					Stat.curHP += q6.gainHP;
+					Stat.curMP += q6.gainMP;
+					break;
+				}
+				onHeal = q6.gainHP > 0 ? (q6.gainMP > 0 ? 3 : 1) : (q6.gainMP > 0 ? 2 : 0);
+				q6.stack--;
+				if (q6.stack <= 0) {
+					q6 = empty;
+				}
+			}
+			break;
+		}
+		break;
 	case 0:
-		switch (equipments[y][x]->type) {
+		switch (equipments[index].type) {
 		case item_weapon:
-			if (Weapon->name == "무기없음") {
-				equipments[y][x]->equipped = true;
-				Weapon = equipments[y][x];
+			if (Weapon.name == "무기없음") {
+				equipments[y * 8 + x].equipped = true;
+				Weapon = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
 			}
 			else {
-				Weapon->equipped = false;
-				equipments[y][x]->equipped = true;
-				Weapon = equipments[y][x];
+				Weapon.equipped = false;
+				Item t = Weapon;
+				equipments[y * 8 + x].equipped = true;
+				Weapon = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
 			}
 			break;
 		case item_coat:
-			if (Armor->name == "없음") {
-				equipments[y][x]->equipped = true;
-				Armor = equipments[y][x];
+			if (Armor.name == "없음") {
+				equipments[y * 8 + x].equipped = true;
+				Armor = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
 			}
 			else {
-				Armor->equipped = false;
-				equipments[y][x]->equipped = true;
-				Armor = equipments[y][x];
+				Armor.equipped = false;
+				Item t = Armor;
+				equipments[y * 8 + x].equipped = true;
+				Armor = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
 			}
 			break;
 		case item_shoulder:
-			if (Shoulder->name == "없음") {
-				equipments[y][x]->equipped = true;
-				Shoulder = equipments[y][x];
+			if (Shoulder.name == "없음") {
+				equipments[y * 8 + x].equipped = true;
+				Shoulder = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
 			}
 			else {
-				Shoulder->equipped = false;
-				equipments[y][x]->equipped = true;
-				Shoulder = equipments[y][x];
+				Shoulder.equipped = false;
+				Item t = Shoulder;
+				equipments[y * 8 + x].equipped = true;
+				Shoulder = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
 			}
 			break;
 		case item_belt:
-			if (Belt->name == "없음") {
-				equipments[y][x]->equipped = true;
-				Belt = equipments[y][x];
+			if (Belt.name == "없음") {
+				equipments[y * 8 + x].equipped = true;
+				Belt = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
 			}
 			else {
-				Belt->equipped = false;
-				equipments[y][x]->equipped = true;
-				Belt = equipments[y][x];
-
+				Belt.equipped = false;
+				Item t = Belt;
+				equipments[y * 8 + x].equipped = true;
+				Belt = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
 			}
 			break;
 		case item_pants:
-			if (Pants->name == "없음") {
-				equipments[y][x]->equipped = true;
-				Pants = equipments[y][x];
+			if (Pants.name == "없음") {
+				equipments[y * 8 + x].equipped = true;
+				Pants = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
 			}
 			else {
-				Pants->equipped = false;
-				equipments[y][x]->equipped = true;
-				Pants = equipments[y][x];
+				Pants.equipped = false;
+				Item t = Pants;
+				equipments[y * 8 + x].equipped = true;
+				Pants = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
 			}
 			break;
 		case item_shoes:
-			if (Boots->name == "없음") {
-				equipments[y][x]->equipped = true;
-				Boots = equipments[y][x];
+			if (Boots.name == "없음") {
+				equipments[y * 8 + x].equipped = true;
+				Boots = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
 			}
 			else {
-				Boots->equipped = false;
-				equipments[y][x]->equipped = true;
-				Boots = equipments[y][x];
+				Boots.equipped = false;
+				Item t = Boots;
+				equipments[y * 8 + x].equipped = true;
+				Boots = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
+			}
+			break;
+		}
+		break;
+	case 1:
+		switch (consume[index].detail) {
+		case 1:											//퍼센트단위로 체력회복시키는거
+			amount = (Stat.maxHP * ((float)consume[index].gainHP / 100.f));
+			Stat.curHP += amount;
+			amount = (Stat.maxMP * ((float)consume[index].gainMP / 100.f));
+			Stat.curMP += amount;
+			onHeal = consume[index].gainHP > 0 ? (consume[index].gainMP > 0 ? 3 : 1) : (consume[index].gainMP > 0 ? 2 : 0);
+			consume[index].stack--;
+			if (consume[index].stack <= 0) {
+				consume[index] = empty;
+			}
+			break;
+		default:										//수치로 체력회복
+			Stat.curHP +=consume[index].gainHP;
+			Stat.curMP +=consume[index].gainMP;
+			onHeal = consume[index].gainHP > 0 ? (consume[index].gainMP > 0 ? 3 : 1) : (consume[index].gainMP > 0 ? 2 : 0);
+			consume[index].stack--;
+			if (consume[index].stack <= 0) {
+				consume[index] = empty;
 			}
 			break;
 		}
@@ -964,10 +1141,11 @@ void player::useItem(int tab, int y, int x)
 		break;
 	}
 
-	Stat.a_str		= Weapon->gainStr	+ Armor->gainStr	+ Shoulder->gainStr		+ Belt->gainStr		+ Pants->gainStr	+ Boots->gainStr	;
-	Stat.a_intel	= Weapon->gainInt	+ Armor->gainInt	+ Shoulder->gainInt		+ Belt->gainInt		+ Pants->gainInt	+ Boots->gainInt	;
-	Stat.a_health	= Weapon->gainHealth+ Armor->gainHealth	+ Shoulder->gainHealth	+ Belt->gainHealth	+ Pants->gainHealth	+ Boots->gainHealth;
-	Stat.a_spirit	= Weapon->gainSpirit+ Armor->gainSpirit	+ Shoulder->gainSpirit	+ Belt->gainSpirit	+ Pants->gainSpirit	+ Boots->gainSpirit;
+
+	Stat.a_str		= Weapon. gainStr	+ Armor. gainStr	+ Shoulder.gainStr		+ Belt.gainStr		+ Pants. gainStr	+ Boots.gainStr	;
+	Stat.a_intel	= Weapon. gainInt	+ Armor. gainInt	+ Shoulder.gainInt		+ Belt.gainInt		+ Pants. gainInt	+ Boots.gainInt	;
+	Stat.a_health	= Weapon. gainHealth+ Armor. gainHealth	+ Shoulder.gainHealth	+ Belt.gainHealth	+ Pants. gainHealth	+ Boots.gainHealth;
+	Stat.a_spirit	= Weapon. gainSpirit+ Armor. gainSpirit	+ Shoulder.gainSpirit	+ Belt.gainSpirit	+ Pants. gainSpirit	+ Boots.gainSpirit;
 
 	Stat.maxHP = (Stat.health + Stat.a_health) * 10 + (Stat.str + Stat.a_str) * 5		+500;
 	Stat.maxMP = (Stat.spirit + Stat.a_spirit) * 10 + (Stat.intel + Stat.a_intel) * 5	+500;
@@ -977,18 +1155,37 @@ void player::useItem(int tab, int y, int x)
 	}
 	Stat.phyAtt = (Stat.str + Stat.a_str) * 5;
 	Stat.magAtt = (Stat.intel + Stat.a_intel) * 10;
-	Stat.a_phyAtt = Weapon->phydmgmin;
-	Stat.a_magAtt = Weapon->magdmgmin;
+
 	Stat.phyDef = (Stat.health + Stat.a_health) * 2 + (Stat.str + Stat.a_str);
-	Stat.a_phyDef = Armor->phydef + Shoulder->phydef + Belt->phydef + Pants->phydef + Boots->phydef;
+	Stat.a_phyDef = Armor.phydef + Shoulder.phydef + Belt.phydef + Pants.phydef + Boots.phydef;
 	Stat.magDef = (Stat.spirit + Stat.a_spirit) * 10 + (Stat.intel + Stat.a_intel);
-	Stat.a_magDef = Armor->magdef + Shoulder->magdef + Belt->magdef + Pants->magdef + Boots->magdef;
+	Stat.a_magDef = Armor.magdef + Shoulder.magdef + Belt.magdef + Pants.magdef + Boots.magdef;
+
+	Stat.a_phyAtt = Weapon.phydmgmin;
+	Stat.a_magAtt = Weapon.magdmgmin;
+}
+
+void player::useIteminQS(int qs)
+{
 }
 
 void player::rootItem(Item it)
 {
+	int last=-1;
 	switch (it.type) {
 	case item_consume:
+		for (int i = 0; i < 32; i++) {
+			if (consume[i].name == it.name) {
+				consume[i].stack++;
+				last = -1;
+				break;
+			}else if (consume[i].name == "없음"&&last<0) {
+				last = i;
+			}
+		}
+		if (last != -1) {
+			consume[last] = it;
+		}
 		break;
 	case item_weapon:
 	case item_coat:
@@ -996,7 +1193,11 @@ void player::rootItem(Item it)
 	case item_belt:
 	case item_pants:
 	case item_shoes:
-		equipments;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = it; break;
+			}
+		}
 		break;
 	}
 }
@@ -1006,33 +1207,110 @@ void player::unequip(int pos)
 	//0 상 1 하 2 어깨 3 벨트 4 신발 5무기
 	switch (pos) {
 	case 0:
-		Armor->equipped = false;
+		Armor.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Armor; break;
+			}
+		}
 		Armor = empty;
 		break;
 	case 1:
-		Pants->equipped = false;
+		Pants.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Pants; break;
+			}
+		}
 		Pants = empty;
 		break;
 	case 2:
-		Shoulder->equipped = false;
+		Shoulder.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Shoulder; break;
+			}
+		}
 		Shoulder = empty;
 		break;
 	case 3:
-		Belt->equipped = false;
+		Belt.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Belt; break;
+			}
+		}
 		Belt = empty;
 		break;
 	case 4:
-		Boots->equipped = false;
+		Boots.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Boots; break;
+			}
+		}
 		Boots = empty;
 		break;
 	case 5:
-		Weapon->equipped = false;
+		Weapon.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Weapon; break;
+			}
+		}
 		Weapon = emptyWeapon;
 	}
 	useItem(-1, 0, 0);
 }
 
+Item player::setquickslot(int index, Item it)
+{
+	Item r = empty;
+	switch (index) {
+	case 1:
+		if (q1.id > 0)r = q1;
+		q1 = it;
+		break;
+	case 2:
+		if (q2.id > 0)r = q2;
+		q2 = it;
+		break;
+	case 3:
+		if (q3.id > 0)r = q3;
+		q3 = it;
+		break;
+	case 4:
+		if (q4.id > 0)r = q4;
+		q4 = it;
+		break;
+	case 5:
+		if (q5.id > 0)r = q5;
+		q5 = it;
+		break;
+	case 6:
+		if (q6.id > 0)r = q6;
+		q6 = it;
+		break;
+	}
+	return r;
+}
 
+
+
+Item player::getItem(int curTab, int x, int y)
+{
+	Item t = empty;
+	switch (curTab) {
+	case 0:
+		break;
+	case 1:
+		if (consume[x + y * 8].id > 0) {
+
+		}
+		break;
+	}
+	return t;
+}
 
 player::player()
 {

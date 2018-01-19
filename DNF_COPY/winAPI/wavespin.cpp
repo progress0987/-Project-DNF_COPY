@@ -63,7 +63,7 @@ void wavespin::update()
 					atk.isProjectile = false;
 					atk.isHold = true;
 					atk.isAbnormal = true;
-					atk.isCrit = rand() % 100 > 80 ? true : false;
+					atk.isCrit = false;
 					atk.attr1 = skilldiameter;
 					atk.attr2 = ballHeight;
 					atk.attr3 = 6;
@@ -101,8 +101,9 @@ void wavespin::update()
 					balls[i].effect = 0;
 
 				if (count % 3 == 0) {
-					atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon()->magdmgmin*2;
-					atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon()->magdmgmax*2;
+					atk.isCrit = rand() % 100 > 80 ? true : false;
+					atk.mindmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon().magdmgmin * 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon().magdmgmin * 2;
+					atk.maxdmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel)*2.5f + pl->getWeapon().magdmgmax * 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel)*2.5f + pl->getWeapon().magdmgmax * 2;
 					atk.isOnetime = true;
 					atk.isProjectile = false;
 					atk.isHold = true;
@@ -113,7 +114,7 @@ void wavespin::update()
 					atk.area.minx = balls[i].x - 45;
 					atk.pushX = 0;
 					atk.pushY = 0;												//추후 스킬레벨에따라 띄우기능력변경
-					atk.staytime = 10;
+					atk.staytime = 5;
 					atk.time = GetTickCount();
 					pl->addAttack(atk);
 				}
@@ -151,8 +152,8 @@ void wavespin::update()
 				//}
 				if (curAction == 166) {
 					for (int i = 0; i < 5; i++) {
-						atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel)*4 + pl->getWeapon()->magdmgmin;
-						atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel)*4 + pl->getWeapon()->magdmgmax;
+						atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel)*4 + pl->getWeapon().magdmgmin;
+						atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel)*4 + pl->getWeapon().magdmgmax;
 						atk.isOnetime = true;
 						atk.isProjectile = false;
 						atk.isHold = false;

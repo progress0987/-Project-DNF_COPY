@@ -22,7 +22,7 @@ void MonsterBase::printNumber(HitQueue h)
 	}
 	//글자는 30x27로
 	char t[50];
-	int left =h.x- ((digit / 2) * 30 + odd ? 15 : 0);
+	int left =h.x- ((digit) * 30 + odd ? 15 : 0);
 	for (int i = 0; i < digit; i++) {//프린트
 		if (h.isCrit) {					//크리티컬이면
 			if(mod/10>0) sprintf(t, "대미지_크리티컬_%d", h.dmg% mod / (mod/10));
@@ -46,7 +46,7 @@ HRESULT MonsterBase::init()
 	return S_OK;
 }
 
-void MonsterBase::update()//두대씩 맞는거 체크?? 왜지??
+void MonsterBase::update()
 {
 	actionTick++;
 	if (!onHold) {
@@ -111,12 +111,7 @@ void MonsterBase::update()//두대씩 맞는거 체크?? 왜지??
 				hitYvel = i->pushY;
 				if (i->mindmg > 0) {////////////////////////////////////공격받았을경우 대미지가 1이상이라면
 					int hitdmg = RND->getFromIntTo(i->mindmg, i->maxdmg);
-					if (i->isCrit) {
-						stat.curHP -= hitdmg*1.5f;
-					}
-					else {
-						stat.curHP -= hitdmg;
-					}
+					stat.curHP -= hitdmg;
 					////////////////////////////////대미지 프린트할 구조체만들기
 					HitQueue hit;
 					hit.dmg = hitdmg;
@@ -182,7 +177,7 @@ void MonsterBase::update()//두대씩 맞는거 체크?? 왜지??
 			}
 		}
 	}
-	if (hitAvailCount + 20 < GetTickCount() && !hitAvail) {
+	if (hitAvailCount + 10 < GetTickCount() && !hitAvail) {
 		hitAvail = true;
 	}
 	/*

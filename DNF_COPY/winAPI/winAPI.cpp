@@ -1,7 +1,7 @@
 #include"stdafx.h"
 #include"mainGame.h"
 //API : Application Programming Interface
-
+//http://zerobell.tistory.com/22 extern에 대해서
 
 HINSTANCE _hInstance;		//어플 고유번호
 HWND _hWnd;					//조작질
@@ -16,12 +16,17 @@ player* pl;
 
 LPTSTR _lpszClass = TEXT("API BASE");
 
+///////////////////////////////////////전역변수들
 POINT ptMouse;
 FLOAT ptScale;			//스케일 값(마우스로함)
 mainGame _mg;
 map<string, Item> itemList;
 vector<string> itemNames;
 bool onDebug;
+bool clicked;
+bool lstay;
+bool rclicked;
+////////////////////////////////////////전역변수들
 
 
 void setWindowsSize(int x, int y, int width, int height);
@@ -31,6 +36,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 {
 	MSG message;			//메세지
 	WNDCLASS wndClass;		//윈도우 정보를 담을 구조체
+	clicked = rclicked = lstay = false;
 
 	_hInstance = hInstance;
 

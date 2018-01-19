@@ -4,7 +4,8 @@
 struct Camera;
 class player;
 class MonsterBase;
-
+extern struct Item;
+extern struct DropItemStruct;
 struct MapTile {
 	RECT rc;
 	int type;
@@ -35,6 +36,8 @@ protected:
 	vector<MonsterBase*> monsterList;
 	vector<MonsterBase*> monBack;
 	vector<MonsterBase*> monFront;
+	vector<DropItemStruct> dropList;
+	vector<Item> droppedItemList;
 public:
 	MapBase();
 	~MapBase();
@@ -58,6 +61,7 @@ public:
 	virtual vector<MonsterBase*> getMonsterList() { return monsterList; }
 	virtual vector<MapTile> getTiles() { return mapTiles; }
 	virtual MapBase* getCurMap() { return curMap; }
+	virtual void DropItem(DropItemStruct item) { dropList.push_back(item); }
 
 	bool isRunnable() { return runnable; }
 	bool isPeaceful() { if (curMap != nullptr) return curMap->isPeaceful(); else return peaceful; }
@@ -74,6 +78,9 @@ public:
 	void setPeaceful(bool p) { peaceful = p; }
 	void setRunnable(bool r) { runnable = r; }
 	void setAttackable(bool a) { attackable = a; }
+	bool aboveItem(FLOAT x, FLOAT z);
+	DropItemStruct rootItem(FLOAT x, FLOAT z);
+	Item* adddroppedItem(Item t) { droppedItemList.push_back(t);return &droppedItemList.back(); }
 
 };
 

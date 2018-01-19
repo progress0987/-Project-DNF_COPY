@@ -95,6 +95,23 @@ HRESULT mainGame::init(void)
  //연산~
  void mainGame::update(void)
  {
+
+	 if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)) {
+		 clicked = true;
+	 }
+	 if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) {
+		 lstay = true;
+	 }
+	 if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON)) {
+		 lstay = false;
+		 clicked = false;
+	 }
+	 if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON)) {
+		 rclicked = true;
+	 }
+	 if (KEYMANAGER->isOnceKeyUp(VK_RBUTTON)) {
+		 rclicked = false;
+	 }
 	 pl->update();
 	 pl->getCurMap()->update();
 
@@ -179,7 +196,8 @@ HRESULT mainGame::init(void)
 			 }
 		 }
 	 }
-	 //인벤슬롯 이미지
+	 
+	 ///인벤슬롯 이미지
 	 
 	 //갑옷부분
 	 {
@@ -209,7 +227,6 @@ HRESULT mainGame::init(void)
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
 	 }
-
 	 //무기부분
 	 {
 		 for (int i = 0; i < 169; i++) {
@@ -223,7 +240,6 @@ HRESULT mainGame::init(void)
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
 	 }
-
 	 //팔찌
 	 {
 		 for (int i = 0; i < 197; i++) {
@@ -248,8 +264,40 @@ HRESULT mainGame::init(void)
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
 	 }
+	 //소모품 - 0~30까지만 함
+	 {
+		 for (int i = 0; i < 30; i++) {
+			 sprintf(tmp2, "sprites/item/icons/consumption.img/%d.png", i);
+			 sprintf(tmp, "소모_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+	 }
+	 //필드상에서 아이템 이미지
+	 {
+		 sprintf(tmp2, "sprites/item/onField/fieldimage.img/9.png");
+		 sprintf(tmp, "아이템_필드_소검");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
 
+		 sprintf(tmp2, "sprites/item/onField/field_equip.img/15.png");
+		 sprintf(tmp, "아이템_필드_판금_상의");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
 
+		 sprintf(tmp2, "sprites/item/onField/field_equip.img/16.png");
+		 sprintf(tmp, "아이템_필드_판금_하의");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/item/onField/field_equip.img/17.png");
+		 sprintf(tmp, "아이템_필드_판금_어깨");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/item/onField/field_equip.img/18.png");
+		 sprintf(tmp, "아이템_필드_판금_벨트");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/item/onField/field_equip.img/19.png");
+		 sprintf(tmp, "아이템_필드_판금_신발");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
 
 	 ///UI
 	 {
@@ -262,8 +310,8 @@ HRESULT mainGame::init(void)
 
 
 		 IMAGEMANAGER->addImage("UI_인벤토리_기본창", "sprites/UI/inventory.img/0.png");
-		 IMAGEMANAGER->addImage("UI_인벤토리_활성탭", "sprites/UI/inventory.img/31.png");
-		 IMAGEMANAGER->addImage("UI_인벤토리_비활성탭", "sprites/UI/inventory.img/29.png");
+		 IMAGEMANAGER->addImage("UI_인벤토리_활성탭", "sprites/UI/windowcommon.img/31.png");
+		 IMAGEMANAGER->addImage("UI_인벤토리_비활성탭", "sprites/UI/windowcommon.img/29.png");
 		 IMAGEMANAGER->addImage("UI_인벤토리_장비베이스", "sprites/UI/inventory.img/21.png");
 		 //IMAGEMANAGER->addImage("UI_인벤토리_아이템_라인베이스", "sprites/UI/inventory.img/39.png");
 		 IMAGEMANAGER->addImage("UI_인벤토리_아이템_개별", "sprites/UI/inventory.img/49.png");
@@ -275,6 +323,7 @@ HRESULT mainGame::init(void)
 		 }
 
 		 IMAGEMANAGER->addImage("UI_스텟_기본", "sprites/UI/profile.img/15.png");
+		 IMAGEMANAGER->addImage("UI_인벤토리_하단", "sprites/UI/inventory.img/13.png");
 
 		 for (int i = 0; i < 10; i++) {
 			 sprintf(tmp2, "sprites/effects/game/combo_big.img/%d.png", i+11);
@@ -290,6 +339,15 @@ HRESULT mainGame::init(void)
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
 		 IMAGEMANAGER->addImage("크리티컬_표시", "sprites/effects/game/combo_big.img/84.png");
+
+		 for (int i = 0; i < 12; i++) {
+			 sprintf(tmp2, "sprites/effects/item/heal.img/%d.png", i);
+			 sprintf(tmp, "체력회복_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+			 sprintf(tmp2, "sprites/effects/item/mpup.img/%d.png", i);
+			 sprintf(tmp, "마나회복_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
 	 }
 
 	 ///몬스터

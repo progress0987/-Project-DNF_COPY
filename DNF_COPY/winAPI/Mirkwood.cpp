@@ -199,6 +199,7 @@ void MirkwoodMap::update()
 		if ((*i)->getZ() < pl->getZ())monBack.push_back((*i));
 		else if ((*i)->getZ() >= pl->getZ())monFront.push_back((*i));
 	}
+	MapBase::update();
 }
 
 void MirkwoodMap::render()
@@ -206,7 +207,61 @@ void MirkwoodMap::render()
 	for (vector<ImgTile>::iterator i = staticTiles.begin(); i != staticTiles.end(); i++) {
 		i->tileImg->render(i->pos.x - cam.x, i->pos.y - cam.y);
 	}
-	
+
+	for (vector<DropItemStruct>::iterator i = dropList.begin(); i != dropList.end(); i++) {
+		switch (i->item->type) {
+		case item_coat: {
+			switch (i->item->detail) {
+			case arm_plate:
+				IMAGEMANAGER->findImage("아이템_필드_판금_상의")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				break;
+			}
+			break;
+		}
+		case item_pants: {
+			switch (i->item->detail) {
+			case arm_plate:
+				IMAGEMANAGER->findImage("아이템_필드_판금_하의")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				break;
+			}
+			break;
+		}
+		case item_shoulder: {
+			switch (i->item->detail) {
+			case arm_plate:
+				IMAGEMANAGER->findImage("아이템_필드_판금_어꺠")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				break;
+			}
+			break;
+		}
+		case item_belt: {
+			switch (i->item->detail) {
+			case arm_plate:
+				IMAGEMANAGER->findImage("아이템_필드_판금_벨트")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				break;
+			}
+			break;
+		}
+		case item_shoes:{
+			switch (i->item->detail) {
+			case arm_plate:
+				IMAGEMANAGER->findImage("아이템_필드_판금_신발")->DFpointrotatedrender(i->x -cam.x, (i->y + translate(i->z)) -cam.y, i->angle, 60, 60);
+				break;
+			}
+			break;
+		}
+		case item_weapon: {
+			switch (i->item->detail) {
+			case wp_sswd:
+				IMAGEMANAGER->findImage("아이템_필드_소검")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				break;
+			}
+			break;
+		}
+		}
+		//IMAGEMANAGER->findImage("아이템_필드_판금_상의")->rotatedrender(i->x - cam.x, i->y -cam.y + translate(i->z), i->angle);
+	}
+
 	for (vector<MonsterBase*>::iterator i = monBack.begin(); i != monBack.end(); i++) {
 		(*i)->render();
 	}

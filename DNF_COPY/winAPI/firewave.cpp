@@ -56,7 +56,7 @@ void firewave::update()
 	}
 
 	if (waveBegin) {						//스킬이펙트
-		if (curWave < numofWave&& waveFrom + curWave * 300 < GetTickCount()) {
+		if (curWave < numofWave&& waveFrom + curWave * 250 < GetTickCount()) {
 			flame f;
 			f.count = 0;
 			f.curFrame = 0;
@@ -69,21 +69,21 @@ void firewave::update()
 			curWave++;
 
 			effectedOnTime atk;
-			atk.mindmg = (pl->getStatus().intel+pl->getStatus().a_intel)*2 + pl->getWeapon()->magdmgmin*2;
-			atk.maxdmg = (pl->getStatus().intel+pl->getStatus().a_intel)*2 + pl->getWeapon()->magdmgmax*2;
+			atk.isCrit = rand() % 100 > 70 ? true : false;
+			atk.mindmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon().magdmgmin * 2)*1.5: (pl->getStatus().intel+pl->getStatus().a_intel)*2 + pl->getWeapon().magdmgmin*2;
+			atk.maxdmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel) * 3 + pl->getWeapon().magdmgmax * 2)*1.5: (pl->getStatus().intel+pl->getStatus().a_intel)*3 + pl->getWeapon().magdmgmax*2;
 			atk.isAbnormal = true;
 			atk.abnormal = 10;
 			atk.isHold = false;
 			atk.isOnetime = true;
 			atk.isProjectile = false;
-			atk.isCrit = rand() % 100 > 70 ? true : false;
 			atk.area.miny = -170; atk.area.maxy = 0;
-			atk.area.minz = f.z - 50; atk.area.maxz = f.z + 50;
-			atk.area.maxx = head ? f.x + 200 : f.x;
-			atk.area.minx = head ? f.x : f.x - 200;
+			atk.area.minz = f.z - 300; atk.area.maxz = f.z + 300;
+			atk.area.maxx = head ? f.x + 300 : f.x+10;
+			atk.area.minx = head ? f.x-10 : f.x - 300;
 			atk.pushX = head? 1.5f : -1.5f;
-			atk.pushY = -7.f;												//추후 스킬레벨에따라 띄우기능력변경
-			atk.staytime = 20;
+			atk.pushY = -5.f;												//추후 스킬레벨에따라 띄우기능력변경
+			atk.staytime = 10;
 			atk.time = GetTickCount();
 			pl->addAttack(atk);
 		}

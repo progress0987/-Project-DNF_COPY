@@ -112,13 +112,13 @@ void vacslash::update()
 		sl.x += (head?7:-7);
 		if (sl.dmgtick % 20 == 0) {
 			effectedOnTime atk;
-			atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon()->magdmgmin*2;
-			atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon()->magdmgmax*2;
+			atk.isCrit = rand() % 100 > 80 ? true : false;
+			atk.mindmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel) + pl->getWeapon().magdmgmin * 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel) + pl->getWeapon().magdmgmin * 2;
+			atk.maxdmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon().magdmgmax * 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel) * 2 + pl->getWeapon().magdmgmax * 2;
 			atk.isOnetime = true;
 			atk.isProjectile = true;
 			atk.isAbnormal = false;
 			atk.isHold = false;
-			atk.isCrit = rand() % 100 > 80 ? true : false;
 			atk.area.miny = (chargeStatus>0?-200:-100); atk.area.maxy = 0;
 			atk.area.minz = sl.z + (chargeStatus>0?-150:-90); atk.area.maxz = sl.z + (chargeStatus>0?+150:+90);
 			atk.area.maxx = sl.x + 100;

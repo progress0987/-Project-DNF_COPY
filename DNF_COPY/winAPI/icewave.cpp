@@ -63,8 +63,9 @@ void icewave::update()
 			needle.staytime = 1000;
 			needles.push_back(needle);
 			effectedOnTime atk;
-			atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel)/2 + pl->getWeapon()->magdmgmin/2;
-			atk.maxdmg = (pl->getStatus().intel + pl->getStatus().a_intel)/2 + pl->getWeapon()->magdmgmax/2;
+			atk.isCrit = rand() % 100 > 80 ? true : false;
+			atk.mindmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel) / 2 + pl->getWeapon().magdmgmin / 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel)/2 + pl->getWeapon().magdmgmin/2;
+			atk.maxdmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel) + pl->getWeapon().magdmgmax / 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel) + pl->getWeapon().magdmgmax/2;
 			atk.isOnetime = false;
 			atk.isCrit = rand() % 100 > 80 ? true : false;
 			atk.isProjectile = false;

@@ -94,9 +94,6 @@
     <Filter Include="MainGame\Player\skill\vacslash">
       <UniqueIdentifier>{e713704e-c458-447b-88fa-1433ef387675}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\Player\skill\wavespin">
-      <UniqueIdentifier>{4721a797-bc73-4868-b8ce-ac5c75c3be42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\Player\skill\releasewave">
       <UniqueIdentifier>{8502b4e8-1d67-43c0-b27c-457d8c996003}</UniqueIdentifier>
     </Filter>
@@ -111,6 +108,9 @@
     </Filter>
     <Filter Include="MainGame\Map\Dungeon\Mirkwood">
       <UniqueIdentifier>{5614f1fc-27b9-4cbe-891d-0aefaaf2e767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Player\skill\wavespin">
+      <UniqueIdentifier>{4721a797-bc73-4868-b8ce-ac5c75c3be42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -300,6 +300,9 @@
     <ClInclude Include="wavehold.h">
       <Filter>MainGame\Player\skill\wavehold</Filter>
     </ClInclude>
+    <ClInclude Include="Universal_structs.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -463,6 +466,9 @@
     </ClCompile>
     <ClCompile Include="initItems.cpp">
       <Filter>MainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Universal_structs.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

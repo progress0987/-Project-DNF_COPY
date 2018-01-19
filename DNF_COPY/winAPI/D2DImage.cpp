@@ -928,6 +928,38 @@ void D2DImage::DFuirender(int destX, int destY, int fromX, int fromY, int Width,
 		color);
 }
 
+void D2DImage::DFpointrotatedrender(int destX, int destY, FLOAT angle, int centerX, int centerY)//돌려서 렌더하는거 만들것
+{
+	int w = c_ImgInfo.Width;
+	int h = c_ImgInfo.Height;
+	D3DXVECTOR2 pos(w / 2 + destX-centerX, h / 2 + destY-centerY);							//좌상단 좌표
+	RECT rect = { 0,0,w,h };						//그림의 크기
+													//회전은 VECTOR3로
+	//D3DXVECTOR3 center(w / 2, h / 2, 0);	//그림의 중심점 - 회전의 중심일듯
+	D3DXVECTOR3 center(centerX, centerY, 0);	//그림의 중심점 - 회전의 중심일듯
+
+	D3DXVECTOR2 scale(1.f, 1.f);						//이미지의 스케일을결정(1이 기본), 중심을 기준으로커짐
+
+	DWORD color = 0xffffffff;							//색들을 출력해줄 정도로 보임(색을바꾸면 해당 색이 좀 빠짐)ARGB순서, A줄이면 이미지흐려짐
+
+	D3DXMATRIX mat;
+	D3DXMatrixTransformation2D(
+		&mat,						//출력
+		NULL,						//스케일링의 중심
+		0.0f,						//스케일링 회전률(???) -확인
+		&scale,						//스케일링
+		NULL,						//회전의 중심
+		angle,						//회전률
+		&pos);						//위치(트랜슬레이션)
+	g_pd3dSprite->SetTransform(&mat);
+	g_pd3dSprite->Draw(
+		c_pd3dTex,
+		&rect,
+		&center,
+		NULL,
+		color);
+}
+
 void D2DImage::shadowrender(int destX, int destY)
 {
 	//2D그리기 시작

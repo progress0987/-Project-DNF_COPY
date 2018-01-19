@@ -192,6 +192,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="Universal_structs.h" />
     <ClInclude Include="upper.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="vacslash.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="Universal_structs.cpp" />
     <ClCompile Include="upper.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vacslash.cpp" />

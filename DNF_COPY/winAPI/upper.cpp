@@ -53,16 +53,16 @@ void upper::update()
 			curAction++;
 			if (curAction == 35) {//공격
 				effectedOnTime atk;
-				atk.mindmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmin;
-				atk.maxdmg = (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon()->phydmgmax;
+				atk.isCrit = rand() % 100 > 70 ? true : false;
+				atk.mindmg = atk.isCrit?((pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon().phydmgmin)*1.5: (pl->getStatus().str + pl->getStatus().a_str) * 2 + pl->getWeapon().phydmgmin;
+				atk.maxdmg = atk.isCrit?((pl->getStatus().str + pl->getStatus().a_str) * 3 + pl->getWeapon().phydmgmax)*1.5: (pl->getStatus().str + pl->getStatus().a_str) * 3 + pl->getWeapon().phydmgmax;
 				atk.isOnetime = true;
 				atk.isProjectile = false;
 				atk.isHold = false;
-				atk.isCrit = rand() % 100 > 70 ? true : false;
 				atk.area.miny = -180; atk.area.maxy = 0;
 				atk.area.minz = z - 50; atk.area.maxz = z + 50;
-				atk.area.maxx = pl->getCurDir() ? x + pl->getWeapon()->reachx : x - 10;
-				atk.area.minx = pl->getCurDir() ? x + 10 : x - pl->getWeapon()->reachx;
+				atk.area.maxx = pl->getCurDir() ? x + pl->getWeapon().reachx : x - 10;
+				atk.area.minx = pl->getCurDir() ? x + 10 : x - pl->getWeapon().reachx;
 				atk.pushX = pl->getCurDir() ? 1.f : -1.f;
 				atk.pushY = -5.f;												//추후 스킬레벨에따라 띄우기능력변경
 				atk.staytime = 10;

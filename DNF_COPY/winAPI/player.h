@@ -1,15 +1,14 @@
 #pragma once
-#include "gameNode.h"
-#include "MapBase.h"
 #include "UI.h"
+#include "MapBase.h"
 #include "skills.h"
 
 #define KEYDELAY 30
 class UI;
 class MapBase;
-struct Item;
+extern struct Item;
 enum itemType {
-	item_weapon,
+	item_weapon=1,
 	item_coat,
 	item_shoulder,
 	item_belt,
@@ -19,6 +18,7 @@ enum itemType {
 	item_necklace,
 	item_braclet,
 	item_consume,
+	item_etc,
 };
 
 enum WeaponType {
@@ -117,8 +117,6 @@ struct inputStruct {
 class player
 {
 private:
-	Item * emptyWeapon;
-	Item * empty;
 	RECT terColRect;
 
 	int frame;
@@ -130,6 +128,9 @@ private:
 	bool onAttack;							//공격 상태인지
 	bool onSkill;
 	bool onJump;							//점프상태인지
+	int onHeal;								//0 없음 1 체력 2 마력 3 둘다
+	int onHealFrame;
+
 	int movestatus;							//가만히있을시 : 0 걷기 : 1 뛰기 : 2
 	float jumpPow;
 	FLOAT x, y, z;
@@ -160,22 +161,27 @@ private:
 
 	/////////////////////////////////장비///////////////////////
 
-	Item* Weapon;
-	Item* Armor;
-	Item* Shoulder;
-	Item* Pants;
-	Item* Belt;
-	Item* Boots;
-	Item* Necklece;
-	Item* Ring;
-	Item* Bracelet;
+	Item Weapon;
+	Item Armor;
+	Item Shoulder;
+	Item Pants;
+	Item Belt;
+	Item Boots;
+	Item Necklece;
+	Item Ring;
+	Item Bracelet;
+
+	Item q1, q2, q3, q4, q5, q6;
 
 
 	long movebegin;
 public:
+	Item emptyWeapon;
+	Item empty;
 	status Stat;									//스텟
-
-	Item* equipments[8][4];
+	int gold;
+	vector<Item> equipments;
+	vector<Item> consume;
 	HRESULT init(void);
 	void release(void);
 	void update(void);
@@ -195,8 +201,10 @@ public:
 
 
 	void useItem(int tab, int x,int y);
+	void useIteminQS(int qs);
 	void rootItem(Item it);
 	void unequip(int);
+	Item setquickslot(int index, Item it);
 
 
 
@@ -205,14 +213,21 @@ public:
 	FLOAT getZ() { return z; }
 	bool getCurDir() { return curDir; }
 	
-	Item* getWeapon() { return Weapon; }
-	Item* getArmor() { return Armor; }
-	Item* getCoat() { return Armor; }
-	Item* getShoulder() { return Shoulder; }
-	Item* getPants() { return Pants; }
-	Item* getBelt() { return Belt; }
-	Item* getBoots() { return Boots; }
-	Item* getShoes() { return Boots; }
+	Item getWeapon() { return Weapon; }
+	Item getArmor() { return Armor; }
+	Item getCoat() { return Armor; }
+	Item getShoulder() { return Shoulder; }
+	Item getPants() { return Pants; }
+	Item getBelt() { return Belt; }
+	Item getBoots() { return Boots; }
+	Item getShoes() { return Boots; }
+	Item getQuick1() { return q1; }
+	Item getQuick2() { return q2; }
+	Item getQuick3() { return q3; }
+	Item getQuick4() { return q4; }
+	Item getQuick5() { return q5; }
+	Item getQuick6() { return q6; }
+	Item getItem(int curTab, int x, int y);
 
 
 	list<effectedOnTime> getAttackQueue() { return attackQueue; }
