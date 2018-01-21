@@ -10,6 +10,8 @@ HRESULT icewave::init()
 	cooldownTick = 7000;			//ÄðÅ¸ÀÓ
 	numofpillar = 30;
 	this->begin = false;
+	skillActive = 0;
+	skillInactive = 1;
 	return S_OK;
 }
 

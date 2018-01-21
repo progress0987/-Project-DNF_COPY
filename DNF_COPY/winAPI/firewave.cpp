@@ -12,6 +12,8 @@ HRESULT firewave::init()
 	waveBegin = false;
 	numofWave = 3;
 	curWave = 0;
+	skillInactive = 3;
+	skillActive = 2;
 
 
 	return S_OK;

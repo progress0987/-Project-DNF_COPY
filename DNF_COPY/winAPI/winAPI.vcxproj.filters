@@ -112,6 +112,18 @@
     <Filter Include="MainGame\Player\skill\wavespin">
       <UniqueIdentifier>{4721a797-bc73-4868-b8ce-ac5c75c3be42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\NPC">
+      <UniqueIdentifier>{171d0dad-567e-49e7-92bf-f65472cc2ad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\NPC\Seria">
+      <UniqueIdentifier>{d616562b-cb12-4ee6-b477-2dcc1f938c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\NPC\Kanna">
+      <UniqueIdentifier>{3114d87b-138c-4efb-b394-2fc89044ec6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\NPC\Linus">
+      <UniqueIdentifier>{75ed6727-3720-4bb6-9af0-c59c0ede1369}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -303,6 +315,18 @@
     <ClInclude Include="Universal_structs.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="NPC_Base.h">
+      <Filter>MainGame\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC_Seria.h">
+      <Filter>MainGame\NPC\Seria</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC_Linus.h">
+      <Filter>MainGame\NPC\Linus</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC_Kanna.h">
+      <Filter>MainGame\NPC\Kanna</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -469,6 +493,18 @@
     </ClCompile>
     <ClCompile Include="Universal_structs.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC_Base.cpp">
+      <Filter>MainGame\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC_Seria.cpp">
+      <Filter>MainGame\NPC\Seria</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC_Linus.cpp">
+      <Filter>MainGame\NPC\Linus</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC_Kanna.cpp">
+      <Filter>MainGame\NPC\Kanna</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

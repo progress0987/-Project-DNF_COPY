@@ -1,8 +1,13 @@
 #pragma once
 #include "MapBase.h"
+#include "NPC_Linus.h"
+#include "NPC_Kanna.h"
+
 class Village:public MapBase
 {
 private:
+	NPC_Linus linus;
+	NPC_Kanna kanna;
 	int count;
 	int flameframe, smokeframe;
 	int bgwidth;
@@ -10,7 +15,7 @@ private:
 	int bgtileNum;
 	POINT furnanceLoc;
 public:
-	void init();
+	HRESULT init();
 	void update();
 	void render();
 	void renderz();

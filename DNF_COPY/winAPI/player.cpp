@@ -23,7 +23,8 @@ HRESULT player::init(void)
 
 	Weapon = emptyWeapon;
 	Armor = Shoulder = Pants = Belt = Boots = Necklece = Ring = Bracelet = empty;
-	
+
+	QSkill = WSkill = ASkill = SSkill = DSkill = FSkill = GSkill = nullptr;
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 8; j++) {
 			equipments.push_back(empty);
@@ -149,6 +150,11 @@ void player::update(void)
 		break;
 	case stance_hit:
 		break;
+	case stance_sit:
+		if (tick % 30 == 0) {
+			frame = curMap->isPeaceful()?stance_idle: stance_ready;
+			curStance = curMap->isPeaceful() ? stance_idle : stance_ready;
+		}
 	case stance_jump_up:
 		if (tick % 30 == 0) {
 		frame++;
@@ -399,7 +405,13 @@ void player::update(void)
 
 
 		if (KEYMANAGER->isOnceKeyDown('X')) {
-			if (curMap->isAttackable()) {
+			if (curMap->aboveItem(x, z)) {
+				frame = stance_sit;
+				curStance = stance_sit;
+				DropItemStruct it = curMap->rootItem(x, z);
+				rootItem(it.item);
+			}
+			else if (curMap->isAttackable()) {
 				inputStruct t;
 				t.key = 'X';
 				t.time = GetTickCount();
@@ -550,58 +562,58 @@ void player::update(void)
 				}
 				inputQueue.pop_front();
 			}
-			if (inputQueue.size() > 0 && inputQueue.front().key == 'A'&&curStance!=stance_onSkill&&!onJump && !skill_wave->onCooldown) {
-				if (Stat.curMP >= skill_wave->reqMana) {
+			if (inputQueue.size() > 0 && inputQueue.front().key == 'A'&&curStance!=stance_onSkill&&!onJump && !ASkill->onCooldown) {
+				if (Stat.curMP >= ASkill->reqMana) {
 					curStance = stance_onSkill;
-					curSkill = skill_wave;
-					skill_wave->cast(x, y, z);
-					Stat.curMP -= skill_wave->reqMana;
+					curSkill = ASkill;
+					ASkill->cast(x, y, z);
+					Stat.curMP -= ASkill->reqMana;
 				}
 				inputQueue.pop_front();
 			}
-			if (inputQueue.size() > 0 && inputQueue.front().key == 'S'&&curStance!=stance_onSkill&&!onJump && !skill_icewave->onCooldown) {
-				if (Stat.curMP >= skill_icewave->reqMana) {
+			if (inputQueue.size() > 0 && inputQueue.front().key == 'S'&&curStance!=stance_onSkill&&!onJump && !SSkill->onCooldown) {
+				if (Stat.curMP >= SSkill->reqMana) {
 					curStance = stance_onSkill;
-					curSkill = skill_icewave;
-					skill_icewave->cast(x, y, z);
-					Stat.curMP -= skill_icewave->reqMana;
+					curSkill = SSkill;
+					SSkill->cast(x, y, z);
+					Stat.curMP -= SSkill->reqMana;
 				}
 				inputQueue.pop_front();
 			}
-			if (inputQueue.size() > 0 && inputQueue.front().key == 'D'&&curStance != stance_onSkill && !onJump && !skill_firewave->onCooldown) {
-				if (Stat.curMP >= skill_firewave->reqMana) {
+			if (inputQueue.size() > 0 && inputQueue.front().key == 'D'&&curStance != stance_onSkill && !onJump && !DSkill->onCooldown) {
+				if (Stat.curMP >= DSkill->reqMana) {
 					curStance = stance_onSkill;
-					curSkill = skill_firewave;
-					skill_firewave->cast(x, y, z);
-					Stat.curMP -= skill_firewave->reqMana;
+					curSkill = DSkill;
+					DSkill->cast(x, y, z);
+					Stat.curMP -= DSkill->reqMana;
 				}
 				inputQueue.pop_front();
 			}
-			if (inputQueue.size() > 0 && inputQueue.front().key == 'F'&&curStance != stance_onSkill && !onJump && !skill_vacslash->onCooldown) {
-				if (Stat.curMP >= skill_vacslash->reqMana) {
+			if (inputQueue.size() > 0 && inputQueue.front().key == 'F'&&curStance != stance_onSkill && !onJump && !FSkill->onCooldown) {
+				if (Stat.curMP >= FSkill->reqMana) {
 					curStance = stance_onSkill;
-					curSkill = skill_vacslash;
-					skill_vacslash->cast(x, y, z);
-					Stat.curMP -= skill_vacslash->reqMana;
+					curSkill = FSkill;
+					FSkill->cast(x, y, z);
+					Stat.curMP -= FSkill->reqMana;
 				}
 				inputQueue.pop_front();
 			}
-			if (inputQueue.size() > 0 && inputQueue.front().key == 'G'&&curStance != stance_onSkill && !onJump && !skill_wavespin->onCooldown) {
-				if (Stat.curMP >= skill_wavespin->reqMana) {
+			if (inputQueue.size() > 0 && inputQueue.front().key == 'G'&&curStance != stance_onSkill && !onJump && !GSkill->onCooldown) {
+				if (Stat.curMP >= GSkill->reqMana) {
 					curStance = stance_onSkill;
-					curSkill = skill_wavespin;
-					skill_wavespin->cast(x, y, z);
-					Stat.curMP -= skill_wavespin->reqMana;
+					curSkill = GSkill;
+					GSkill->cast(x, y, z);
+					Stat.curMP -= GSkill->reqMana;
 					onSuperarmor = true;
 				}
 				inputQueue.pop_front();
 			}
-			if (inputQueue.size() > 0 && inputQueue.front().key == 'Q'&&curStance != stance_onSkill && !onJump && !skill_releasewave->onCooldown) {
-				if (Stat.curMP >= skill_releasewave->reqMana) {
+			if (inputQueue.size() > 0 && inputQueue.front().key == 'Q'&&curStance != stance_onSkill && !onJump && !QSkill->onCooldown) {
+				if (Stat.curMP >= QSkill->reqMana) {
 					curStance = stance_onSkill;
-					curSkill = skill_releasewave;
-					skill_releasewave->cast(x, y, z);
-					Stat.curMP -= skill_releasewave->reqMana;
+					curSkill = QSkill;
+					QSkill->cast(x, y, z);
+					Stat.curMP -= QSkill->reqMana;
 					onSuperarmor = true;
 				}
 				inputQueue.pop_front();
@@ -745,6 +757,7 @@ void player::update(void)
 void player::render(void)
 {
 	printSkillb();
+	IMAGEMANAGER->findImage("그림자")->DFpointrender(x - cam.x, translate(z) - cam.y, 300, 50, 0.3f, 0xAA);
 	char tmp[50];
 	sprintf(tmp, "%s_뒤_%d",Weapon.name.c_str(), frame);
 	if (Weapon.id == -1) {
@@ -836,26 +849,32 @@ void player::setSkills()
 	skill_wave = new wave;
 	skill_wave->init();
 	skills.push_back(skill_wave);
+	ASkill = skill_wave;
 
 	skill_icewave = new icewave;
 	skill_icewave->init();
 	skills.push_back(skill_icewave);
+	SSkill = skill_icewave;
 
 	skill_firewave = new firewave;
 	skill_firewave->init();
 	skills.push_back(skill_firewave);
+	DSkill = skill_firewave;
 
 	skill_vacslash = new vacslash;
 	skill_vacslash->init();
 	skills.push_back(skill_vacslash);
+	FSkill = skill_vacslash;
 
 	skill_releasewave = new releasewave;
 	skill_releasewave->init();
 	skills.push_back(skill_releasewave);
+	QSkill = skill_releasewave;
 	
 	skill_wavespin = new wavespin;
 	skill_wavespin->init();
 	skills.push_back(skill_wavespin);
+	GSkill = skill_wavespin;
 }
 
 void player::updateSkills()

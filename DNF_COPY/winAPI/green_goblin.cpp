@@ -45,6 +45,7 @@ void green_goblin::update()
 
 void green_goblin::render()
 {
+	IMAGEMANAGER->findImage("그림자")->DFpointrender(x - cam.x, translate(z) - cam.y, 300, 50, 0.25, 0xAA);
 	char tmp[50];
 	sprintf(tmp, "고블린_초록_%d", frame);
 	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y + translate(z)) - cam.y, 200, 154, 1.0f, 255, curDir);

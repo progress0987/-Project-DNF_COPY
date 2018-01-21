@@ -147,6 +147,7 @@ HRESULT mainGame::init(void)
 	 char tmp2[255];
 
 
+#pragma region 플레이어
 	 ///플레이어
 	 for (int i = 0; i < 210; i++) {
 
@@ -162,7 +163,8 @@ HRESULT mainGame::init(void)
 		 sprintf(tmp, "빈손앞_%d", i);
 		 IMAGEMANAGER->addImage(tmp, tmp2);
 	 }
-
+#pragma endregion 플레이어 프레임은 210개
+#pragma region 아이템 - 무기
 	 ///아이템
 	 //장착시 모습(무기)
 	 for (vector<string>::iterator i = itemNames.begin(); i != itemNames.end(); i++) {
@@ -197,36 +199,38 @@ HRESULT mainGame::init(void)
 		 }
 	 }
 	 
+#pragma endregion 무기 앞,뒤 이미지는 아이템리스트에 들어가있는 정보로 로드됨. 내부 for문 참조
+
 	 ///인벤슬롯 이미지
 	 
 	 //갑옷부분
-	 {
-		 for (int i = 0; i < 70; i++) {
-			 if (i < 63) {
-				 sprintf(tmp2, "sprites/item/icons/plate_belt.img/%d.png", i);
-				 sprintf(tmp, "판금_벨트_%d", i);
-				 IMAGEMANAGER->addImage(tmp, tmp2);
-			 }
-			 if (i < 64) {
-				 sprintf(tmp2, "sprites/item/icons/plate_neck.img/%d.png", i);
-				 sprintf(tmp, "판금_어깨_%d", i);
-				 IMAGEMANAGER->addImage(tmp, tmp2);
-			 }
-			 if (i < 65) {
-				 sprintf(tmp2, "sprites/item/icons/plate_shoes.img/%d.png", i);
-				 sprintf(tmp, "판금_신발_%d", i);
-				 IMAGEMANAGER->addImage(tmp, tmp2);
-			 }
-			 if (i < 67) {
-				 sprintf(tmp2, "sprites/item/icons/plate_pants.img/%d.png", i);
-				 sprintf(tmp, "판금_바지_%d", i);
-				 IMAGEMANAGER->addImage(tmp, tmp2);
-			 }
-			 sprintf(tmp2, "sprites/item/icons/plate_coat.img/%d.png", i);
-			 sprintf(tmp, "판금_상의_%d", i);
+#pragma region 아이템 - 갑옷(판금)
+	 for (int i = 0; i < 70; i++) {
+		 if (i < 63) {
+			 sprintf(tmp2, "sprites/item/icons/plate_belt.img/%d.png", i);
+			 sprintf(tmp, "판금_벨트_%d", i);
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
+		 if (i < 64) {
+			 sprintf(tmp2, "sprites/item/icons/plate_neck.img/%d.png", i);
+			 sprintf(tmp, "판금_어깨_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 if (i < 65) {
+			 sprintf(tmp2, "sprites/item/icons/plate_shoes.img/%d.png", i);
+			 sprintf(tmp, "판금_신발_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 if (i < 67) {
+			 sprintf(tmp2, "sprites/item/icons/plate_pants.img/%d.png", i);
+			 sprintf(tmp, "판금_바지_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 sprintf(tmp2, "sprites/item/icons/plate_coat.img/%d.png", i);
+		 sprintf(tmp, "판금_상의_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
 	 }
+#pragma endregion 판금의 모든 인벤토리 아이템 이미지 저장
 	 //무기부분
 	 {
 		 for (int i = 0; i < 169; i++) {
@@ -274,6 +278,10 @@ HRESULT mainGame::init(void)
 	 }
 	 //필드상에서 아이템 이미지
 	 {
+		 sprintf(tmp2, "sprites/item/onField/fieldimage.img/20.png");
+		 sprintf(tmp, "아이템_필드_소모품");
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
 		 sprintf(tmp2, "sprites/item/onField/fieldimage.img/9.png");
 		 sprintf(tmp, "아이템_필드_소검");
 		 IMAGEMANAGER->addImage(tmp, tmp2);
@@ -301,6 +309,7 @@ HRESULT mainGame::init(void)
 
 	 ///UI
 	 {
+		 IMAGEMANAGER->addImage("UI_아이템선택", "sprites/UI/attachicon.img/0.png");
 		 IMAGEMANAGER->addImage("UI_하단_기본창", "sprites/UI/hud.img/0.png");
 		 IMAGEMANAGER->addImage("UI_하단_기본창_확장", "sprites/UI/hud.img/133.png");
 		 IMAGEMANAGER->addImage("UI_하단_기본창_조각", "sprites/UI/hud.img/134.png");
@@ -348,6 +357,58 @@ HRESULT mainGame::init(void)
 			 sprintf(tmp, "마나회복_%d", i);
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
+		 for (int i = 1; i < 7; i++) {
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/%d.png", i+45);
+			 sprintf(tmp, "키보드_숏컷_%d", i);
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+		 //키 숏컷 출력 - 나중에 for문으로 한번에 처리할것
+		 {
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/55.png");
+			 sprintf(tmp, "키보드_숏컷_A");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/73.png");
+			 sprintf(tmp, "키보드_숏컷_S");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/58.png");
+			 sprintf(tmp, "키보드_숏컷_D");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/60.png");
+			 sprintf(tmp, "키보드_숏컷_F");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/61.png");
+			 sprintf(tmp, "키보드_숏컷_G");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/62.png");
+			 sprintf(tmp, "키보드_숏컷_H");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/71.png");
+			 sprintf(tmp, "키보드_숏컷_Q");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/77.png");
+			 sprintf(tmp, "키보드_숏컷_W");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/59.png");
+			 sprintf(tmp, "키보드_숏컷_E");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/72.png");
+			 sprintf(tmp, "키보드_숏컷_R");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+
+			 sprintf(tmp2, "sprites/UI/keyshortcut.img/74.png");
+			 sprintf(tmp, "키보드_숏컷_T");
+			 IMAGEMANAGER->addImage(tmp, tmp2);
+		 }
+
 	 }
 
 	 ///몬스터
@@ -482,6 +543,14 @@ HRESULT mainGame::init(void)
 
 	 ///스킬 이미지들 가져오기
 	 
+	 //스킬 아이콘
+	 for (int i = 0; i < 138; i++) {
+		 sprintf(tmp2, "sprites/skill/icons/%d.png", i);
+		 sprintf(tmp, "스킬_아이콘_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+
+
 	 //어퍼슬래시
 	 for (int i = 0; i < 9; i++) {
 		 sprintf(tmp2, "sprites/skill/upperslash/%d.png", i);
@@ -665,10 +734,28 @@ HRESULT mainGame::init(void)
 
 	 //살의의 파동
 
+	 ///NPC
+#pragma region NPC 이미지
+	 for (int i = 0; i < 12; i++) {
+		 sprintf(tmp2, "sprites/NPC/origin_seria.img/%d.png", i);
+		 sprintf(tmp, "NPC_세리아_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+
+		 sprintf(tmp2, "sprites/NPC/linus.img/%d.png", i);
+		 sprintf(tmp, "NPC_라이너스_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+	 for (int i = 0; i < 8; i++) {
+		 sprintf(tmp2, "sprites/NPC/kanna.img/%d.png", i);
+		 sprintf(tmp, "NPC_칸나_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+#pragma endregion 세리아,칸나,라이너스
 
 
 	 //기타 이미지
 	 IMAGEMANAGER->addImage("X표시", "sprites/invalid.png");
+	 IMAGEMANAGER->addImage("그림자", "sprites/shadow.png");
  }
 
  //이미지들 처리

@@ -2,7 +2,7 @@
 #include "Village.h"
 
 
-void Village::init()
+HRESULT Village::init()
 {
 	IMAGEMANAGER->addImage("마을_뒷배경_0", "sprites/maps/village/back_far/0.png");
 	IMAGEMANAGER->addImage("마을_뒷배경_1", "sprites/maps/village/back_far/1.png");
@@ -39,6 +39,8 @@ void Village::init()
 	peaceful = true;
 	runnable = false;
 	attackable = false;
+	linus.init();
+	kanna.init();
 
 
 	flameframe = 1;
@@ -131,6 +133,7 @@ void Village::init()
 	imgt.pos.x = -40;
 	imgt.pos.y = 120;
 	staticTiles.push_back(imgt);
+	return S_OK;
 }
 
 void Village::update()
@@ -138,6 +141,8 @@ void Village::update()
 	count++;
 	showSmoke();
 	showFlame();
+	linus.update();
+	kanna.update();
 }
 
 void Village::render()
@@ -151,6 +156,8 @@ void Village::render()
 	IMAGEMANAGER->findImage(temp)->render(1290 - cam.x, -20- cam.y);
 	sprintf(temp, "마을_연기_%d", smokeframe);
 	IMAGEMANAGER->findImage(temp)->render(1290+262 - cam.x, -20-160- cam.y);
+	linus.render();
+	kanna.render();
 	pl->render();
 }
 
@@ -163,12 +170,14 @@ void Village::renderz()
 
 void Village::renderdc()
 {
-	POINT curpt = ptMouse;
-	curpt.x += cam.x;
-	curpt.y += cam.y;
-	char t[50];
-	sprintf(t, "x:%d, y:%d", curpt.x, curpt.y);
-	TextOut(hdc, 50, 300, t, strlen(t));	//테스트용
+	//POINT curpt = ptMouse;
+	//curpt.x += cam.x;
+	//curpt.y += cam.y;
+	//char t[50];
+	//sprintf(t, "x:%d, y:%d", curpt.x, curpt.y);
+	//TextOut(hdc, 50, 300, t, strlen(t));	//테스트용
+	//linus.renderdc();
+	//kanna.renderdc();
 }
 
 void Village::showSmoke()

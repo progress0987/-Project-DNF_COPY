@@ -1,6 +1,7 @@
 #pragma once
 #include "player.h"
 #include "MonsterBase.h"
+#include "NPC_Base.h"
 struct Camera;
 class player;
 class MonsterBase;
@@ -22,6 +23,8 @@ protected:
 		MapBase* nextNode;
 		POINT pos;
 	};
+	LPD3DXFONT d3dFont;
+	void drawWindow(int destX, int destY, int width, int height, int alpha=0xff);
 	MapBase* curMap;
 	int tileNumX, tileNumY;
 	player * pl;
@@ -44,7 +47,7 @@ public:
 
 	//////virtual로 안해놓을시 바로 부모의 함수로 가버림. 
 	//////virtual을 해야 로컬을 먼저찾고 부모로 감.
-	virtual void init();
+	virtual HRESULT init();
 	virtual void update();
 	virtual void render();
 	virtual void renderz();

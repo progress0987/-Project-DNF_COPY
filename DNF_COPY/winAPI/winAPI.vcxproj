@@ -153,6 +153,10 @@
     <ClInclude Include="goblin_base.h" />
     <ClInclude Include="green_goblin.h" />
     <ClInclude Include="icewave.h" />
+    <ClInclude Include="NPC_Base.h" />
+    <ClInclude Include="NPC_Kanna.h" />
+    <ClInclude Include="NPC_Linus.h" />
+    <ClInclude Include="NPC_Seria.h" />
     <ClInclude Include="releasewave.h" />
     <ClInclude Include="skills.h" />
     <ClInclude Include="iniDataManager.h" />
@@ -232,6 +236,10 @@
     <ClCompile Include="mainGame.cpp" />
     <ClCompile Include="MapBase.cpp" />
     <ClCompile Include="MonsterBase.cpp" />
+    <ClCompile Include="NPC_Base.cpp" />
+    <ClCompile Include="NPC_Kanna.cpp" />
+    <ClCompile Include="NPC_Linus.cpp" />
+    <ClCompile Include="NPC_Seria.cpp" />
     <ClCompile Include="PixelCollisionTest.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="progressBar.cpp" />

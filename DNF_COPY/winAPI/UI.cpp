@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "UI.h"
 
-//아이템 팝업 만들것!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-void UI::drawWindow(int destX, int destY,int width, int height, int alpha)
+void drawWindow(int destX, int destY,int width, int height, int alpha)
 {
 		//0, 3, 6 11x, 1,4,7 - 12x, 2,5,8 - 10x
 
@@ -35,13 +34,26 @@ HRESULT UI::init(void)
 	showInv = showStat = showPopup = false;
 	popupItem = &pl->empty;
 	inv = RectMake(WINSIZEX - 300, 50, 270, 400);
-	stat = RectMake(inv.left - 270, 50, 260, 400);
+	stat = shop = RectMake(inv.left - 270, 50, 260, 400);
 	q1 = RectMake(100, 518 + 42, 30, 30);
 	q2 = RectMake(130, 518 + 42, 30, 30);
 	q3 = RectMake(160, 518 + 42, 30, 30);
-	q4 = RectMake(170, 518 + 42, 30, 30);
-	q5 = RectMake(210, 518 + 42, 30, 30);
-	q6 = RectMake(240, 518 + 42, 30, 30);
+	q4 = RectMake(190, 518 + 42, 30, 30);
+	q5 = RectMake(220, 518 + 42, 30, 30);
+	q6 = RectMake(250, 518 + 42, 30, 30);
+	int fromx = 0;
+	qa = RectMake(540+fromx++*30+1, 561, 28, 28);
+	qs = RectMake(540+fromx++*30+1, 561, 28, 28);
+	qd = RectMake(540+fromx++*30+1, 561, 28, 28);
+	qf = RectMake(540+fromx++*30+1, 561, 28, 28);
+	qg = RectMake(540+fromx++*30+1, 561, 28, 28);
+	qh = RectMake(540+fromx*30+1, 561, 28, 28);
+	fromx = 0;
+	qq = RectMake(540+fromx++*30+1, 531, 28, 28);
+	qw = RectMake(540+fromx++*30+1, 531, 28, 28);
+	qe = RectMake(540+fromx++*30+1, 531, 28, 28);
+	qr = RectMake(540+fromx++*30+1, 531, 28, 28);
+	qt = RectMake(540+fromx++*30+1, 531, 28, 28);
 	tabEquip = RectMake(520, 210 - 21, 62, 21);
 	tabConsume = RectMake(520 + 65, 210 - 21, 62, 21);
 	for (int i = 0; i < 4; i++) {
@@ -203,7 +215,7 @@ void UI::update(void)
 						//Item* tmp = new Item;
 						//memcpy(tmp,&pl->equipments[onHoldPosX + onHoldPosY * 8],sizeof(Item));
 						//t.item = tmp;
-						t.item = pl->getCurMap()->adddroppedItem(pl->equipments[onHoldPosX + onHoldPosY * 8]);
+						t.item = onHold->type == item_consume?pl->consume[onHoldPosX+onHoldPosY*8]:onHold->type == item_etc?Item(): pl->equipments[onHoldPosX + onHoldPosY * 8];
 						t.xVel = t.yVel = t.Tick = t.isGold = t.goldamount = 0;
 						t.x = pl->getX();
 						t.z = pl->getZ();
@@ -373,7 +385,55 @@ void UI::render(void)
 		sprintf(tmp, "소모_%d", pl->getQuick6().id);
 		IMAGEMANAGER->findImage(tmp)->render(q6.left + 1, q6.top + 1);
 	}
-	
+	if (pl->getASkill() != nullptr) {
+		sprintf(tmp, "스킬_아이콘_%d", pl->getASkill()->skillInactive);
+		IMAGEMANAGER->findImage(tmp)->render(qa.left, qa.top);
+		if (pl->getStatus().curMP > pl->getASkill()->reqMana) {
+			sprintf(tmp, "스킬_아이콘_%d", pl->getASkill()->skillActive);
+			IMAGEMANAGER->findImage(tmp)->render(qa.left, qa.top, 0, 0, 28, 28 - (28 * pl->getASkill()->getremainCooldown()));
+		}
+	}
+	if (pl->getSSkill() != nullptr) {
+		sprintf(tmp, "스킬_아이콘_%d", pl->getSSkill()->skillInactive);
+		IMAGEMANAGER->findImage(tmp)->render(qs.left, qs.top);
+		if (pl->getStatus().curMP > pl->getSSkill()->reqMana) {
+			sprintf(tmp, "스킬_아이콘_%d", pl->getSSkill()->skillActive);
+			IMAGEMANAGER->findImage(tmp)->render(qs.left, qs.top, 0, 0, 28, 28 - (28 * pl->getSSkill()->getremainCooldown()));
+		}
+	}
+	if (pl->getDSkill() != nullptr) {
+		sprintf(tmp, "스킬_아이콘_%d", pl->getDSkill()->skillInactive);
+		IMAGEMANAGER->findImage(tmp)->render(qd.left, qd.top);
+		if (pl->getStatus().curMP > pl->getDSkill()->reqMana) {
+			sprintf(tmp, "스킬_아이콘_%d", pl->getDSkill()->skillActive);
+			IMAGEMANAGER->findImage(tmp)->render(qd.left, qd.top, 0, 0, 28, 28 - (28 * pl->getDSkill()->getremainCooldown()));
+		}
+	}
+	if (pl->getFSkill() != nullptr) {
+		sprintf(tmp, "스킬_아이콘_%d", pl->getFSkill()->skillInactive);
+		IMAGEMANAGER->findImage(tmp)->render(qf.left, qf.top);
+		if (pl->getStatus().curMP > pl->getFSkill()->reqMana) {
+			sprintf(tmp, "스킬_아이콘_%d", pl->getFSkill()->skillActive);
+			IMAGEMANAGER->findImage(tmp)->render(qf.left, qf.top, 0, 0, 28, 28 - (28 * pl->getFSkill()->getremainCooldown()));
+		}
+	}
+	if (pl->getGSkill() != nullptr) {
+		sprintf(tmp, "스킬_아이콘_%d", pl->getGSkill()->skillInactive);
+		IMAGEMANAGER->findImage(tmp)->render(qg.left, qg.top);
+		if (pl->getStatus().curMP > pl->getGSkill()->reqMana) {
+			sprintf(tmp, "스킬_아이콘_%d", pl->getGSkill()->skillActive);
+			IMAGEMANAGER->findImage(tmp)->render(qg.left, qg.top, 0, 0, 28, 28 - (28 * pl->getGSkill()->getremainCooldown()));
+		}
+	}
+	if (pl->getQSkill() != nullptr) {
+		sprintf(tmp, "스킬_아이콘_%d", pl->getQSkill()->skillInactive);
+		IMAGEMANAGER->findImage(tmp)->render(qq.left, qq.top);
+		if (pl->getStatus().curMP > pl->getQSkill()->reqMana) {
+			sprintf(tmp, "스킬_아이콘_%d", pl->getQSkill()->skillActive);
+			IMAGEMANAGER->findImage(tmp)->render(qq.left, qq.top, 0, 0, 28, 28 - (28 * pl->getQSkill()->getremainCooldown()));
+		}
+	}
+
 
 
 	if (showInv) {
@@ -533,7 +593,7 @@ void UI::render(void)
 						switch (i->detail) {
 						case wp_sswd:
 							sprintf(tmp, "소검_%d", i->id);
-							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount%8][invcount/8].left-1,itemrects[invcount%8][invcount/8].top-1);
+							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left+1, itemrects[invcount % 8][invcount / 8].top+1);
 							break;
 						case wp_kat:
 							break;
@@ -545,7 +605,7 @@ void UI::render(void)
 						switch (i->detail) {
 						case arm_plate:
 							sprintf(tmp, "판금_상의_%d", i->id);
-							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount%8][invcount/8].left-1,itemrects[invcount%8][invcount/8].top-1);
+							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
 							break;
 						}
 					}
@@ -555,7 +615,7 @@ void UI::render(void)
 						switch (i->detail) {
 						case arm_plate:
 							sprintf(tmp, "판금_어깨_%d", i->id);
-							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount%8][invcount/8].left-1,itemrects[invcount%8][invcount/8].top-1);
+							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
 							break;
 						}
 					}
@@ -565,7 +625,7 @@ void UI::render(void)
 						switch (i->detail) {
 						case arm_plate:
 							sprintf(tmp, "판금_벨트_%d", i->id);
-							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount%8][invcount/8].left-1,itemrects[invcount%8][invcount/8].top-1);
+							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
 							break;
 						}
 					}
@@ -575,7 +635,7 @@ void UI::render(void)
 						switch (i->detail) {
 						case arm_plate:
 							sprintf(tmp, "판금_바지_%d", i->id);
-							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount%8][invcount/8].left-1,itemrects[invcount%8][invcount/8].top-1);
+							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
 							break;
 						}
 					}
@@ -585,7 +645,7 @@ void UI::render(void)
 						switch (i->detail) {
 						case arm_plate:
 							sprintf(tmp, "판금_신발_%d", i->id);
-							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount%8][invcount/8].left-1,itemrects[invcount%8][invcount/8].top-1);
+							IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
 							break;
 						}
 					}
@@ -606,7 +666,7 @@ void UI::render(void)
 					}
 					else {
 						sprintf(tmp, "소모_%d", i->id);
-						IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left - 1, itemrects[invcount % 8][invcount / 8].top - 1);
+						IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
 						invcount++;
 					}
 				}
@@ -617,6 +677,13 @@ void UI::render(void)
 			break;
 		case 2:								//기타템
 			break;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (PtInRect(&itemrects[j][i], ptMouse) && (curActiveTab == 0 ? pl->equipments[j + i * 8].id > 0:(curActiveTab == 1 ? pl->consume[j + i * 8].id > 0:false)))
+					IMAGEMANAGER->findImage("UI_아이템선택")->render(itemrects[j][i].left, itemrects[j][i].top);
+			}
 		}
 		if (showPopup) {//팝업 보여주는거면
 			drawWindow(ptMouse.x, ptMouse.y, 200, 200);
@@ -740,31 +807,39 @@ void UI::render(void)
 			}
 		}
 	}
-	
+	if (showShop) {
+		
+	}
+
+	IMAGEMANAGER->findImage("키보드_숏컷_1")->render(q1.left+1, q1.top+1);
+	IMAGEMANAGER->findImage("키보드_숏컷_2")->render(q2.left+1, q2.top+1);
+	IMAGEMANAGER->findImage("키보드_숏컷_3")->render(q3.left+1, q3.top+1);
+	IMAGEMANAGER->findImage("키보드_숏컷_4")->render(q4.left+1, q4.top+1);
+	IMAGEMANAGER->findImage("키보드_숏컷_5")->render(q5.left+1, q5.top+1);
+	IMAGEMANAGER->findImage("키보드_숏컷_6")->render(q6.left+1, q6.top+1);
+
+	IMAGEMANAGER->findImage("키보드_숏컷_A")->render(qa.left, qa.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_S")->render(qs.left, qs.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_D")->render(qd.left, qd.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_F")->render(qf.left, qf.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_G")->render(qg.left, qg.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_H")->render(qh.left, qh.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_Q")->render(qq.left, qq.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_W")->render(qw.left, qw.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_E")->render(qe.left, qe.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_R")->render(qr.left, qr.top);
+	IMAGEMANAGER->findImage("키보드_숏컷_T")->render(qt.left, qt.top);
 }
 
 void UI::renderdc(void)
 {
 	char test[200];
 
+	//Rectangle(hdc, qa.left, qa.top, qa.right, qa.bottom);
+	//Rectangle(hdc, qq.left, qq.top, qq.right, qq.bottom);
 	if (showInv) {
-		//sprintf(test, "테스트중임");
-		//d3dFont->DrawTextA(
-		//	NULL,
-		//	test,
-		//	-1,
-		//	&RectMake(350, 350, 500, 50),
-		//	DT_LEFT,
-		//	D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
-		//Rectangle(hdc, inv.left, inv.top, inv.right, inv.bottom);
 
-		//for (int i = 0; i < 4; i++) {
-		//	for (int j = 0; j < 8; j++) {
-		//		Rectangle(hdc, itemrects[j][i].left, itemrects[j][i].top, itemrects[j][i].right, itemrects[j][i].bottom);
-		//	}
-		//}
-
-//#pragma region 돈 출력부분
+#pragma region 돈 출력부분
 		//돈 출력부분
 		{
 			sprintf(test, "%d", pl->gold);
@@ -776,7 +851,7 @@ void UI::renderdc(void)
 				DT_RIGHT | DT_VCENTER,
 				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 		}
-//#pragma endregion
+#pragma endregion
 		//장비
 		{
 			sprintf(test, "장비");
@@ -921,6 +996,24 @@ void UI::renderdc(void)
 						D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 				}
 				break;
+			}
+		}
+		if (curActiveTab == 1) {//소모품일때
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 8; j++) {
+					if (pl->consume[j + i * 8].id > 0) {		//아이템이 있으면 갯수출력
+						if (pl->consume[j + i * 8].stack > 1) {	//2개이상만 출력
+							sprintf(test, "%d", pl->consume[j + i*8].stack);
+							d3dFont->DrawTextA(
+								NULL,
+								test,
+								-1,
+								&itemrects[j][i],
+								DT_RIGHT | DT_BOTTOM,
+								D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+						}
+					}
+				}
 			}
 		}
 
@@ -1244,6 +1337,85 @@ void UI::renderdc(void)
 		t++;
 
 	}
+
+	if (pl->getQuick1().id > 0) {
+		if (pl->getQuick1().stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick1().stack);
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&q1,
+				DT_LEFT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}
+	}
+	if (pl->getQuick2().id > 0) {
+		if (pl->getQuick2().stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick2().stack);
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&q2,
+				DT_LEFT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}
+	}
+	if (pl->getQuick3().id > 0) {
+		if (pl->getQuick3().stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick3().stack);
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&q3,
+				DT_LEFT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}
+	}
+	if (pl->getQuick4().id > 0) {
+		if (pl->getQuick4().stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick4().stack);
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&q4,
+				DT_LEFT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}
+	}
+	if (pl->getQuick5().id > 0) {
+		if (pl->getQuick5().stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick5().stack);
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&q5,
+				DT_LEFT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}
+	}
+	if (pl->getQuick6().id > 0) {
+		if (pl->getQuick6().stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick6().stack);
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&q6,
+				DT_LEFT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}
+	}
+}
+
+void UI::openShop(vector<Item> merchandices)
+{
+	showShop = true;
+	merch = merchandices;
 }
 
 UI::UI()

@@ -2,8 +2,9 @@
 #include "DungeonBase.h"
 
 
-void DungeonBase::init()
+HRESULT DungeonBase::init()
 {
+	return S_OK;
 }
 
 void DungeonBase::update()

@@ -5,7 +5,7 @@ class Mirkwood :public MapBase
 {
 private:
 public:
-	void init();
+	HRESULT init();
 	void update();
 	void render();
 	void renderz();
@@ -20,7 +20,7 @@ public:
 class MirkwoodMap : public MapBase
 {
 public:
-	void init();
+	HRESULT init();
 	void update();
 	void render();
 	void renderz();

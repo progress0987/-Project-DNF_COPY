@@ -9,8 +9,8 @@ HRESULT wave::init()
 	chargeamount = 10;
 	onCooldown = false;
 	cooldownTick=400;
-
-
+	skillActive = 6;
+	skillInactive = 7;
 
 	return S_OK;
 }

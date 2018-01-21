@@ -13,6 +13,8 @@ HRESULT vacslash::init()
 	chargetick = 10;
 	travelDist = 500;			//사정거리
 	sl.onshow = false;
+	skillActive = 108;
+	skillInactive = 109;
 	return S_OK;
 }
 

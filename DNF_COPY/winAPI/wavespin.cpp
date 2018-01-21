@@ -12,6 +12,8 @@ HRESULT wavespin::init()
 	numofbead = 5;
 	skilldiameter = 160;
 	ballHeight = -100;
+	skillActive = 136;
+	skillInactive = 137;
 	for (int i = 0; i < numofbead; i++) {
 		bead t;
 		balls.push_back(t);

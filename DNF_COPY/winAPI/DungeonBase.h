@@ -6,7 +6,7 @@ class DungeonBase :public MapBase
 protected:
 	vector<MapBase*> Maps;
 public:
-	virtual void init();
+	virtual HRESULT init();
 	virtual void update();
 	virtual void render();
 	virtual void renderz();

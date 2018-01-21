@@ -144,6 +144,13 @@ private:
 	vacslash* skill_vacslash;
 	releasewave* skill_releasewave;
 	wavespin* skill_wavespin;
+	Skill* QSkill;
+	Skill* WSkill;
+	Skill* ASkill;
+	Skill* SSkill;
+	Skill* DSkill;
+	Skill* FSkill;
+	Skill* GSkill;
 
 
 
@@ -228,6 +235,13 @@ public:
 	Item getQuick5() { return q5; }
 	Item getQuick6() { return q6; }
 	Item getItem(int curTab, int x, int y);
+
+	Skill* getQSkill() { return QSkill; }
+	Skill* getASkill() { return ASkill; }
+	Skill* getSSkill() { return SSkill; }
+	Skill* getDSkill() { return DSkill; }
+	Skill* getFSkill() { return FSkill; }
+	Skill* getGSkill() { return GSkill; }
 
 
 	list<effectedOnTime> getAttackQueue() { return attackQueue; }

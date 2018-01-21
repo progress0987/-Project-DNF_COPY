@@ -8,6 +8,8 @@ HRESULT releasewave::init()
 	onCooldown = false;
 	oncast = false;
 	cooldownTick = 4000;
+	skillActive = 100;
+	skillInactive = 101;
 	return S_OK;
 }
 

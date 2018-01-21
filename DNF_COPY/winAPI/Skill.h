@@ -39,6 +39,10 @@ public:
 	bool oncast,finished;
 	bool onCooldown;
 	bool isSuperArmor;
+	int skillInactive;
+	int skillActive;
+	FLOAT getremainCooldown();
+	int getremainCooldownTime();
 	virtual HRESULT init();
 	virtual void cast(FLOAT x, FLOAT y, FLOAT z);
 	virtual void update();

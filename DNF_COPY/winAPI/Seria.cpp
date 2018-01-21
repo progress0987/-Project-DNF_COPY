@@ -12,7 +12,7 @@ Seria::~Seria()
 {
 }
 
-void Seria::init()
+HRESULT Seria::init()
 {
 	IMAGEMANAGER->addImage("技府酒_2", "sprites/maps/seria/bg2/0.png");
 	IMAGEMANAGER->addImage("技府酒_3", "sprites/maps/seria/bg3/0.png");
@@ -39,10 +39,13 @@ void Seria::init()
 	peaceful = true;
 	runnable = false;
 	attackable = false;
+	seria.init();
+	return S_OK;
 }
 
 void Seria::update()
 {
+	seria.update();
 }
 
 void Seria::render()
@@ -50,6 +53,9 @@ void Seria::render()
 	IMAGEMANAGER->findImage("技府酒_2")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
 	IMAGEMANAGER->findImage("技府酒_3")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
 	IMAGEMANAGER->findImage("技府酒_4")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
+
+	seria.render();
+
 	//IMAGEMANAGER->findImage("技府酒_2")->blurredrender(0,0,0x88);
 	//IMAGEMANAGER->findImage("技府酒_3")->blurredrender(0,0,0x88);
 	//IMAGEMANAGER->findImage("技府酒_4")->blurredrender(0,0,0x88);

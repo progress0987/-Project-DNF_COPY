@@ -2,8 +2,9 @@
 #include "Mirkwood.h"
 
 
-void Mirkwood::init()
+HRESULT Mirkwood::init()
 {
+	//MapBase::init();
 	peaceful = false;
 	runnable = true;
 	attackable = true;
@@ -17,6 +18,7 @@ void Mirkwood::init()
 	tilewidth = IMAGEMANAGER->findImage("던전_머크우드_바닥_0")->getWidth();
 	/////////////////////////////////////////////////////////////////////////1번째 맵 처리
 	{
+		m1->init();
 		m1->setPlayer(pl);
 		m1->setPeaceful(false);
 		int tileNum = 5;
@@ -57,6 +59,7 @@ void Mirkwood::init()
 	}
 	/////////////////////////////////////////////////////////////////////2번째 맵 처리
 	{
+		m2->init();
 		m2->setPlayer(pl);
 		m2->setPeaceful(false);
 		int tileNum = 6;
@@ -98,6 +101,7 @@ void Mirkwood::init()
 	}
 	/////////////////////////////////////////////////////////////////////////////3번째 맵 처리
 	{
+		m3->init();
 		m3->setPlayer(pl);
 		m3->setPeaceful(false);
 		int tileNum = 7;
@@ -154,6 +158,7 @@ void Mirkwood::init()
 
 
 	curMap = m1;
+	return S_OK;
 }
 
 void Mirkwood::update()
@@ -186,8 +191,10 @@ Mirkwood::~Mirkwood()
 ///////////////////////////////////////////////////////////////머크우드 세부맵
 
 
-void MirkwoodMap::init()
+HRESULT MirkwoodMap::init()
 {
+	MapBase::init();
+	return S_OK;
 }
 
 void MirkwoodMap::update()
@@ -207,61 +214,63 @@ void MirkwoodMap::render()
 	for (vector<ImgTile>::iterator i = staticTiles.begin(); i != staticTiles.end(); i++) {
 		i->tileImg->render(i->pos.x - cam.x, i->pos.y - cam.y);
 	}
-
 	for (vector<DropItemStruct>::iterator i = dropList.begin(); i != dropList.end(); i++) {
-		switch (i->item->type) {
+		switch (i->item.type) {
 		case item_coat: {
-			switch (i->item->detail) {
+			switch (i->item.detail) {
 			case arm_plate:
-				IMAGEMANAGER->findImage("아이템_필드_판금_상의")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				IMAGEMANAGER->findImage("아이템_필드_판금_상의")->DFpointrotatedrender(i->x - cam.x + 25, (i->y + translate(i->z)) - cam.y + 25, i->angle, 60, 60);
 				break;
 			}
 			break;
 		}
 		case item_pants: {
-			switch (i->item->detail) {
+			switch (i->item.detail) {
 			case arm_plate:
-				IMAGEMANAGER->findImage("아이템_필드_판금_하의")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				IMAGEMANAGER->findImage("아이템_필드_판금_하의")->DFpointrotatedrender(i->x - cam.x + 25, (i->y + translate(i->z)) - cam.y + 25, i->angle, 60, 60);
 				break;
 			}
 			break;
 		}
 		case item_shoulder: {
-			switch (i->item->detail) {
+			switch (i->item.detail) {
 			case arm_plate:
-				IMAGEMANAGER->findImage("아이템_필드_판금_어꺠")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				IMAGEMANAGER->findImage("아이템_필드_판금_어깨")->DFpointrotatedrender(i->x - cam.x + 25, (i->y + translate(i->z)) - cam.y + 25, i->angle, 60, 60);
 				break;
 			}
 			break;
 		}
 		case item_belt: {
-			switch (i->item->detail) {
+			switch (i->item.detail) {
 			case arm_plate:
-				IMAGEMANAGER->findImage("아이템_필드_판금_벨트")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				IMAGEMANAGER->findImage("아이템_필드_판금_벨트")->DFpointrotatedrender(i->x - cam.x + 25, (i->y + translate(i->z)) - cam.y + 25, i->angle, 60, 60);
 				break;
 			}
 			break;
 		}
-		case item_shoes:{
-			switch (i->item->detail) {
+		case item_shoes: {
+			switch (i->item.detail) {
 			case arm_plate:
-				IMAGEMANAGER->findImage("아이템_필드_판금_신발")->DFpointrotatedrender(i->x -cam.x, (i->y + translate(i->z)) -cam.y, i->angle, 60, 60);
+				IMAGEMANAGER->findImage("아이템_필드_판금_신발")->DFpointrotatedrender(i->x - cam.x + 25, (i->y + translate(i->z)) - cam.y + 25, i->angle, 60, 60);
 				break;
 			}
 			break;
 		}
 		case item_weapon: {
-			switch (i->item->detail) {
+			switch (i->item.detail) {
 			case wp_sswd:
-				IMAGEMANAGER->findImage("아이템_필드_소검")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 60, 60);
+				IMAGEMANAGER->findImage("아이템_필드_소검")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 24, 10);
 				break;
 			}
+			break;
+		}
+		case item_consume: {
+			IMAGEMANAGER->findImage("아이템_필드_소모품")->DFpointrotatedrender(i->x - cam.x, (i->y + translate(i->z)) - cam.y, i->angle, 7, 10);
 			break;
 		}
 		}
 		//IMAGEMANAGER->findImage("아이템_필드_판금_상의")->rotatedrender(i->x - cam.x, i->y -cam.y + translate(i->z), i->angle);
 	}
-
 	for (vector<MonsterBase*>::iterator i = monBack.begin(); i != monBack.end(); i++) {
 		(*i)->render();
 	}
@@ -278,6 +287,8 @@ void MirkwoodMap::render()
 
 void MirkwoodMap::renderz()
 {
+	
+
 	//for (vector<MapTile>::iterator i = mapTiles.begin(); i != mapTiles.end(); i++) {
 	//	IMAGEMANAGER->findImage("X표시")->render(i->rc.left -cam.x, i->rc.top -cam.y);
 	//}
@@ -285,6 +296,7 @@ void MirkwoodMap::renderz()
 
 void MirkwoodMap::renderdc()
 {
+	char tmp[50];
 
 
 	for (vector<MonsterBase*>::iterator i = monBack.begin(); i != monBack.end(); i++) {
@@ -295,6 +307,27 @@ void MirkwoodMap::renderdc()
 	for (vector<MonsterBase*>::iterator i = monFront.begin(); i != monFront.end(); i++) {
 		(*i)->renderdc();
 	}
+
+	for (vector<DropItemStruct>::iterator i = dropList.begin(); i != dropList.end(); i++) {
+		int offset = -i->item.name.length() * 8;
+		if (i->x - 30 < pl->getX() && pl->getX() < i->x + 30 &&
+			i->z - 30 < pl->getZ() && pl->getZ() < i->z + 30) {
+			drawWindow(i->x + offset / 2 - cam.x, i->y + translate(i->z) - 50 - cam.y, (-(offset)), 20);
+		}
+		drawWindow(i->x + offset / 2 - cam.x, i->y + translate(i->z) - 50 - cam.y, (-(offset)), 20);
+		{
+			sprintf(tmp, "%s",i->item.name.c_str());
+			d3dFont->DrawTextA(
+				NULL,
+				tmp,
+				-1,
+				&RectMake(i->x +offset/2 -cam.x,i->y + translate(i->z) - 50 -cam.y,(-(offset)),20),
+				DT_CENTER | DT_VCENTER,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}
+
+	}
+
 }
 
 void MirkwoodMap::setMap(const char* tileName, int x, int y)
