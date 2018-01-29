@@ -10,6 +10,7 @@ public:
 	void update();
 	void render();
 	void renderdc();
+	void setAttack();
 
 	green_goblin();
 	~green_goblin();

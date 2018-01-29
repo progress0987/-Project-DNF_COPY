@@ -13,7 +13,8 @@ goblin_base::~goblin_base()
 
 HRESULT goblin_base::init()
 {
-	stat.name = "고블린";
+	MonsterBase::init();
+	sprintf(stat.name,"고블린");
 	idlefrom = idleto = 0;
 	attackfrom = 1;
 	attackto = 4;

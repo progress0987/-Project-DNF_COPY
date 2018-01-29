@@ -151,6 +151,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="firewave.h" />
     <ClInclude Include="goblin_base.h" />
+    <ClInclude Include="goblin_thrower.h" />
     <ClInclude Include="green_goblin.h" />
     <ClInclude Include="icewave.h" />
     <ClInclude Include="NPC_Base.h" />
@@ -191,6 +192,9 @@
     <ClInclude Include="soundTest.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Tauamy.h" />
+    <ClInclude Include="TauAssaulter.h" />
+    <ClInclude Include="Tau_Base.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="Timer.h" />
@@ -218,6 +222,7 @@
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="firewave.cpp" />
     <ClCompile Include="goblin_base.cpp" />
+    <ClCompile Include="goblin_thrower.cpp" />
     <ClCompile Include="green_goblin.cpp" />
     <ClCompile Include="icewave.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
@@ -257,6 +262,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Tauamy.cpp" />
+    <ClCompile Include="TauAssaulter.cpp" />
+    <ClCompile Include="Tau_Base.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="txtData.cpp" />

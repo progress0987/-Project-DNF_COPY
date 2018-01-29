@@ -15,13 +15,26 @@ private:
 	Seria* seriaRoom;
 	Village* village;
 	Mirkwood* mirkwood;
+	vector<MapBase*> Maps;
+	bool showDungeonSelect;
+	bool showDungeonMoveScene;
+	vector<RECT> dunRect;
+	vector<string> dunName;
+	bool onOpening;
+	int openingPhase;
+	int openingTick;
+	int dunselected;
+	int dunmovetick;
 public:
 
 	HRESULT init(void);
-	virtual void release(void);
-	virtual void update(void);
-	virtual void render();
+	void release(void);
+	void update(void);
+	void render();
 	void LoadImages();
+	void showdungeonselect();
+	void showdunmoveScene();
+	void showOpening();
 
 	void paint();
 	void paintDC();

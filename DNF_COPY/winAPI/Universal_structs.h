@@ -44,7 +44,7 @@ static struct DropItemStruct {
 	Item item;
 	bool isGold;
 	int goldamount;
-	FLOAT xVel, yVel;
+	FLOAT xVel, yVel,zVel;
 	FLOAT x, y, z;
 	int Tick;
 	FLOAT angle;

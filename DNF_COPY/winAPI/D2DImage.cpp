@@ -242,6 +242,39 @@ void D2DImage::blurredrender(int destX, int destY, BYTE alpha)
 		NULL,
 		color);
 }
+void D2DImage::coloredrender(int destX, int destY, BYTE col)
+{
+	//2D그리기 시작
+	int w = c_ImgInfo.Width;
+	int h = c_ImgInfo.Height;
+	D3DXVECTOR2 pos(destX + w / 2, destY + h / 2);					//좌상단 좌표
+	RECT rect = { 0,0,w,h };						//그림의 크기
+	float radian = 0.0f;							//회전각도(직각을 기준으로함
+													//회전은 VECTOR3로
+	D3DXVECTOR3 center(w / 2, h / 2, 0);	//그림의 중심점 - 회전의 중심일듯
+
+	D3DXVECTOR2 scale(1.f, 1.f);						//이미지의 스케일을결정(1이 기본), 중심을 기준으로커짐
+
+	DWORD color =col << 24+ col<<16+col<<8+col;							//색들을 출력해줄 정도로 보임(색을바꾸면 해당 색이 좀 빠짐)ARGB순서, A줄이면 이미지흐려짐
+
+
+	D3DXMATRIX mat;
+	D3DXMatrixTransformation2D(
+		&mat,						//출력
+		NULL,						//스케일링의 중심
+		0.0f,						//스케일링 회전률(???) -확인
+		&scale,						//스케일링
+		NULL,						//회전의 중심
+		radian,						//회전률
+		&pos);						//위치(트랜슬레이션)
+	g_pd3dSprite->SetTransform(&mat);
+	g_pd3dSprite->Draw(
+		c_pd3dTex,
+		&rect,
+		&center,
+		NULL,
+		color);
+}
 //맨 앞에꺼 출력
 void D2DImage::framerender()
 {

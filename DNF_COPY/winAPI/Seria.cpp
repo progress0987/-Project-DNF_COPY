@@ -14,10 +14,13 @@ Seria::~Seria()
 
 HRESULT Seria::init()
 {
+	IMAGEMANAGER->addImage("技府酒_0", "sprites/maps/seria/bg0/0.png");
+	IMAGEMANAGER->addImage("技府酒_1", "sprites/maps/seria/bg1/0.png");
 	IMAGEMANAGER->addImage("技府酒_2", "sprites/maps/seria/bg2/0.png");
 	IMAGEMANAGER->addImage("技府酒_3", "sprites/maps/seria/bg3/0.png");
 	IMAGEMANAGER->addImage("技府酒_4", "sprites/maps/seria/bg4/0.png");
 	IMAGEMANAGER->addImage("技府酒_5", "sprites/maps/seria/bg5/0.png");
+	IMAGEMANAGER->addImage("技府酒_6", "sprites/maps/seria/bg6/0.png");
 	tileNumX = IMAGEMANAGER->findImage("技府酒_2")->getWidth() / 50 + 1;
 	tileNumY = IMAGEMANAGER->findImage("技府酒_2")->getHeight() / 50 + 1;
 	mapWidth = IMAGEMANAGER->findImage("技府酒_2")->getWidth();
@@ -39,18 +42,24 @@ HRESULT Seria::init()
 	peaceful = true;
 	runnable = false;
 	attackable = false;
+	isChangable = false;
+	showresult = false;
 	seria.init();
+
 	return S_OK;
 }
 
 void Seria::update()
 {
 	seria.update();
+	MapBase::update();
 }
 
 void Seria::render()
 {
 	IMAGEMANAGER->findImage("技府酒_2")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
+	IMAGEMANAGER->findImage("技府酒_1")->render(0, 0, cam.x, cam.y, WINSIZEX, WINSIZEY);
+	IMAGEMANAGER->findImage("技府酒_0")->render(0, 0, cam.x, cam.y, WINSIZEX, WINSIZEY);
 	IMAGEMANAGER->findImage("技府酒_3")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
 	IMAGEMANAGER->findImage("技府酒_4")->render(0,0,cam.x,cam.y,WINSIZEX,WINSIZEY);
 
@@ -60,6 +69,8 @@ void Seria::render()
 	//IMAGEMANAGER->findImage("技府酒_3")->blurredrender(0,0,0x88);
 	//IMAGEMANAGER->findImage("技府酒_4")->blurredrender(0,0,0x88);
 	pl->render();
+	IMAGEMANAGER->findImage("技府酒_5")->render(0, 0, cam.x, cam.y, WINSIZEX, WINSIZEY);
+	IMAGEMANAGER->findImage("技府酒_6")->render(0, 0, cam.x, cam.y, WINSIZEX, WINSIZEY);
 
 }
 

@@ -4,27 +4,32 @@
 HRESULT green_goblin::init()
 {
 	goblin_base::init();
+	sprintf(stat.name,"초록 고블린");
 	x = rand() % curMap->getWidth();
 	y = 0;
 	int range = WINSIZEY - 350;
 	z = (rand() % range + 350) * 2;
-	frame = 0;
-	actionTick = 0;
-	actionIndicate = rand() % 500+300;
+
+	aggressive = 60;
+	atkcooldown =1000;
+	goldAmount = 10;
+	expamount = 50;
+
+	actionIndicate = rand() % 200+200;
 	monHeight = 51;
-	curStatus = mon_Idle;
 	moveSpeedMaxX = moveSpeedMaxZ = 6.0f;
-	onAbnormal = false;
-	abnormalCount = abnormalFrame = abnormalStage = abnormalType = -1;
-	hitXvel = hitYvel = hitZvel = 0.f;
 	probeX = 500;
 	probeZ = 350;
-	found = onAir = onHold = false;
-	printblood = bloodframe = onAbnormal = false;
-	hitAvail = -1;
 	stat.maxHP = stat.curHP = 500;
-	stat.dmg = 30;
+	stat.dmgmin = 100;
+	stat.dmgmax = 150;
 
+	Item it = itemList.find("블루베리")->second;
+	it.stack = 1;
+	dropItems.push_back(it);
+	it = itemList.find("라미화 잎")->second;
+	it.stack = 1;
+	dropItems.push_back(it);
 	return S_OK;
 }
 
@@ -41,18 +46,33 @@ HRESULT green_goblin::init(int x, int z)
 void green_goblin::update()
 {
 	MonsterBase::update();
+	//공격
+	if (curatkcooldown <= 0&&!onAttack) {
+		if (x - 30 < curMap->getPlayer()->getX() && curMap->getPlayer()->getX() < x + 30 &&
+			z - 40 < curMap->getPlayer()->getZ() && curMap->getPlayer()->getZ() < z + 40) {
+			int atk = rand() % 99 + 1;
+			if (atk < aggressive) {
+				curStatus = mon_Attack;
+				curatkcooldown = atkcooldown;
+				onAttack = true;
+			}
+		}
+	}
 }
 
 void green_goblin::render()
 {
-	IMAGEMANAGER->findImage("그림자")->DFpointrender(x - cam.x, translate(z) - cam.y, 300, 50, 0.25, 0xAA);
 	char tmp[50];
+	if (curStatus == mon_onDeadProcess) {
+	IMAGEMANAGER->findImage("그림자")->DFpointrender(x - cam.x, translate(z) - cam.y, 300, 50, 0.25, (0xAA - deadcount*2>0? 0xAA-deadcount*2:0));
+	sprintf(tmp, "고블린_초록_%d", frame);
+	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y + translate(z)) - cam.y, 200, 154, 1.0f, (0xFF - deadcount * 2>0 ? 0xFF - deadcount * 2 : 0), curDir);
+	}
+	else {
+	IMAGEMANAGER->findImage("그림자")->DFpointrender(x - cam.x, translate(z) - cam.y, 300, 50, 0.25, 0xAA);
 	sprintf(tmp, "고블린_초록_%d", frame);
 	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y + translate(z)) - cam.y, 200, 154, 1.0f, 255, curDir);
-
-	sprintf(tmp, "고블린_무기_클럽_%d", frame);
-	IMAGEMANAGER->findImage(tmp)->DFpointrender(x - cam.x, (y + translate(z)) - cam.y, 200, 154, 1.0f, 255, curDir);
-
+	}
 	if (onAbnormal) {
 		switch (abnormalType) {
 		case 0:
@@ -86,19 +106,45 @@ void green_goblin::render()
 		sprintf(tmp, "혈흔_%d", bloodframe/4);
 		IMAGEMANAGER->findImage(tmp)->render(x - 50 -cam.x, (y + translate(z) - 80) -cam.y);
 	}
-	
-	MonsterBase::render();
+
+	for (list<HitQueue>::iterator i = hitQueue.begin(); i != hitQueue.end(); i++) {
+		printNumber(*i);
+	}
 }
 
 void green_goblin::renderdc()
 {
-	char tmp[200];
-	sprintf(tmp, "%d / %d", stat.curHP, stat.maxHP);
+	//char tmp[200];
+	//sprintf(tmp, "%d / %d", stat.curHP, stat.maxHP);
 
-	TextOut(hdc, 500, 500, tmp, strlen(tmp));
+	//TextOut(hdc, 500, 500, tmp, strlen(tmp));
 	//Rectangle(hdc, terColRect.left -cam.x, terColRect.top -cam.y, terColRect.right -cam.x, terColRect.bottom -cam.y);
 }
 
+void green_goblin::setAttack() {
+
+	effectedOnTime a;
+	a.abnormal = -1;
+	a.area.minx = x - 50;
+	a.area.maxx = x + 50;
+	a.area.miny = -50;
+	a.area.maxy = 0;
+	a.area.minz = z - 40;
+	a.area.maxz = z + 40;
+
+	a.isAbnormal = a.isHold = a.isMove = a.isProjectile = false;
+	a.isOnetime = true;
+	a.isCrit = rand() % 100 > 80 ? true : false;
+	a.time = GetTickCount();
+	a.staytime = 30;
+
+	a.mindmg = a.isCrit ? stat.dmgmin*1.5 : stat.dmgmin;
+	a.maxdmg = a.isCrit ? stat.dmgmax*1.5 : stat.dmgmax;
+	a.pushX = curDir ? 5.f : -5.f;
+	a.pushY = 0;
+	a.pushZ = 0;
+	pl->hit(a);
+}
 green_goblin::green_goblin()
 {
 }

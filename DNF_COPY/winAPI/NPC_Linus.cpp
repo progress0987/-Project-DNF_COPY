@@ -14,6 +14,14 @@ HRESULT NPC_Linus::init()
 
 	isMerchant = false;
 	Merchant.clear();
+	Merchant.push_back(itemList.find("일반검")->second);
+	Merchant.push_back(itemList.find("창성의 구원자 - 소검")->second);
+	Merchant.push_back(itemList.find("메탈라인 아머 상의")->second);
+	Merchant.push_back(itemList.find("메탈라인 아머 하의")->second);
+	Merchant.push_back(itemList.find("메탈라인 아머 어깨")->second);
+	Merchant.push_back(itemList.find("메탈라인 아머 벨트")->second);
+	Merchant.push_back(itemList.find("메탈라인 아머 신발")->second);
+
 	x = 1821;
 	y = 325;
 	pointRC = RectMakeCenter(x,y-50,50,100);
@@ -54,7 +62,8 @@ void NPC_Linus::update()
 	t.y += cam.y;
 	if (PtInRect(&pointRC, t)) {
 		if (clicked) {
-			//pl->getUI()->openShop(Merchant);
+			pl->getUI()->setCurActiveTab(0);
+			pl->getUI()->openShop(Merchant);
 		}
 	}
 }

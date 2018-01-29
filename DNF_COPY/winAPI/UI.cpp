@@ -31,10 +31,18 @@ void drawWindow(int destX, int destY,int width, int height, int alpha)
 
 HRESULT UI::init(void)
 {
-	showInv = showStat = showPopup = false;
+	showInv = showStat = showPopup = showShop = false;
 	popupItem = &pl->empty;
 	inv = RectMake(WINSIZEX - 300, 50, 270, 400);
-	stat = shop = RectMake(inv.left - 270, 50, 260, 400);
+	stat = RectMake(inv.left - 270, 50, 260, 400);
+	shop = RectMake(inv.left - 370, 50, 360, 430);
+	shopClose = RectMake(shop.right - 25, shop.top + 10, 15, 15);
+	for (int i = 0; i < 6; i++) {
+		for (int j = 0; j < 2; j++) {
+			shopItemRC[i * 2 + j] = RectMake(shop.left + 10 + 175 * j, shop.top + 40 + i * 60, 165, 57);
+		}
+	}
+
 	q1 = RectMake(100, 518 + 42, 30, 30);
 	q2 = RectMake(130, 518 + 42, 30, 30);
 	q3 = RectMake(160, 518 + 42, 30, 30);
@@ -111,6 +119,7 @@ void UI::release(void)
 void UI::update(void)
 {
 	showPopup = false;
+	if(onHoldPosX==-1||onHoldPosY==-1)
 	popupItem = &pl->empty;
 
 	///////////퀵슬롯에서 우클릭
@@ -174,26 +183,34 @@ void UI::update(void)
 						break;
 					}
 					if (rclicked) {
-						pl->useItem(curActiveTab, j,i);
-						rclicked = false;
-						showPopup = false;
-						popupItem = &pl->empty;
+						if (!showShop) {
+							pl->useItem(curActiveTab, j, i);
+							rclicked = false;
+							showPopup = false;
+							popupItem = &pl->empty;
+						}
+						else if (showShop) {
+							showPopup = false;
+							rclicked = false;
+							pl->sellItem(curActiveTab, j + i * 8);
+						}
 					}
-					if (clicked) {//아이템 클릭																	인벤창에서 마우스 끌면 아이템 셔플됨
+					if (clicked) {//아이템 클릭
 						switch (curActiveTab) {
 						case 0:
 							if (pl->equipments[j + i * 8].id > 0) {
 								onHold = &pl->equipments[j + i * 8];
 								onHoldPosX = j;
 								onHoldPosY = i;
+								clicked = false;
 							}
 							break;
 						case 1:
 							if (pl->consume[j + i * 8].id > 0) {
-								//memcpy(&onHold,&(pl->consume[j + i * 8]),sizeof(Item));
 								onHold = &pl->consume[j + i * 8];
 								onHoldPosX = j;
 								onHoldPosY = i;
+								clicked = false;
 							}
 							break;
 						}
@@ -202,7 +219,7 @@ void UI::update(void)
 			}
 		}
 
-		if (!clicked) {										//마우스를뗐을때
+		if (!lstay) {										//마우스를뗐을때
 			if (onHold->id > 0) {													//잡고있는게 아이템일경우
 																					//마우스를 놓은 지점이 놓아도 되는곳이 아닌경우
 				if (!(PtInRect(&inv, ptMouse) || PtInRect(&q1, ptMouse) || PtInRect(&q2, ptMouse) || PtInRect(&q3, ptMouse) || PtInRect(&q4, ptMouse) || PtInRect(&q5, ptMouse) || PtInRect(&q6, ptMouse))) {
@@ -216,7 +233,7 @@ void UI::update(void)
 						//memcpy(tmp,&pl->equipments[onHoldPosX + onHoldPosY * 8],sizeof(Item));
 						//t.item = tmp;
 						t.item = onHold->type == item_consume?pl->consume[onHoldPosX+onHoldPosY*8]:onHold->type == item_etc?Item(): pl->equipments[onHoldPosX + onHoldPosY * 8];
-						t.xVel = t.yVel = t.Tick = t.isGold = t.goldamount = 0;
+						t.xVel = t.yVel = t.zVel = t.Tick = t.isGold = t.goldamount = 0;
 						t.x = pl->getX();
 						t.z = pl->getZ();
 						t.y = -100;
@@ -310,7 +327,6 @@ void UI::update(void)
 				curActiveTab = 0;
 			}
 		}
-
 		if (PtInRect(&tabConsume, ptMouse)) {
 			if (clicked) {
 				curActiveTab = 1;
@@ -346,6 +362,32 @@ void UI::update(void)
 			if (rclicked && pl->getShoes().id != -1) {
 				pl->unequip(4);
 			}
+		}
+	}
+	if (showShop) {
+		showInv = true;
+		if (PtInRect(&shopClose, ptMouse)) {
+			if (clicked) {
+				showShop = false;
+			}
+		}
+		for (int i = 0; i < 12; i++) {
+			if (PtInRect(&shopItemRC[i], ptMouse)&&i<merch.size()) {
+				showPopup = true;
+				popupItem = &merch[i];
+				if (rclicked) {
+					if (merch[i].price <= pl->gold) {
+						pl->rootItem(merch[i]);
+						pl->gold -= merch[i].price;
+						rclicked = false;
+					}
+				}
+			}
+		}
+	}
+	if (pl->getCurMap()->showresult) {
+		if (PtInRect(&RectMake(WINSIZEX - 300 + 67, 167, 165, 23), ptMouse)&&clicked) {
+			pl->reset = true;
 		}
 	}
 }
@@ -443,6 +485,22 @@ void UI::render(void)
 		IMAGEMANAGER->findImage("UI_인벤토리_장비베이스")->DFuirender(inv.left + 12+3,inv.top+25+5);
 		IMAGEMANAGER->findImage("UI_인벤토리_하단")->DFuirender(inv.left + 12, inv.bottom - IMAGEMANAGER->findImage("UI_인벤토리_하단")->getHeight() - 25);
 		
+		sprintf(tmp, "%s_뒤_176", pl->getWeapon().name.c_str());
+		if (pl->getWeapon().id == -1) {
+			sprintf(tmp, "빈손뒤_176");
+		}
+		IMAGEMANAGER->findImage(tmp)->render(inv.left + 12 + 3 +93 - 200, inv.top + 25 + 5 + 21 - 223,0,0,264,308);
+
+		sprintf(tmp, "캐릭터_176");
+		IMAGEMANAGER->findImage(tmp)->render(inv.left + 12 + 3 + 93 - 200, inv.top + 25 + 5 + 21 - 223, 0, 0, 264, 308);
+
+		sprintf(tmp, "%s_앞_176", pl->getWeapon().name.c_str());
+		if (pl->getWeapon().id == -1) {
+			sprintf(tmp, "빈손앞_176");
+		}
+		IMAGEMANAGER->findImage(tmp)->render(inv.left + 12 + 3 + 93 - 200, inv.top + 25 + 5 + 21 - 223, 0, 0, 264, 308);
+
+
 
 		if (pl->getArmor().id != -1) {
 			switch (pl->getArmor().detail) {
@@ -516,7 +574,7 @@ void UI::render(void)
 
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 8; j++) {
-				IMAGEMANAGER->findImage("UI_인벤토리_아이템_개별")->DFuirender(inv.left + 13+ j*30,inv.top + 162 + i * 30);
+				IMAGEMANAGER->findImage("UI_인벤토리_아이템_개별")->DFuirender(itemrects[j][i].left-1,itemrects[j][i].top-1);
 			}
 		}
 		switch (curActiveTab) {
@@ -685,71 +743,6 @@ void UI::render(void)
 					IMAGEMANAGER->findImage("UI_아이템선택")->render(itemrects[j][i].left, itemrects[j][i].top);
 			}
 		}
-		if (showPopup) {//팝업 보여주는거면
-			drawWindow(ptMouse.x, ptMouse.y, 200, 200);
-			switch (curActiveTab) {
-			case 0:								//장비
-				switch (popupItem->type) {
-				case item_weapon:
-					switch (popupItem->detail) {
-					case wp_sswd:
-						sprintf(tmp, "소검_%d", popupItem->id);
-						break;
-					case wp_kat:
-						break;
-					}
-					break;
-				case item_coat:
-					switch (popupItem->detail) {
-					case arm_plate:
-						sprintf(tmp, "판금_상의_%d", popupItem->id);
-						break;
-					}
-					break;
-				case item_shoulder:
-				
-					switch (popupItem->detail) {
-					case arm_plate:
-						sprintf(tmp, "판금_어깨_%d", popupItem->id);
-						break;
-					}
-				
-					break;
-				case item_belt:
-					switch (popupItem->detail) {
-					case arm_plate:
-						sprintf(tmp, "판금_벨트_%d", popupItem->id);
-						break;
-					}
-					break;
-				case item_pants:
-					switch (popupItem->detail) {
-					case arm_plate:
-						sprintf(tmp, "판금_바지_%d", popupItem->id);
-						break;
-					}
-					break;
-				case item_shoes:
-					switch (popupItem->detail) {
-					case arm_plate:
-						sprintf(tmp, "판금_신발_%d", popupItem->id);
-						break;
-					}
-					break;
-				case -1:
-					break;
-				}
-				IMAGEMANAGER->findImage(tmp)->render(ptMouse.x + 15, ptMouse.y + 15);
-				break;
-			case 1:								//소모품
-				sprintf(tmp, "소모_%d", popupItem->id);
-				IMAGEMANAGER->findImage(tmp)->render(ptMouse.x+15, ptMouse.y+15);
-				invcount++;
-				break;
-			case 2:								//기타템
-				break;
-			}
-		}
 	}
 	if (showStat) {
 		drawWindow(stat.left, stat.top, stat.right - stat.left, stat.bottom - stat.top);
@@ -808,7 +801,132 @@ void UI::render(void)
 		}
 	}
 	if (showShop) {
-		
+		drawWindow(shop.left, shop.top, shop.right - shop.left, shop.bottom - shop.top);
+		if (PtInRect(&shopClose, ptMouse)) {
+			if (clicked) {
+			IMAGEMANAGER->findImage("UI_닫기_클릭")->render(shopClose.left,shopClose.top);
+			}
+			else {
+			IMAGEMANAGER->findImage("UI_닫기_오버")->render(shopClose.left,shopClose.top);
+			}
+		}
+		else {
+			IMAGEMANAGER->findImage("UI_닫기_기본")->render(shopClose.left,shopClose.top);
+		}
+		for (int i = 0; i < 12; i++) {
+			IMAGEMANAGER->findImage("UI_상점_슬롯")->render(shopItemRC[i].left, shopItemRC[i].top);
+			if (i < merch.size()) {
+				char tmp[50];
+				switch (merch[i].type) {
+				case item_consume:
+					sprintf(tmp, "소모_%d", merch[i].id);
+					break;
+				case item_weapon:
+					switch (merch[i].detail) {
+					case wp_sswd:
+						sprintf(tmp, "소검_%d", merch[i].id);
+						break;
+					case wp_kat:
+						break;
+					}
+					break;
+				case item_coat:
+					switch (merch[i].detail) {
+					case arm_plate:
+						sprintf(tmp, "판금_상의_%d", merch[i].id);
+						break;
+					}
+					break;
+				case item_shoulder:
+
+					switch (merch[i].detail) {
+					case arm_plate:
+						sprintf(tmp, "판금_어깨_%d", merch[i].id);
+						break;
+					}
+
+					break;
+				case item_belt:
+					switch (merch[i].detail) {
+					case arm_plate:
+						sprintf(tmp, "판금_벨트_%d", merch[i].id);
+						break;
+					}
+					break;
+				case item_pants:
+					switch (merch[i].detail) {
+					case arm_plate:
+						sprintf(tmp, "판금_바지_%d", merch[i].id);
+						break;
+					}
+					break;
+				case item_shoes:
+					switch (merch[i].detail) {
+					case arm_plate:
+						sprintf(tmp, "판금_신발_%d", merch[i].id);
+						break;
+					}
+					break;
+				default:
+					break;
+				}
+				IMAGEMANAGER->findImage(tmp)->render(shopItemRC[i].left + 5, shopItemRC[i].top + 6);
+			}
+		}
+	}
+	if (showPopup) {//팝업 보여주는거면
+		drawWindow(ptMouse.x, ptMouse.y, 200, 200);
+		switch (popupItem->type) {
+		case item_weapon:
+			switch (popupItem->detail) {
+			case wp_sswd:
+				sprintf(tmp, "소검_%d", popupItem->id);
+				break;
+			case wp_kat:
+				break;
+			}
+			break;
+		case item_coat:
+			switch (popupItem->detail) {
+			case arm_plate:
+				sprintf(tmp, "판금_상의_%d", popupItem->id);
+				break;
+			}
+			break;
+		case item_shoulder:
+
+			switch (popupItem->detail) {
+			case arm_plate:
+				sprintf(tmp, "판금_어깨_%d", popupItem->id);
+				break;
+			}
+
+			break;
+		case item_belt:
+			switch (popupItem->detail) {
+			case arm_plate:
+				sprintf(tmp, "판금_벨트_%d", popupItem->id);
+				break;
+			}
+			break;
+		case item_pants:
+			switch (popupItem->detail) {
+			case arm_plate:
+				sprintf(tmp, "판금_바지_%d", popupItem->id);
+				break;
+			}
+			break;
+		case item_shoes:
+			switch (popupItem->detail) {
+			case arm_plate:
+				sprintf(tmp, "판금_신발_%d", popupItem->id);
+				break;
+			}
+			break;
+		case item_consume:
+			sprintf(tmp, "소모_%d", popupItem->id);
+		}
+		IMAGEMANAGER->findImage(tmp)->render(ptMouse.x + 15, ptMouse.y + 15);
 	}
 
 	IMAGEMANAGER->findImage("키보드_숏컷_1")->render(q1.left+1, q1.top+1);
@@ -829,6 +947,42 @@ void UI::render(void)
 	IMAGEMANAGER->findImage("키보드_숏컷_E")->render(qe.left, qe.top);
 	IMAGEMANAGER->findImage("키보드_숏컷_R")->render(qr.left, qr.top);
 	IMAGEMANAGER->findImage("키보드_숏컷_T")->render(qt.left, qt.top);
+
+	if (pl->getCurMap()->showresult) {//마지막장면출력
+		int rl = WINSIZEX - 300;
+		IMAGEMANAGER->findImage("마지막출력_배경")->render(rl, 0);
+		IMAGEMANAGER->findImage("마지막출력")->render(rl + 13, 53);
+		IMAGEMANAGER->findImage("재도전_비활")->render(rl + 21, 107);
+		IMAGEMANAGER->findImage("다른던전_비활")->render(rl + 21, 137);
+		IMAGEMANAGER->findImage("마을로_비활")->render(rl + 21, 167);
+		if (PtInRect(&RectMake(rl + 67, 107, 165, 23), ptMouse)) {
+			IMAGEMANAGER->findImage("재도전_오버_배경")->render(rl + 16, 71);
+			if (clicked) {
+				IMAGEMANAGER->findImage("재도전_클릭")->render(rl + 21, 107);
+			}
+			else {
+				IMAGEMANAGER->findImage("재도전_오버")->render(rl + 21, 107);
+			}
+		}
+		if (PtInRect(&RectMake(rl + 67, 137, 165, 23), ptMouse)) {
+			IMAGEMANAGER->findImage("다른던전_오버_배경")->render(rl + 16, 101);
+			if (clicked) {
+				IMAGEMANAGER->findImage("다른던전_클릭")->render(rl + 21, 137);
+			}
+			else {
+				IMAGEMANAGER->findImage("다른던전_오버")->render(rl + 21, 137);
+			}
+		}
+		if (PtInRect(&RectMake(rl + 67, 167, 165, 23), ptMouse)) {
+			IMAGEMANAGER->findImage("마을로_오버_배경")->render(rl + 16, 131);
+			if (clicked) {
+				IMAGEMANAGER->findImage("마을로_클릭")->render(rl + 21, 167);
+			}
+			else {
+				IMAGEMANAGER->findImage("마을로_오버")->render(rl + 21, 167);
+			}
+		}
+	}
 }
 
 void UI::renderdc(void)
@@ -997,6 +1151,15 @@ void UI::renderdc(void)
 				}
 				break;
 			}
+
+			sprintf(test, "%d 골드", popupItem->price);
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&RectMake(ptMouse.x, ptMouse.y+175, 190, 20),
+				DT_RIGHT | DT_VCENTER,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 		}
 		if (curActiveTab == 1) {//소모품일때
 			for (int i = 0; i < 4; i++) {
@@ -1336,6 +1499,11 @@ void UI::renderdc(void)
 		}
 		t++;
 
+	}
+	if (showShop) {
+		//for (int i = 0; i < 12; i++) {
+		//	Rectangle(hdc, shopItemRC[i].left, shopItemRC[i].top, shopItemRC[i].right, shopItemRC[i].bottom);
+		//}
 	}
 
 	if (pl->getQuick1().id > 0) {

@@ -124,6 +124,9 @@
     <Filter Include="MainGame\NPC\Linus">
       <UniqueIdentifier>{75ed6727-3720-4bb6-9af0-c59c0ede1369}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Enemy\Monster\Tau">
+      <UniqueIdentifier>{bb840a85-dca5-4108-bf5f-e489d44f38d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -327,6 +330,18 @@
     <ClInclude Include="NPC_Kanna.h">
       <Filter>MainGame\NPC\Kanna</Filter>
     </ClInclude>
+    <ClInclude Include="Tauamy.h">
+      <Filter>MainGame\Enemy\Monster\Tau</Filter>
+    </ClInclude>
+    <ClInclude Include="Tau_Base.h">
+      <Filter>MainGame\Enemy\Monster\Tau</Filter>
+    </ClInclude>
+    <ClInclude Include="TauAssaulter.h">
+      <Filter>MainGame\Enemy\Monster\Tau</Filter>
+    </ClInclude>
+    <ClInclude Include="goblin_thrower.h">
+      <Filter>MainGame\Enemy\Monster\goblin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -505,6 +520,18 @@
     </ClCompile>
     <ClCompile Include="NPC_Kanna.cpp">
       <Filter>MainGame\NPC\Kanna</Filter>
+    </ClCompile>
+    <ClCompile Include="Tauamy.cpp">
+      <Filter>MainGame\Enemy\Monster\Tau</Filter>
+    </ClCompile>
+    <ClCompile Include="Tau_Base.cpp">
+      <Filter>MainGame\Enemy\Monster\Tau</Filter>
+    </ClCompile>
+    <ClCompile Include="TauAssaulter.cpp">
+      <Filter>MainGame\Enemy\Monster\Tau</Filter>
+    </ClCompile>
+    <ClCompile Include="goblin_thrower.cpp">
+      <Filter>MainGame\Enemy\Monster\goblin</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

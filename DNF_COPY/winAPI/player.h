@@ -7,34 +7,6 @@
 class UI;
 class MapBase;
 extern struct Item;
-enum itemType {
-	item_weapon=1,
-	item_coat,
-	item_shoulder,
-	item_belt,
-	item_pants,
-	item_shoes,
-	item_ring,
-	item_necklace,
-	item_braclet,
-	item_consume,
-	item_etc,
-};
-
-enum WeaponType {
-	wp_empty,			//없음
-	wp_sswd,			//소검
-	wp_gswd,			//대검
-	wp_kat,				//도
-	//이후 더 추가
-};
-enum ArmorType {
-	arm_cloth,			//천갑옷
-	arm_leather,		//가죽
-	arm_larmor,			//경갑
-	arm_harmor,			//중갑
-	arm_plate			//판금
-};
 
 
 struct effected {
@@ -96,6 +68,7 @@ enum SKILLS {
 };
 
 struct status {			//스텟, a붙은건 추가분
+	int level;
 	int maxHP, curHP;
 	int a_maxHP;
 	int maxMP, curMP;
@@ -106,6 +79,7 @@ struct status {			//스텟, a붙은건 추가분
 	int a_phyAtt, a_magAtt;
 	int phyDef, magDef;
 	int a_phyDef, a_magDef;
+	int curEXP, reqEXP;
 	float phycritrate, magcritrate;//안쓸거임
 };
 
@@ -128,8 +102,22 @@ private:
 	bool onAttack;							//공격 상태인지
 	bool onSkill;
 	bool onJump;							//점프상태인지
+	bool onHit;								//맞는상태인지
+	bool printblood;
+
+	bool onLevelup;
+	bool levelupEffect;
+	int levelupTick;
+
+
+	int Coin;
+	int deadTick;
+
 	int onHeal;								//0 없음 1 체력 2 마력 3 둘다
 	int onHealFrame;
+	int bloodframe;
+
+	int hitcount;
 
 	int movestatus;							//가만히있을시 : 0 걷기 : 1 뛰기 : 2
 	float jumpPow;
@@ -164,6 +152,8 @@ private:
 	UI* ui;
 	list<effectedOnTime> attackQueue;
 	list<inputStruct> inputQueue;
+	list<effectedOnTime> hitQueue;
+	list<HitQueue> dmgShow;
 
 
 	/////////////////////////////////장비///////////////////////
@@ -183,6 +173,7 @@ private:
 
 	long movebegin;
 public:
+	bool reset;
 	Item emptyWeapon;
 	Item empty;
 	status Stat;									//스텟
@@ -194,11 +185,13 @@ public:
 	void update(void);
 	void render(void);
 	void renderdc(void);
+	void gainEXP(int amount);
 
 
 
 	void setCurScene(MapBase* map, FLOAT x = 0.f, FLOAT z = 0.f);
 	void setOnCombat(bool oncombat);
+	void setDirection(bool dir) { curDir = dir; }
 	void addAttack(effectedOnTime attack) { attackQueue.push_back(attack); }
 	void setSkills();
 	void updateSkills();
@@ -210,6 +203,7 @@ public:
 	void useItem(int tab, int x,int y);
 	void useIteminQS(int qs);
 	void rootItem(Item it);
+	void sellItem(int tab, int index);
 	void unequip(int);
 	Item setquickslot(int index, Item it);
 
@@ -252,6 +246,8 @@ public:
 	MapBase* getCurMap() { return curMap; }
 	UI* getUI() { return ui; }
 	status getStatus() { return Stat; }
+
+	void hit(effectedOnTime h) { hitQueue.push_back(h); }
 
 	player();
 	~player();

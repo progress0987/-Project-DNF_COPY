@@ -65,14 +65,39 @@ void MapBase::update()
 {
 	for (vector<DropItemStruct>::iterator i = dropList.begin(); i != dropList.end(); i++) {
 		if (i->y < 0) {
-			if (i->xVel != 0) i->x += i->xVel;
-			i->y += 3.5f;
+			if (i->xVel != 0.f) i->x += i->xVel;
+			if (i->zVel != 0.f) i->z += i->zVel;
+			i->yVel += 0.1f;
+			i->y += i->yVel;
 			i->angle += 0.3f;
 
 			if (i->y > 0) {
 				i->y = 0.f;
 				i->angle = 0.f;
+				if (i->x > maxX) i->x = maxX - 50;
+				else if (i->x < minX) i->x = minX + 50;
+				if (i->z > maxZ) i->z = maxZ - 100;
+				else if (i->z < minZ) i->z = minZ + 100;
+
 			}
+		}
+	}
+	if (monsterList.size() > 0) {
+		peaceful = false;
+	}
+	else if(monsterList.size()==0&&!peaceful){
+		peaceful = true;
+		for (int i = 0; i < 4; i++) {
+			if (!Gates[i].isShow)continue;
+			Gates[i].movable = true;
+		}
+	}
+	for (int i = 0; i < 4; i++) {
+		if (!Gates[i].movable) continue;
+		POINT pt = pointMake((int)pl->getX(), translate(pl->getZ()));
+		if (PtInRect(&Gates[i].moveRect, pt)) {
+			pl->setCurScene(Gates[i].con.nextNode, Gates[i].con.x, Gates[i].con.z);
+			break;
 		}
 	}
 }
@@ -87,25 +112,97 @@ void MapBase::renderz()
 
 void MapBase::renderdc()
 {
+	char tmp[50];
+	for (vector<DropItemStruct>::iterator i = dropList.begin(); i != dropList.end(); i++) {
+		int offset = -i->item.name.length() * 8;
+		if (i->isGold) {
+			offset = -70;
+		}
+		if (i->x - 30 < pl->getX() && pl->getX() < i->x + 30 &&
+			i->z - 30 < pl->getZ() && pl->getZ() < i->z + 30&&!i->isGold) {
+			drawWindow(i->x + offset / 2 - cam.x, i->y + translate(i->z) - 50 - cam.y, (-(offset)), 20);
+		}
+		if(!i->isGold)
+		drawWindow(i->x + offset / 2 - cam.x, i->y + translate(i->z) - 50 - cam.y, (-(offset)), 20);
+		else
+		drawWindow(i->x - cam.x, i->y + translate(i->z) - 30 - cam.y, (-(offset)), 20);
+		if(!i->isGold){
+			sprintf(tmp, "%s", i->item.name.c_str());
+			d3dFont->DrawTextA(
+				NULL,
+				tmp,
+				-1,
+				&RectMake(i->x + offset / 2 - cam.x, i->y + translate(i->z) - 50 - cam.y, (-(offset)), 20),
+				DT_CENTER | DT_VCENTER,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}else {
+			sprintf(tmp, "%d °ñµå", i->goldamount);
+			d3dFont->DrawTextA(
+				NULL,
+				tmp,
+				-1,
+				&RectMake(i->x - cam.x, i->y + translate(i->z) - 30 - cam.y, (-(offset)), 20),
+				DT_CENTER | DT_VCENTER,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+		}
+
+	}
 }
 
-bool MapBase::aboveItem(FLOAT x, FLOAT z)
+bool MapBase::getMove(conNode * next, FLOAT x, FLOAT z)
 {
-	for (vector<DropItemStruct>::iterator i = dropList.begin(); i != dropList.end(); i++ ) {
-		if (x - 30 < i->x&&i->x < x + 30 &&
-			z - 40 < i->z&&i->z < z + 30 && i->y == 0) {
-			return true;
+	bool ret = false;
+	for (int i = 0; i < 4; i++) {
+		if (!Gates[i].movable) continue;
+		POINT pt = pointMake(pl->getX(), translate(pl->getZ()));
+		if (PtInRect(&Gates[i].moveRect, pt)) {
+			next = &Gates[i].con;
+			ret = true;
+			break;
 		}
 	}
-	return false;
+	return ret;
+}
+
+void MapBase::resetMonsters()
+{
+	if (curMap == nullptr) {
+		monsterList.clear();
+		for (int i = 0; i < monsterBackup.size(); i++) {
+			monsterList.push_back(monsterBackup[i]);
+		}
+		peaceful = false;
+		for (int i = 0; i < 4; i++) {
+			Gates[i].movable = false;
+		}
+	}
+	else {
+		curMap->resetMonsters();
+	}
+}
+
+int MapBase::aboveItem(FLOAT x, FLOAT z)
+{
+	for (vector<DropItemStruct>::iterator i = dropList.begin(); i != dropList.end(); i++ ) {
+		if (x - 70 < i->x&&i->x < x + 70 &&
+			z - 50 < i->z&&i->z < z + 50 && i->y == 0) {
+			if (i->isGold) {
+				return 2;
+			}
+			else {
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
 
 DropItemStruct MapBase::rootItem(FLOAT x, FLOAT z)
 {
 	DropItemStruct t;
 	for (vector<DropItemStruct>::iterator i = dropList.begin(); i != dropList.end(); ) {
-		if (x - 30 < i->x&&i->x < x + 30 &&
-			z - 40 < i->z&&i->z < z + 30 && i->y == 0) {
+		if (x - 70 < i->x&&i->x < x + 70 &&
+			z - 50 < i->z&&i->z < z + 50 && i->y == 0) {
 			t = (*i);
 			i = dropList.erase(i);
 			break;

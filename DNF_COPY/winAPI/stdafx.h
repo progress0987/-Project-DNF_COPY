@@ -53,51 +53,8 @@ struct Camera {
 	DOUBLE x, y;
 	DOUBLE offsetX, offsetY;
 };
-//struct Item {
-//	string name;
-//	char imgName[50];
-//	int branch;							//내부에서 몇개까지 갈라져있는지, 갈라져있으면 몇번인지(없으면 0);
-//	int id;								//아이템 이미지 id
-//	int type;							//아이템 종류로 할 것
-//	int detail;							//아이템 세부사항
-//
-//	int stack;							//소모/기타 아이템 한정
-//
-//	int phydmgmin;							//무기한정
-//	int magdmgmin;
-//	int phydmgmax;
-//	int magdmgmax;
-//
-//	int phydef;
-//	int magdef;
-//
-//	int reachx;							//무기에 한정됨
-//	int reachz;							//무기에 한정됨
-//
-//	int gainStr;
-//	int gainInt;
-//	int gainHealth;
-//	int gainSpirit;
-//
-//	int gainHP;
-//	int gainMP;
-//	
-//	int reqlvl;
-//
-//	bool equipped;
-//
-//	int price;
-//
-//	string description;
-//};
 
 
-struct HitQueue {
-	bool isCrit;
-	FLOAT x, y;
-	int dmg;
-	DWORD time;
-};
 //====================================
 // ##내가 만든 헤더파일 요기에 추가!!
 //====================================
@@ -171,6 +128,97 @@ static enum Abnormal {
 	abfreeze,
 	abonhold,
 	abforcemove,
+};
+
+static enum itemType {
+	item_weapon = 1,
+	item_coat,
+	item_shoulder,
+	item_belt,
+	item_pants,
+	item_shoes,
+	item_ring,
+	item_necklace,
+	item_braclet,
+	item_consume,
+	item_etc,
+};
+
+static enum WeaponType {
+	wp_empty,			//없음
+	wp_sswd,			//소검
+	wp_gswd,			//대검
+	wp_kat,				//도
+						//이후 더 추가
+};
+static enum ArmorType {
+	arm_cloth,			//천갑옷
+	arm_leather,		//가죽
+	arm_larmor,			//경갑
+	arm_harmor,			//중갑
+	arm_plate			//판금
+};
+static struct HitQueue {
+	bool isCrit;
+	FLOAT x, y;
+	int dmg;
+	DWORD time;
+};
+
+static void printNumber(HitQueue h)
+{
+	int digit;
+	bool odd;
+	DWORD now = GetTickCount();
+	///////////////////자릿수 설정
+	if (h.dmg / 1000000 > 0) digit = 7;
+	else if (h.dmg / 100000 > 0)digit = 6;
+	else if (h.dmg / 10000 > 0)digit = 5;
+	else if (h.dmg / 1000 > 0)digit = 4;
+	else if (h.dmg / 100 > 0)digit = 3;
+	else if (h.dmg / 10 > 0)digit = 2;
+	else digit = 1;
+	odd = digit % 2;
+	int mod = 1;
+	for (int i = 0; i < digit; i++) {
+		mod *= 10;
+	}
+	//글자는 30x27로
+	char t[50];
+	int left = h.x - ((digit) * 30 + odd ? 15 : 0);
+	for (int i = 0; i < digit; i++) {//프린트
+		if (h.isCrit) {					//크리티컬이면
+			if (mod / 10>0) sprintf(t, "대미지_크리티컬_%d", h.dmg% mod / (mod / 10));
+			else sprintf(t, "대미지_크리티컬_%d", h.dmg % mod);
+			IMAGEMANAGER->findImage(t)->blurredrender(left + i * 30 - cam.x, h.y - cam.y, (h.time - now)<0xff ? h.time - now : 0xff);
+			mod /= 10;
+		}
+		else {							//일반이면
+			if (mod / 10>0) sprintf(t, "대미지_일반_%d", h.dmg% mod / (mod / 10));
+			else sprintf(t, "대미지_일반_%d", h.dmg % mod);
+			IMAGEMANAGER->findImage(t)->blurredrender(left + i * 30 - cam.x, h.y - cam.y, (h.time - GetTickCount())<0xff ? h.time - GetTickCount() : 0xff);
+			mod /= 10;
+
+		}
+	}
+
+}
+
+static struct projectile {
+	string imgName;
+	int dmgmin, dmgmax;
+	FLOAT distance;
+	int frame;
+	int framemax;
+	int imgOffsetX, imgOffsetY;
+	FLOAT x, y, z;
+	FLOAT sizex, sizey, sizez;
+	FLOAT speedx, speedy, speedz;
+	FLOAT accelx, accely, accelz;
+	effectedOnTime dmginfo;
+	int abnormal;
+	bool gravity;
+	int hitCount;
 };
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.

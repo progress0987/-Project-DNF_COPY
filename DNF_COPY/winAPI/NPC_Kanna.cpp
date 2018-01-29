@@ -13,6 +13,15 @@ HRESULT NPC_Kanna::init()
 
 	isMerchant = false;
 	Merchant.clear();
+
+
+	Merchant.push_back(itemList.find("블루베리")->second);
+	Merchant.push_back(itemList.find("라미화 잎")->second);
+	Merchant.push_back(itemList.find("타코야끼")->second);
+	Merchant.push_back(itemList.find("샴페인")->second);
+	Merchant.push_back(itemList.find("하트쿠키")->second);
+	Merchant.push_back(itemList.find("마나에이드")->second);
+
 	x = 423;
 	y = 325;
 	pointRC = RectMakeCenter(x, y - 50, 50, 80);
@@ -33,7 +42,8 @@ void NPC_Kanna::update()
 	t.y += cam.y;
 	if (PtInRect(&pointRC, t)) {
 		if (clicked) {
-
+			pl->getUI()->setCurActiveTab(1);
+			pl->getUI()->openShop(Merchant);
 		}
 	}
 }

@@ -39,6 +39,7 @@ public:
 	void scaledrender(int destX, int destY, FLOAT sizeX =1.f, FLOAT sizeY =1.f);
 
 	void blurredrender(int destX, int destY,BYTE alpha);
+	void coloredrender(int destX, int destY, BYTE color);
 
 	void framerender();
 	void framerender(int curX,int curY);

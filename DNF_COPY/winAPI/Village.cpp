@@ -39,6 +39,8 @@ HRESULT Village::init()
 	peaceful = true;
 	runnable = false;
 	attackable = false;
+	isChangable = true;
+	showresult = false;
 	linus.init();
 	kanna.init();
 
@@ -143,6 +145,7 @@ void Village::update()
 	showFlame();
 	linus.update();
 	kanna.update();
+	MapBase::update();
 }
 
 void Village::render()

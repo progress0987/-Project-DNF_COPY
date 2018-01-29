@@ -5,8 +5,7 @@ void mainGame::initItems()
 {
 	Item it = Item();
 
-	//////////////////////////////////////장비류
-	{
+#pragma region 장비류
 		//기본무기 - 무기없음
 		{
 			it.id = -1;
@@ -139,10 +138,9 @@ void mainGame::initItems()
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
-	}
+#pragma endregion
 
-	//////////////////////////////////////소모품
-	{
+#pragma region 소모품
 		//블루베리
 		{
 			it.id = 4;
@@ -205,5 +203,5 @@ void mainGame::initItems()
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
-	}
+#pragma endregion
 }

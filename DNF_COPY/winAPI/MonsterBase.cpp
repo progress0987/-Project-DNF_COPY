@@ -2,100 +2,97 @@
 #include "MonsterBase.h"
 
 
-void MonsterBase::printNumber(HitQueue h)
-{
-	int digit;
-	bool odd;
-	DWORD now = GetTickCount();
-	///////////////////자릿수 설정
-	if (h.dmg / 1000000 > 0) digit = 7;
-	else if (h.dmg / 100000 > 0)digit = 6;
-	else if (h.dmg / 10000 > 0)digit = 5;
-	else if (h.dmg / 1000 > 0)digit = 4;
-	else if (h.dmg / 100 > 0)digit = 3;
-	else if (h.dmg / 10 > 0)digit = 2;
-	else digit = 1;
-	odd = digit % 2;
-	int mod=1;
-	for (int i = 0; i < digit; i++) {
-		mod *= 10;
-	}
-	//글자는 30x27로
-	char t[50];
-	int left =h.x- ((digit) * 30 + odd ? 15 : 0);
-	for (int i = 0; i < digit; i++) {//프린트
-		if (h.isCrit) {					//크리티컬이면
-			if(mod/10>0) sprintf(t, "대미지_크리티컬_%d", h.dmg% mod / (mod/10));
-			else sprintf(t, "대미지_크리티컬_%d", h.dmg % mod);
-			IMAGEMANAGER->findImage(t)->blurredrender(left + i * 30 - cam.x, h.y -cam.y,(h.time - now)<0xff?h.time-now:0xff);
-			mod /= 10;
-		}
-		else {							//일반이면
-			if(mod/10>0) sprintf(t, "대미지_일반_%d", h.dmg% mod/ (mod/ 10));
-			else sprintf(t, "대미지_일반_%d", h.dmg % mod);
-			IMAGEMANAGER->findImage(t)->blurredrender(left + i * 30 -cam.x, h.y -cam.y,(h.time - GetTickCount())<0xff?h.time-GetTickCount():0xff);
-			mod /= 10;
 
-		}
-	}
-
-}
 
 HRESULT MonsterBase::init()
 {
+	frame = deadcount = actionTick = curatkcooldown = 0;
+	onAbnormal = isDead = onAttack = onSkill = found = onAir = onHold = printblood = bloodframe = onAbnormal = false;
+	abnormalCount = abnormalFrame = abnormalStage = abnormalType = hitAvail = -1;
+	hitXvel = hitYvel = hitZvel = 0.f;
+	curStatus = mon_Idle;
 	return S_OK;
 }
 
 void MonsterBase::update()
 {
 	actionTick++;
-	if (!onHold) {
+	tick++;
+
+	//행동을 변경한다
+	if (!onHold&&curStatus!= mon_onDeadProcess &&(!onSkill||!onAttack)) {
 		if (actionTick > actionIndicate && !found && (curStatus != mon_Hit || curStatus != mon_Falldown || curStatus != mon_Wakeup)) {										//동작 변경
-			int indicate = rand() % 100;
-			if (indicate > 30) {																		//이동으로 변경
+			int indicate = rand() % 80;
+			
+			//이동으로 변경
+			if (indicate > 40) {
 				curStatus = mon_Walk;
 				moveSpeedX = RND->getFloat(moveSpeedMaxX) - moveSpeedMaxX / 2.f;
 				moveSpeedX += moveSpeedX > 0.f ? 1.f : -1.f;
 				moveSpeedZ = RND->getFloat(moveSpeedMaxZ) - moveSpeedMaxZ / 2.f;
 				moveSpeedZ += moveSpeedX > 0.f ? 1.f : -1.f;
 				frame = walkfrom;
-				actionIndicate = rand() % 300 + 200;
+				actionIndicate = rand() % 100 + 200;
 			}
-			else {																					//가만히 있기
+			//가만히 있기
+			else {
 				curStatus = mon_Idle;
 				frame = idlefrom;
-				actionIndicate = rand() % 500 + 300;
+				actionIndicate = rand() % 200 + 200;
 			}
 			actionTick = 0;
 		}
-		else if (isdetected() && curStatus != mon_Hit) {
-			found = true;
-			if (curMap->getPlayer()->getX() > x) {
-				moveSpeedX = 4.f;
-			}
-			else if (x - 4.f <= curMap->getPlayer()->getX() && curMap->getPlayer()->getX() <= x + 4.f) {
-				//x = curMap->getPlayer()->getX();
-				moveSpeedX = 0.f;
-			}
-			else {
-				moveSpeedX = -4.f;
-			}
+		else if (actionTick > actionIndicate && isdetected() && (curStatus ==mon_Idle||curStatus == mon_Walk)) {
+			int indicate = rand() % 40;
+			if (indicate > 20) {
+				FLOAT plX = curMap->getPlayer()->getX();
+				FLOAT plZ = curMap->getPlayer()->getZ();
+				found = true;
+				if (plX > x) {
+					moveSpeedX = 4.f;
+				}
+				else if (x - 4.f <= plX && plX <= x + 4.f) {
+					//x = curMap->getPlayer()->getX();
+					moveSpeedX = 0.f;
+				}
+				else {
+					moveSpeedX = -4.f;
+				}
 
-			if (curMap->getPlayer()->getZ() > z) {
-				moveSpeedZ = 5.f;
-			}
-			else if (z - 5.f <= curMap->getPlayer()->getZ() && curMap->getPlayer()->getZ() <= z + 5.f) {
-				moveSpeedZ = 0.f;
+				if (plZ > z) {
+					moveSpeedZ = 5.f;
+				}
+				else if (z - 5.f <= plZ && plZ <= z + 5.f) {
+					moveSpeedZ = 0.f;
+				}
+				else {
+					moveSpeedZ = -5.f;
+				}
+				curStatus = mon_Walk;
+				actionIndicate = rand() % 200 + 200;
 			}
 			else {
-				moveSpeedZ = -5.f;
+				curStatus = mon_Idle;
+				frame = idlefrom;
+				actionIndicate = rand() % 200 + 100;
 			}
+			actionTick = 0;
 		}
 		else {
 			found = false;
 		}
 	}
-	//맞기시작
+
+	//공격 쿨다운
+	if (curatkcooldown > 0) {
+		curatkcooldown -= 5;
+		if (curatkcooldown <= 0) {
+			curatkcooldown = 0;
+			onAttack = false;
+		}
+	}
+
+	//공격렉트와 충돌확인
 	for (list<effectedOnTime>::iterator i = curMap->getPlayer()->getAttackQueueBegin(); i != curMap->getPlayer()->getAttackQueueEnd(); i++) {
 		if (curMap->getPlayer()->getAttackQueue().size() > 0 && hitAvail) {
 			if (i->area.minx < x&&x < i->area.maxx&&
@@ -136,10 +133,6 @@ void MonsterBase::update()
 							abnormalFrame = 0;
 						onAbnormal = true;
 						break;
-						//case 9://홀딩
-						//	abnormalType = 9;
-						//	onAbnormal = true;
-						//	break;
 					case 10://화염
 						if (abnormalType == 0) {
 							abnormalType = -1;
@@ -177,13 +170,13 @@ void MonsterBase::update()
 			}
 		}
 	}
+	
+	//일정시간이후 다시 맞을수있음
 	if (hitAvailCount + 10 < GetTickCount() && !hitAvail) {
 		hitAvail = true;
 	}
-	/*
-	해야할것 : 대미지 큐 업데이트하면서 위로 올라가게 만들기.
-	렌더부분에서 해당이미지를 출력하도록 만들기
-	*/
+	
+	//대미지 이미지 올라가는부분
 	for (list<HitQueue>::iterator i = hitQueue.begin(); i != hitQueue.end();) {
 		DWORD now = GetTickCount();
 		if (now<i->time+300) {////////////////////////// 맞아서 300ms까지는 위로올라감
@@ -202,10 +195,7 @@ void MonsterBase::update()
 		i++;
 	}
 
-
-	if (hitYvel < 0 && !onHold) { curStatus = mon_Falldown; }
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////맞는상태이면
-
+	//홀딩중이라면
 	if (onHold) {
 		if (tick % 10 == 0) {
 			effectframe1++;
@@ -214,16 +204,16 @@ void MonsterBase::update()
 			}
 		}
 	}
+
+	//공중에 떠있으면 맞는방향으로 움직임
 	if (onAir) {
+		onAttack = onSkill = false;
+		curStatus = mon_Falldown;
 		if (!onAbnormal&& abnormalType != 0) {
 			hitYvel += .1f;
 			y += hitYvel;
 			x += hitXvel;
 		}
-		//if (!onHold&&y<0) {
-		//	hitYvel += .1f;
-		//	y += hitYvel;
-		//}
 		if (y > 0) {
 			y = 0;
 			hitYvel = 0;
@@ -231,32 +221,77 @@ void MonsterBase::update()
 			onHitCount = GetTickCount();
 		}
 	}
+
+	//체력이 0 미만이면 사망처리
+	if (stat.curHP <= 0&&y==0) {
+		stat.curHP = 0;
+		curStatus = mon_onDeadProcess;
+	}
+
+	//공중에 떠있을땐 쓰러지는모습
+	if (y < 0 && !onHold) {
+		curStatus = mon_Falldown;
+	}
+
+	//사망프로세스
+	if (curStatus == mon_onDeadProcess) {
+		deadcount++;
+		if (deadcount >= 128) {
+			//사망처리 완료
+			pl->gainEXP(expamount);
+			//여기서 아이템드롭!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			for (vector<Item>::iterator i = dropItems.begin(); i != dropItems.end(); i++) {
+				int prob = rand() % 100;
+				if (prob > 50) {
+					DropItemStruct t;
+	 				t.item = (*i);
+					t.isGold = false;
+					t.angle = 0;
+					t.Tick = 0;
+					t.x = x;
+					t.z = z;
+					t.y = -100;
+					t.xVel = RND->getFromFloatTo(-1.f, 1.f);
+					t.zVel = RND->getFromFloatTo(-2.f, 2.f);
+					t.yVel = -3.f;
+					curMap->DropItem(t);
+				}
+			}
+			DropItemStruct t;
+			t.isGold = true;
+			t.goldamount = goldAmount + rand()%goldAmount-goldAmount/2;
+			t.angle = 0;
+			t.Tick = 0;
+			t.x = x;
+			t.z = z;
+			t.y = -100;
+			t.xVel = RND->getFromFloatTo(-1.f, 1.f);
+			t.zVel = RND->getFromFloatTo(-2.f, 2.f);
+			t.yVel = -3.f;
+			curMap->DropItem(t);
+			isDead = true;
+			curStatus = mon_onDead;
+		}
+	}
+
+	//맞으면 밀리는거
 	if ((curStatus == mon_Hit || curStatus == mon_Falldown) && !onHold) {
 		if (hitXvel != 0.f && !onAir && abnormalType != 0) {
 			x += hitXvel;
 			hitXvel *= 0.8f;
-			if (-0.5f < hitXvel&&hitXvel < 0.5f) hitXvel = 0.f;
+			if (-0.4f < hitXvel&&hitXvel < 0.4f) hitXvel = 0.f;
 		}
-		if (!onAir && onHitCount + 300< GetTickCount() && hitXvel == 0.f) {
-			if (curStatus == mon_Falldown) {
-				curStatus = mon_Wakeup;
-				frame = wakeupfrom;
-			}
-			else if (curStatus == mon_Hit) {
+		if (!onAir && hitXvel == 0.f) {
+			if (curStatus == mon_Hit) {
 				curStatus = mon_Idle;
 				frame = idlefrom;
 			}
 		}
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////맞는상태이면
-	if (curStatus == mon_Idle) {
-		moveSpeedX = moveSpeedZ = 0;
-		tick = 0;
-	}
-	//상태에 따른 처리
+
+	//상태에 따른 처리 (프레임처리)
 	switch (curStatus) {																		//프레임이미지 처리부분
 	case mon_Walk:
-		tick++;
 		if (tick % 15 == 0) {
 			frame++;
 			if (frame > walkto) {
@@ -265,7 +300,7 @@ void MonsterBase::update()
 		}
 		break;
 	case mon_Idle:
-		tick++;
+		onSkill = onAttack = false;
 		if (tick % 15 == 0) {
 			frame++;
 			if (frame > idleto) {
@@ -274,16 +309,20 @@ void MonsterBase::update()
 		}
 		break;
 	case mon_Attack:
-		tick++;
 		if (tick % 10 == 0) {
 			frame++;
+			if (frame == 3) {
+				setAttack();
+			}
 			if (frame > attackto) {
-				frame = attackfrom;
+				frame = idlefrom;
+				curStatus = mon_Idle;
+				actionIndicate = rand() % 300 + 100;
+				actionTick = 0;
 			}
 		}
 		break;
 	case mon_Hit:
-		tick++;
 		if (tick % 10 == 0) {
 			frame++;
 			if (frame > hitto) {
@@ -292,17 +331,21 @@ void MonsterBase::update()
 		}
 		break;
 	case mon_Falldown:
-		tick++;
 		if (tick % 15 == 0) {
 			if (frame != falldownto)
 				frame++;
 			if (frame > falldownto) {
 				frame = falldownto;			//계속 쓰러져있는 상태로 유지
 			}
+			if (stat.curHP > 0) {
+				if (GetTickCount() % 50 == 0) {
+					curStatus = mon_Wakeup;
+					frame = wakeupfrom;
+				}
+			}
 		}
 		break;
 	case mon_Wakeup:
-		tick++;
 		if (tick % 30 == 0) {
 			frame++;
 			if (frame > wakeupto) {
@@ -311,10 +354,17 @@ void MonsterBase::update()
 			}
 		}
 		break;
+	case mon_Skill1:
+	case mon_Skill2:
+	case mon_Skill3:
+		//각각의 스킬당으로 프레임 정리해줘야함
+		break;
 	}
 
-	if (onAbnormal) {																							////상태이상 처리
+	//상태이상 처리
+	if (onAbnormal) {
 		switch (abnormalType) {
+			//빙결
 		case 0: {
 			printblood = false;
 			y = 0;
@@ -388,19 +438,29 @@ void MonsterBase::update()
 		}
 		}
 	}
-	if (printblood) {
-		bloodframe++;
-	}
 
-	if (tick % 5 == 0 && curStatus == mon_Walk) {														//걷기(이동)
+	//걷기(이동)
+	if (tick % 5 == 0 && curStatus == mon_Walk) {
 		x += moveSpeedX;
 		z += moveSpeedZ;
 	}
 
-	if (curStatus != mon_Hit && curStatus != mon_Falldown && abnormalType != 0) {
+	//플레이어를 지속적으로 바라보도록
+	if (curStatus != mon_Hit && curStatus != mon_Falldown && abnormalType != 0&&!onSkill) {
 		curDir = curMap->getPlayer()->getX() > x ? true : false;
 	}
 
+	//스킬들 업데이트
+	onskill1();
+	onskill2();
+	onskill3();
+
+	//피 출력
+	if (printblood) {
+		bloodframe++;
+	}
+
+	//몬스터가 화면 못벗어나게
 	terColRect = RectMakeCenter(x, translate(z), 50, 50);
 	RECT t;
 	vector<MapTile> curMapTiles = curMap->getTiles();
@@ -433,12 +493,49 @@ void MonsterBase::update()
 	if (translate(z) + 25 > curMap->getHeight()) z = (curMap->getHeight() - 25) * 2;
 	if (translate(z) - 25 < 0) z = (25) * 2;
 	terColRect = RectMakeCenter(x, translate(z), 50, 50);
+
+	for (vector<projectile>::iterator i = projectiles.begin(); i != projectiles.end();) {
+		if (tick % 20 == 0) {
+			if(i->frame>=0)
+				i->frame++;
+			if (i->framemax <= i->frame && i->frame>=0) {
+				i->frame = 0;
+			}
+		}
+		i->speedx += i->accelx;
+		i->speedy += i->accely;
+		i->speedz += i->accelz;
+		i->x += i->speedx;
+		i->y += i->speedy;
+		i->z += i->speedz;
+		i->dmginfo.area.minx = i->x - i->sizex / 2;
+		i->dmginfo.area.maxx = i->x + i->sizex / 2;
+		i->dmginfo.area.miny = i->y - i->sizey / 2;
+		i->dmginfo.area.maxy = i->y + i->sizey / 2;
+		i->dmginfo.area.minz = i->z - i->sizez / 2;
+		i->dmginfo.area.maxz = i->z + i->sizez / 2;
+		i->distance -= sqrt(i->speedx*i->speedx + i->speedz*i->speedz);
+		if (i->distance < 0 ) {
+			i = projectiles.erase(i);
+		}
+		else if ((i->x - i->sizex / 2 <= pl->getX() && pl->getX() <= i->x + i->sizex / 2 &&
+			i->y - i->sizey / 2 <= pl->getY() && pl->getY() <= i->y + i->sizey / 2 &&
+			i->z - i->sizez / 2 <= pl->getZ() && pl->getZ() <= i->z + i->sizez / 2)) {
+			pl->hit(i->dmginfo);
+			i = projectiles.erase(i);
+		}
+		else {
+			i++;
+		}
+	}
 }
 
 void MonsterBase::render()
 {
-	for (list<HitQueue>::iterator i = hitQueue.begin(); i != hitQueue.end();i++) {
-		printNumber(*i);
+	char tmp[100];
+	for (vector<projectile>::iterator i = projectiles.begin(); i != projectiles.end(); i++) {
+		sprintf(tmp, "%s%d", i->imgName.c_str(), i->frame);
+		IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + i->imgOffsetX - cam.x, i->y + i->imgOffsetY + translate(i->z) - cam.y, 17, 8);
 	}
 }
 
@@ -453,6 +550,10 @@ bool MonsterBase::isdetected()
 		return true;
 	}else
 		return false;
+}
+
+void MonsterBase::setAttack()
+{
 }
 
 MonsterBase::MonsterBase()
