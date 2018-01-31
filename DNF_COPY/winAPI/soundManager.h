@@ -9,7 +9,7 @@
 using namespace FMOD;
 
 //여유분의 채널 갯수 설정(버퍼)
-#define SOUNDBUFFER 10
+#define SOUNDBUFFER 50
 #define EXTRACHANNELBUFFER 5
 
 //총 사운드 갯수

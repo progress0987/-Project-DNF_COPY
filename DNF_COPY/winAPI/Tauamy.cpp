@@ -42,6 +42,8 @@ HRESULT Tau::init(int x, int z)
 	Tau::init();
 	this->x = x;
 	this->z = z;
+	backupx = x;
+	backupz = z;
 	y = 0;
 	return S_OK;
 }
@@ -118,6 +120,7 @@ void Tau::render()
 	for (list<HitQueue>::iterator i = hitQueue.begin(); i != hitQueue.end(); i++) {
 		printNumber(*i);
 	}
+	MonsterBase::render();
 }
 
 void Tau::renderdc()

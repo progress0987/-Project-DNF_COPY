@@ -28,6 +28,9 @@ HRESULT soundManager::init(void)
 
 void soundManager::release(void)
 {
+	SAFE_DELETE_ARRAY(sound);
+	SAFE_DELETE_ARRAY(channel);
+	system->release();
 }
 
 void soundManager::update(void)
@@ -62,7 +65,7 @@ void soundManager::play(string keyName, float volume)
 
 	for (; iter != totalSounds.end();count++, iter++) {
 		if (keyName == iter->first) {
-			system->playSound(FMOD_CHANNEL_FREE, sound[count], false, &channel[count]);
+			system->playSound(FMOD_CHANNEL_FREE, *(iter->second)/*sound[count]*/, false, &channel[count]);
 
 			channel[count]->setVolume(volume);
 			break;

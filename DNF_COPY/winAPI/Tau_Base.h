@@ -20,8 +20,8 @@ class Tau_Base : public MonsterBase
 {
 protected:
 public:
-	HRESULT init();
-	HRESULT init(int x, int z);
+	virtual HRESULT init();
+	virtual HRESULT init(int x, int z);
 	void castskill1() {
 		fromX = x;
 		frame = skill1from;

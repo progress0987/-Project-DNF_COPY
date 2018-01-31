@@ -77,6 +77,17 @@ HRESULT Mirkwood::init()
 		m1->addMonster(g);
 	}
 
+	//Tau* tau = new Tau();
+	//tau->setCurmap(m1);
+	//tau->init(800 + 100, WINSIZEY * 2 - 500);
+	//m1->addMonster(tau);
+
+	//TauAssaulter* ta = new TauAssaulter();
+	//ta->setCurmap(m1);
+	//ta->init(800 - 100, WINSIZEY * 2 - 300);
+	//m1->addMonster(ta);
+
+
 	t.rc = RectMake(1485, 390, 50, 50);
 	t.type = 0;
 	t.moveindex = 0;
@@ -355,7 +366,7 @@ HRESULT Mirkwood::init()
 	node.x = m3->getWidth() - 160;
 	node.z = 423 * 2;
 	gateinfo.con = node;
-	gateinfo.isBoss = false;
+	gateinfo.isBoss = true;
 	gateinfo.isShow = true;
 	gateinfo.movable = false;
 	gateinfo.x = 0;
@@ -371,22 +382,13 @@ HRESULT Mirkwood::init()
 #pragma endregion
 
 
-	//Tau* tau = new Tau();
-	//tau->setCurmap(m1);
-	//tau->init(800 + 100, WINSIZEY * 2 - 500);
-	//m1->addMonster(tau);
-
-	//TauAssaulter* ta = new TauAssaulter();
-	//ta->setCurmap(m1);
-	//ta->init(800 - 100, WINSIZEY * 2 - 300);
-	//m1->addMonster(ta);
 
 	Maps.push_back(m1);
 	Maps.push_back(m2);
 	Maps.push_back(m3);
 	Maps.push_back(m4);
 
-	curMap = Maps[0];
+	curMap = Maps[3];
 	return S_OK;
 }
 
@@ -433,6 +435,7 @@ HRESULT MirkwoodMap::init()
 	runnable = true;
 	attackable = true;
 	showresult = false;
+	playendsound = playedendsound = false;
 	MapBase::init();
 	return S_OK;
 }
@@ -461,8 +464,14 @@ void MirkwoodMap::update()
 		}
 	}
 	MapBase::update();
+	if (playendsound && !SOUNDMANAGER->isPlaySound("효과_결과출력") ) {
+		SOUNDMANAGER->play("효과_결과출력");
+		playedendsound = true;
+		playendsound = false;
+	}
 	if (isBossMap) {
 		if (Boss->getCurStat() == mon_onDead) {
+			if(!playedendsound&&!playendsound)		playendsound = true;
 			showresult = true;
 			for (vector<MonsterBase*>::iterator i = monsterList.begin(); i != monsterList.end(); i++) {
 				(*i)->setCurStat(mon_onDeadProcess);
@@ -628,12 +637,19 @@ void MirkwoodMap::renderdc()
 	//for (vector<MapTile>::iterator i = mapTiles.begin(); i != mapTiles.end(); i++) {
 	//	Rectangle(hdc, i->rc.left-cam.x, i->rc.top-cam.y, i->rc.right-cam.x, i->rc.bottom-cam.y);
 	//}
-	for (int i = 0; i < 4; i++) {
-		if (Gates[i].isShow) {
-			Rectangle(hdc, Gates[i].moveRect.left-cam.x, Gates[i].moveRect.top-cam.y, Gates[i].moveRect.right-cam.x, Gates[i].moveRect.bottom-cam.y);
-		}
-	}
+	//for (int i = 0; i < 4; i++) {
+	//	if (Gates[i].isShow) {
+	//		Rectangle(hdc, Gates[i].moveRect.left-cam.x, Gates[i].moveRect.top-cam.y, Gates[i].moveRect.right-cam.x, Gates[i].moveRect.bottom-cam.y);
+	//	}
+	//}
 	MapBase::renderdc();
+}
+
+void MirkwoodMap::resetMonsters()
+{
+	for (vector<MonsterBase*>::iterator i = monsterBackup.begin();i!=monsterBackup.end();i++){
+		(*i)->reset();
+	}
 }
 
 

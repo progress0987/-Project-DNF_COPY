@@ -5,6 +5,12 @@ class Tau :public Tau_Base
 public:
 	HRESULT init();
 	HRESULT init(int x, int z);
+	void reset(){
+		x = backupx;
+		z = backupz;
+		stat.curHP = stat.maxHP;
+		curStatus = mon_Idle;
+	}
 	void update();
 	void render();
 	void renderdc();

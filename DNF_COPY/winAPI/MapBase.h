@@ -43,6 +43,8 @@ protected:
 	bool peaceful;
 	bool runnable;
 	bool attackable;
+	bool playendsound;
+	bool playedendsound;
 	int tilewidth;
 	dungeonGate Gates[4];
 

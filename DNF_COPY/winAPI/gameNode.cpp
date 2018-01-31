@@ -40,6 +40,7 @@ HRESULT gameNode::init(bool managerInit)
 		 IMAGEMANAGER->deleteAll();
 		 IMAGEMANAGER->releaseSingleton();
 		 KEYMANAGER->releaseSingleton();
+		 SOUNDMANAGER->release();
 		 SOUNDMANAGER->releaseSingleton();
 		 INIDATAMANAGER->releaseSingleton();
 		 EFFECTMANAGER->releaseSingleton();
@@ -49,6 +50,7 @@ HRESULT gameNode::init(bool managerInit)
  }
  void gameNode::update(void)
  {
+	 SOUNDMANAGER->update();
 	 InvalidateRect(_hWnd, NULL, false);
  }
  void gameNode::render()

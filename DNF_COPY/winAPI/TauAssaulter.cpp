@@ -41,6 +41,8 @@ HRESULT TauAssaulter::init(int x, int z)
 	TauAssaulter::init();
 	this->x = x;
 	this->z = z;
+	backupx = x;
+	backupz = z;
 	y = 0;
 	return S_OK;
 }
@@ -117,6 +119,7 @@ void TauAssaulter::render()
 	for (list<HitQueue>::iterator i = hitQueue.begin(); i != hitQueue.end(); i++) {
 		printNumber(*i);
 	}
+	MonsterBase::render();
 }
 
 void TauAssaulter::renderdc()

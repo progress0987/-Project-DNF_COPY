@@ -32,6 +32,7 @@ public:
 	void update(void);
 	void render();
 	void LoadImages();
+	void LoadSounds();
 	void showdungeonselect();
 	void showdunmoveScene();
 	void showOpening();

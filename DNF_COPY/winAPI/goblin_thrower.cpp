@@ -39,7 +39,17 @@ HRESULT goblin_thrower::init(int x, int z)
 	goblin_thrower::init();
 	this->x = x;
 	this->z = z;
+	backupx = x;
+	backupz = z;
 	return S_OK;
+}
+
+void goblin_thrower::reset()
+{
+	x = backupx;
+	z = backupz;
+	stat.curHP = stat.maxHP;
+	curStatus = mon_Idle;
 }
 
 void goblin_thrower::update()

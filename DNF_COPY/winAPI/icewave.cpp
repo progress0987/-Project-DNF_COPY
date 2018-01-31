@@ -29,6 +29,7 @@ void icewave::cast(FLOAT x, FLOAT y, FLOAT z)
 	cooldownstartfrom = GetTickCount();
 	onCooldown = true;
 	curcharge = 0;
+	SOUNDMANAGER->play("캐릭_스킬_파동검빙인");
 }
 
 void icewave::update()
@@ -64,6 +65,7 @@ void icewave::update()
 			needle.fadetime = 100;
 			needle.staytime = 1000;
 			needles.push_back(needle);
+			SOUNDMANAGER->play("효과_얼믐타격");
 			effectedOnTime atk;
 			atk.isCrit = rand() % 100 > 80 ? true : false;
 			atk.mindmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel) / 2 + pl->getWeapon().magdmgmin / 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel)/2 + pl->getWeapon().magdmgmin/2;

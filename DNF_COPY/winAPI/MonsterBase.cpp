@@ -208,6 +208,9 @@ void MonsterBase::update()
 	//공중에 떠있으면 맞는방향으로 움직임
 	if (onAir) {
 		onAttack = onSkill = false;
+		if (curStatus != mon_Falldown) {
+			frame = falldownfrom;
+		}
 		curStatus = mon_Falldown;
 		if (!onAbnormal&& abnormalType != 0) {
 			hitYvel += .1f;
@@ -533,6 +536,13 @@ void MonsterBase::update()
 void MonsterBase::render()
 {
 	char tmp[100];
+
+	if (stat.curHP < stat.maxHP) {
+		IMAGEMANAGER->findImage("체력바_배경")->render(x - 35 -cam.x, y + translate(z) - 100 -cam.y);
+		int hp = stat.curHP > 0 ? stat.curHP : 1;
+		IMAGEMANAGER->findImage("체력바_빨강")->render(x - 35 -cam.x, y + translate(z) - 100,0,0,(float)IMAGEMANAGER->findImage("체력바_빨강")->getWidth()*((float)hp/(float)stat.maxHP),(float)IMAGEMANAGER->findImage("체력바_빨강")->getHeight() -cam.y);
+	}
+
 	for (vector<projectile>::iterator i = projectiles.begin(); i != projectiles.end(); i++) {
 		sprintf(tmp, "%s%d", i->imgName.c_str(), i->frame);
 		IMAGEMANAGER->findImage(tmp)->DFpointrender(i->x + i->imgOffsetX - cam.x, i->y + i->imgOffsetY + translate(i->z) - cam.y, 17, 8);

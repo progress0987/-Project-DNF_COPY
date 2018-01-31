@@ -38,9 +38,19 @@ HRESULT green_goblin::init(int x, int z)
 	green_goblin::init();
 	this->x = x;
 	this->z = z;
+	backupx = x;
+	backupz = z;
 	y = 0;
 
 	return S_OK;
+}
+
+void green_goblin::reset()
+{
+	x = backupx;
+	z = backupz;
+	stat.curHP = stat.maxHP;
+	curStatus = mon_Idle;
 }
 
 void green_goblin::update()
@@ -110,6 +120,7 @@ void green_goblin::render()
 	for (list<HitQueue>::iterator i = hitQueue.begin(); i != hitQueue.end(); i++) {
 		printNumber(*i);
 	}
+	MonsterBase::render();
 }
 
 void green_goblin::renderdc()

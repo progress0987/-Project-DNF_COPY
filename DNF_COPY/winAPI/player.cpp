@@ -79,6 +79,8 @@ HRESULT player::init(void)
 	for (int i = equipments.size(); i < 32; i++) {
 		equipments.push_back(empty);
 	}
+
+	test = false;
 	return S_OK;
 }
 
@@ -94,6 +96,12 @@ void player::update(void)
 	//살아있을때
 	if (Stat.curHP > 0) {
 		if (gold < 0)gold = 0;//혹시모를 에러검출용
+
+		if (reset) {
+			Stat.curHP = Stat.maxHP;
+			deadTick = 9;
+			reset = false;
+		}
 		effectedOnTime atk;
 		/////////////////////////////////////////////////////////////////////////////////////////////////////체력/마력 적을때 회복, 회복효과
 		{
@@ -208,6 +216,7 @@ void player::update(void)
 					atk.time = Time;
 					atk.time = GetTickCount();
 					attackQueue.push_back(atk);
+					SOUNDMANAGER->play("캐릭_평타_1");
 				}
 				if (frame > 8) {
 					if (nextStance < 0) {
@@ -243,6 +252,7 @@ void player::update(void)
 					atk.time = Time;
 					atk.time = GetTickCount();
 					attackQueue.push_back(atk);
+					SOUNDMANAGER->play("캐릭_평타_2");
 				}
 				if (frame > 20) {
 					if (nextStance < 0) {
@@ -278,6 +288,7 @@ void player::update(void)
 					atk.time = Time;
 					atk.time = GetTickCount();
 					attackQueue.push_back(atk);
+					SOUNDMANAGER->play("캐릭_평타_3");
 				}
 				if (frame > 41) {
 					//if (nextStance < 0) {
@@ -331,6 +342,7 @@ void player::update(void)
 					atk.time = Time;
 					atk.time = GetTickCount();
 					attackQueue.push_back(atk);											//추후 스킬레벨에따라 띄우기능력변경
+					SOUNDMANAGER->play("캐릭_점프공격");
 
 				}
 				if (frame > 137) {
@@ -376,12 +388,16 @@ void player::update(void)
 					dmgShow.push_back(hit);
 					onHit = false;
 					printblood = true;
+					SOUNDMANAGER->play("캐릭_타격");
+
+
 					if (!onSuperarmor) {
 						curStance = stance_hit;
 						frame = stance_hit;
 					}
 					if (Stat.curHP <= 0) {///////////////////////////////////////////////////////////////////사망 프로세스!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 						frame = 103;
+						SOUNDMANAGER->play("캐릭_사망");
 					}
 				}
 			}
@@ -471,6 +487,7 @@ void player::update(void)
 					curStance = stance_sit;
 					DropItemStruct it = curMap->rootItem(x, z);
 					rootItem(it.item);
+					SOUNDMANAGER->play("UI_아이템획득");
 				}
 				else if (curMap->isAttackable()) {
 					inputStruct t;
@@ -575,8 +592,8 @@ void player::update(void)
 
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE)) {
 				//onDebug = !onDebug;
-				levelupEffect = true;
-				onLevelup = true;
+				//levelupEffect = true;
+				//onLevelup = true;
 			}
 			//if (KEYMANAGER->isOnceKeyDown('V')) {
 			//	test = !test;
@@ -621,7 +638,7 @@ void player::update(void)
 						curSkill = skill_upper;
 						skill_upper->cast(x, y, z);
 						Stat.curMP -= skill_upper->reqMana;
-					}
+					}else SOUNDMANAGER->play("캐릭_스킬_쿨타임");
 					inputQueue.pop_front();
 				}
 				if (inputQueue.size() > 0 && inputQueue.front().key == 'A'&&curStance != stance_onSkill && !onJump && !ASkill->onCooldown) {
@@ -631,6 +648,7 @@ void player::update(void)
 						ASkill->cast(x, y, z);
 						Stat.curMP -= ASkill->reqMana;
 					}
+					else SOUNDMANAGER->play("캐릭_스킬_쿨타임");
 					inputQueue.pop_front();
 				}
 				if (inputQueue.size() > 0 && inputQueue.front().key == 'S'&&curStance != stance_onSkill && !onJump && !SSkill->onCooldown) {
@@ -640,6 +658,7 @@ void player::update(void)
 						SSkill->cast(x, y, z);
 						Stat.curMP -= SSkill->reqMana;
 					}
+					else SOUNDMANAGER->play("캐릭_스킬_쿨타임");
 					inputQueue.pop_front();
 				}
 				if (inputQueue.size() > 0 && inputQueue.front().key == 'D'&&curStance != stance_onSkill && !onJump && !DSkill->onCooldown) {
@@ -649,6 +668,7 @@ void player::update(void)
 						DSkill->cast(x, y, z);
 						Stat.curMP -= DSkill->reqMana;
 					}
+					else SOUNDMANAGER->play("캐릭_스킬_쿨타임");
 					inputQueue.pop_front();
 				}
 				if (inputQueue.size() > 0 && inputQueue.front().key == 'F'&&curStance != stance_onSkill && !onJump && !FSkill->onCooldown) {
@@ -658,6 +678,7 @@ void player::update(void)
 						FSkill->cast(x, y, z);
 						Stat.curMP -= FSkill->reqMana;
 					}
+					else SOUNDMANAGER->play("캐릭_스킬_쿨타임");
 					inputQueue.pop_front();
 				}
 				if (inputQueue.size() > 0 && inputQueue.front().key == 'G'&&curStance != stance_onSkill && !onJump && !GSkill->onCooldown) {
@@ -668,6 +689,7 @@ void player::update(void)
 						Stat.curMP -= GSkill->reqMana;
 						onSuperarmor = true;
 					}
+					else SOUNDMANAGER->play("캐릭_스킬_쿨타임");
 					inputQueue.pop_front();
 				}
 				if (inputQueue.size() > 0 && inputQueue.front().key == 'Q'&&curStance != stance_onSkill && !onJump && !QSkill->onCooldown) {
@@ -678,6 +700,7 @@ void player::update(void)
 						Stat.curMP -= QSkill->reqMana;
 						onSuperarmor = true;
 					}
+					else SOUNDMANAGER->play("캐릭_스킬_쿨타임");
 					inputQueue.pop_front();
 				}
 			}
@@ -817,6 +840,7 @@ void player::update(void)
 				deadTick = 9;
 				levelupEffect = true;
 				reset = false;
+				SOUNDMANAGER->play("UI_이어하기");
 			}
 		}
 		if (tick % 200 == 0) {
@@ -906,6 +930,17 @@ void player::update(void)
 		if (cam.y < 0) cam.y = 0;
 	}
 	ui->update();
+	/////////////////////////////////////////////////////////////////////////////////////////////////////테스트중
+	bool test2;
+	if (SOUNDMANAGER->isPlaySound("효과_결과출력")) { 
+		test = true;
+	}
+	if (!SOUNDMANAGER->isPlaySound("효과_결과출력")) {
+		test = false;
+	}
+	if (!test) {
+		test2 = false;
+	}
 }
 
 void player::render(void)
@@ -1030,7 +1065,16 @@ void player::gainEXP(int amount)
 		Stat.a_magAtt = Weapon.magdmgmin;
 		levelupEffect = true;
 		onLevelup = true;
+		SOUNDMANAGER->play("UI_레벨업");
 	}
+}
+
+void player::resetPlayer()
+{
+	setOnCombat(false);
+	Stat.curHP = Stat.maxHP;
+	deadTick = 9;
+	reset = false;
 }
 
 void player::setCurScene(MapBase * map, FLOAT x, FLOAT z)
@@ -1352,8 +1396,10 @@ void player::useItem(int tab, int x, int y)
 		case 1:											//퍼센트단위로 체력회복시키는거
 			amount = (Stat.maxHP * ((float)consume[index].gainHP / 100.f));
 			Stat.curHP += amount;
+			if(consume[index].gainHP>0)SOUNDMANAGER->play("체력회복");
 			amount = (Stat.maxMP * ((float)consume[index].gainMP / 100.f));
 			Stat.curMP += amount;
+			if(consume[index].gainMP>0)SOUNDMANAGER->play("마나회복");
 			onHeal = consume[index].gainHP > 0 ? (consume[index].gainMP > 0 ? 3 : 1) : (consume[index].gainMP > 0 ? 2 : 0);
 			consume[index].stack--;
 			if (consume[index].stack <= 0) {
@@ -1362,7 +1408,9 @@ void player::useItem(int tab, int x, int y)
 			break;
 		default:										//수치로 체력회복
 			Stat.curHP +=consume[index].gainHP;
+			if(consume[index].gainHP>0)SOUNDMANAGER->play("체력회복");
 			Stat.curMP +=consume[index].gainMP;
+			if(consume[index].gainMP>0)SOUNDMANAGER->play("마나회복");
 			onHeal = consume[index].gainHP > 0 ? (consume[index].gainMP > 0 ? 3 : 1) : (consume[index].gainMP > 0 ? 2 : 0);
 			consume[index].stack--;
 			if (consume[index].stack <= 0) {

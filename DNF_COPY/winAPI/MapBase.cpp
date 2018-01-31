@@ -87,6 +87,7 @@ void MapBase::update()
 	}
 	else if(monsterList.size()==0&&!peaceful){
 		peaceful = true;
+		pl->setOnCombat(!peaceful);
 		for (int i = 0; i < 4; i++) {
 			if (!Gates[i].isShow)continue;
 			Gates[i].movable = true;
@@ -166,18 +167,23 @@ bool MapBase::getMove(conNode * next, FLOAT x, FLOAT z)
 
 void MapBase::resetMonsters()
 {
-	if (curMap == nullptr) {
-		monsterList.clear();
-		for (int i = 0; i < monsterBackup.size(); i++) {
-			monsterList.push_back(monsterBackup[i]);
-		}
-		peaceful = false;
-		for (int i = 0; i < 4; i++) {
-			Gates[i].movable = false;
-		}
-	}
-	else {
-		curMap->resetMonsters();
+	//if (curMap == nullptr) {
+	//	monsterList.clear();
+	//	for (int i = 0; i < monsterBackup.size(); i++) {
+	//		monsterList.push_back(monsterBackup[i]);
+	//	}
+	//	peaceful = false;
+	//	for (int i = 0; i < 4; i++) {
+	//		Gates[i].movable = false;
+	//	}
+	//}
+	//else {
+	//	curMap->resetMonsters();
+	//}
+	monsterList.clear();
+	for (vector<MonsterBase*>::iterator i = monsterBackup.begin(); i != monsterBackup.end(); i++) {
+		(*i)->reset();
+		monsterList.push_back(*i);
 	}
 }
 

@@ -50,6 +50,7 @@ HRESULT mainGame::init(void)
 	cam.y = 0;
 
 	initItems();
+	LoadSounds();
 	LoadImages();
 #pragma endregion
 
@@ -103,8 +104,10 @@ HRESULT mainGame::init(void)
 	mirkwood->setPlayer(pl);
 	mirkwood->init();
 
-	pl->setCurScene(seriaRoom);
+	pl->setCurScene(mirkwood);/////////////////////////////////////////////////현재맵설정
 	pl->init();
+
+
 	showDungeonSelect = showDungeonMoveScene = false;
 	dunRect.push_back(RectMake(100, 100, 168, 73));
 	dunRect.push_back(RectMake(300, 150, 168, 73));
@@ -115,8 +118,10 @@ HRESULT mainGame::init(void)
 	dunName.push_back("던전_선택_빌마르크");
 
 	Maps.push_back(mirkwood);
+
+
 	dunselected = -1;
-	onOpening = true;
+	onOpening = false;///////////////////////////////////////////////////오프닝플레이
 	openingPhase = 0;
 	openingTick = 0;
 
@@ -165,6 +170,7 @@ HRESULT mainGame::init(void)
 	 if (pl->reset) {
 		 pl->setCurScene(village, 100, (WINSIZEY - 100) * 2);
 		 pl->reset = false;
+		 pl->resetPlayer();
 	 }
 	 if (showDungeonMoveScene) {
 		 dunmovetick++;
@@ -222,6 +228,8 @@ HRESULT mainGame::init(void)
  //여기가 그려주는 곳 - paint 후에 paintDC가 렌더됨 - 순서 바꿀시 주의할것
  void mainGame::render() 
  {
+	 SetCursor(NULL);
+	 ShowCursor(false);
 	 if (SUCCEEDED(g_pd3dDevice->BeginScene())) {
 		 //3D그리기 시작
 		 if (SUCCEEDED(g_pd3dSprite->Begin(D3DXSPRITE_ALPHABLEND))) {
@@ -237,6 +245,12 @@ HRESULT mainGame::init(void)
 			 }
 			 else {
 				 paint();
+			 }
+			 if (clicked) {
+				 IMAGEMANAGER->findImage("마우스_클릭")->render(ptMouse.x, ptMouse.y);
+			 }
+			 else {
+				 IMAGEMANAGER->findImage("마우스_기본")->render(ptMouse.x, ptMouse.y);
 			 }
 			 g_pd3dSprite->End();
 		 }
@@ -955,6 +969,13 @@ HRESULT mainGame::init(void)
 
 	 ///기타 이미지
 
+	 //마우스 포인터
+	 IMAGEMANAGER->addImage("마우스_기본", "sprites/UI/cursor.img/0.png");
+	 IMAGEMANAGER->addImage("마우스_클릭", "sprites/UI/cursor.img/1.png");
+
+	 //몬스터 체력
+	 IMAGEMANAGER->addImage("체력바_배경", "sprites/UI/overheadgauge.img/0.png");
+	 IMAGEMANAGER->addImage("체력바_빨강", "sprites/UI/overheadgauge.img/1.png");
 	 //오프닝
 	 {
 		 IMAGEMANAGER->addImage("로딩_배경", "sprites/Opening/sprite_interface2_nowloading/nowloading.img/1.png");
@@ -1025,6 +1046,46 @@ HRESULT mainGame::init(void)
 	 IMAGEMANAGER->addImage("페이드", "sprites/fade.img");
  }
 
+ //모든 사운드들 로드
+ void mainGame::LoadSounds()
+ {
+	 SOUNDMANAGER->addSound("캐릭_평타_1", "Sounds/char/sm_atk_01.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_평타_2", "Sounds/char/sm_atk_02.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_평타_3", "Sounds/char/sm_atk_03.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_점프공격", "Sounds/char/sm_jumpatk_01.ogg", false, false);
+	 
+	 SOUNDMANAGER->addSound("캐릭_타격", "Sounds/char/sm_dmg_01.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_사망", "Sounds/char/sm_die.ogg", false, false);
+
+	 SOUNDMANAGER->addSound("캐릭_스킬_쿨타임", "Sounds/char/sm_cooltime.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_부동_시작", "Sounds/char/sm_boodong_start.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_부동_폭발", "Sounds/char/sm_boodong_explosion.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_파동검폭염", "Sounds/char/sm_firewave.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_파동검빙인", "Sounds/char/sm_icewave.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_충전", "Sounds/char/sm_gue_charge.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_진공참", "Sounds/char/sm_jingong.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_수라진공참", "Sounds/char/sm_sura_jingong.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_어퍼", "Sounds/char/sm_upslash.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬_웨이브", "Sounds/char/sm_wave.ogg", false, false);
+
+	 SOUNDMANAGER->addSound("캐릭_스킬사운드_부동_구생성", "Sounds/skill/boodong_ball.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬사운드_부동_마법진_루프", "Sounds/skill/boodong_circle_loop.ogg", false, true);
+	 SOUNDMANAGER->addSound("캐릭_스킬사운드_부동_구폭발", "Sounds/skill/boodong_explosion.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬사운드_어퍼", "Sounds/skill/upper_slash_01.ogg", false, false);
+	 SOUNDMANAGER->addSound("캐릭_스킬사운드_웨이브", "Sounds/skill/hadouken.ogg", false, false);
+
+	 SOUNDMANAGER->addSound("효과_화염폭발", "Sounds/effect/fire_explosion.ogg", false, false);
+	 SOUNDMANAGER->addSound("효과_체력회복", "Sounds/effect/hp_recovered.ogg", false, false);
+	 SOUNDMANAGER->addSound("효과_마나회복", "Sounds/effect/mp_recovered.ogg", false, false);
+	 SOUNDMANAGER->addSound("효과_결과출력", "Sounds/effect/result.ogg", false, false);
+
+	 SOUNDMANAGER->addSound("UI_레벨업", "Sounds/UI/levup.ogg", false, false);
+	 SOUNDMANAGER->addSound("UI_아이템획득", "Sounds/UI/get_item.ogg", false, false);
+	 SOUNDMANAGER->addSound("UI_이어하기", "Sounds/UI/coin_in.ogg", false, false);
+
+
+ }
+
  void mainGame::showdungeonselect()
  {
 	 IMAGEMANAGER->findImage("던전_선택_배경")->render();
@@ -1054,26 +1115,6 @@ HRESULT mainGame::init(void)
 
  void mainGame::showOpening()
  {
-	 /*
-	 로딩_배경
-	 로딩_회전
-	 
-	 오프닝_배경
-	 오프닝_로고_강조
-	 오프닝_로고
-	 오프닝_로고_먼지
-	 오프닝_붓_1
-	 오프닝_붓_2
-	 오프닝_붓_3
-	 오프닝_붓_4
-	 오프닝_로고_빛남_1
-	 오프닝_로고_빛남_2
-	 오프닝_로고_빛남_3
-	 오프닝_등급
-	 */
-
-
-
 	 switch (openingPhase) {
 	 case 0://떨어지는것
 		 IMAGEMANAGER->findImage("오프닝_배경")->render(0,0);
@@ -1103,7 +1144,7 @@ HRESULT mainGame::init(void)
 	 case 1://등급보여주는것
 		 IMAGEMANAGER->findImage("오프닝_배경")->render(0, 0);
 		 if (900 < openingTick&&openingTick < 1000) {
-			 IMAGEMANAGER->findImage("오프닝_로고")->DFpointrender(237, 189,0,0,1.f,255*(1000 - openingTick/100));
+			 IMAGEMANAGER->findImage("오프닝_로고")->DFpointrender(237, 189,0,0,1.f,255.f*(1000.f - (float)openingTick/100.f));
 			 //900~1000 -> 1 ~ 0
 			 //1000 - openingtick / 100?
 		 }
@@ -1120,22 +1161,23 @@ HRESULT mainGame::init(void)
 			 IMAGEMANAGER->findImage("오프닝_붓_4")->DFpointrender(153, 208, 0, 0);
 		 }
 		 if (1060 < openingTick&&openingTick<1076) {
-			 IMAGEMANAGER->findImage("오프닝_등급")->DFpointrender(0, 0, 0, 0,1.f,(255 * ((1076 - openingTick)*16 -1)));
+			 IMAGEMANAGER->findImage("오프닝_등급")->DFpointrender(0, 0, 0, 0,1.f,(255.f * ((1076.f - (float)openingTick)*16.f -1)));
 		 }
 		 if (1076 <= openingTick) {
 			 IMAGEMANAGER->findImage("오프닝_붓_4")->DFpointrender(237, 189, 0, 0);
 			 IMAGEMANAGER->findImage("오프닝_등급")->render();
 		 }
-		 //if (openingTick > 1000) {
-			// openingPhase = 2;
-			// openingTick = 0;
-		 //}
+		 if (1800 < openingTick&&openingTick < 2000) {
+			 IMAGEMANAGER->findImage("오프닝_붓_4")->DFpointrender(237, 189, 0, 0,1.f,255.f*(2000.f - (float)openingTick)/200.f);
+			 IMAGEMANAGER->findImage("오프닝_등급")->DFpointrender(0,0,0,0,1.f,255.f*(2000.f - (float)openingTick)/200.f);
+
+		 }
 		 break;
 	 case 2://로딩창
-		 //if (openingTick > 4000) {
-			// onOpening = false;
-			// openingTick = openingPhase = -1;
-		 //}
+		 IMAGEMANAGER->findImage("로딩_배경")->render(0,0);
+
+		 IMAGEMANAGER->findImage("로딩_회전")->DFpointrotatedrender(378+23, 461+23, PI*((float)openingTick - 2000.f) / 100.f,23,23);
+			 //IMAGEMANAGER->findImage("로딩_회전")->rotatedrender(378,461,)
 		 break;
 	 }
  }

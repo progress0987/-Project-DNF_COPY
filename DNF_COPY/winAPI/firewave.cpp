@@ -33,6 +33,7 @@ void firewave::cast(FLOAT x, FLOAT y, FLOAT z)
 	cooldownstartfrom = GetTickCount();
 	onCooldown = true;
 	curcharge = 0;
+	SOUNDMANAGER->play("Ä³¸¯_½ºÅ³_ÆÄµ¿°ËÆø¿°");
 }
 
 void firewave::update()
@@ -88,6 +89,7 @@ void firewave::update()
 			atk.staytime = 10;
 			atk.time = GetTickCount();
 			pl->addAttack(atk);
+			SOUNDMANAGER->play("È¿°ú_È­¿°Æø¹ß");
 		}
 	}
 	for (list<flame>::iterator i = flameEffects.begin(); i != flameEffects.end();) {

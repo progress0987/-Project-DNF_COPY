@@ -24,6 +24,7 @@ void upper::cast(FLOAT x, FLOAT y, FLOAT z)
 	cooldownstartfrom = GetTickCount();
 	onCooldown = true;
 	curcharge = 0;
+	SOUNDMANAGER->play("캐릭_스킬_어퍼");
 }
 /*
 struct effected{
@@ -68,6 +69,7 @@ void upper::update()
 				atk.staytime = 10;
 				atk.time = GetTickCount();
 				pl->addAttack(atk);
+				SOUNDMANAGER->play("캐릭_스킬사운드_어퍼");
 			}
 			if (curAction > 41) {
 				finished = true;

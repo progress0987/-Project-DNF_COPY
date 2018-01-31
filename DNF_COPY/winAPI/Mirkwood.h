@@ -36,6 +36,7 @@ public:
 	void renderz();
 	void renderdc();
 	void setBoss(MonsterBase *b) { Boss = b; };
+	void resetMonsters();
 	void addMonster(MonsterBase* m) { monsterList.push_back(m); monsterBackup.push_back(m); }
 	void setMap(const char* tileName,int x, int y);
 };

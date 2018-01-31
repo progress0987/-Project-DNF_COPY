@@ -43,6 +43,8 @@ void wavespin::cast(FLOAT x, FLOAT y, FLOAT z)
 		balls[i].distance = 0;
 		balls[i].effect = i;
 	}
+	SOUNDMANAGER->play("캐릭_스킬_부동_시작");
+	SOUNDMANAGER->play("캐릭_스킬사운드_부동_마법진_루프",0.5f);
 }
 
 void wavespin::update()
@@ -57,6 +59,7 @@ void wavespin::update()
 				if (curAction > 89) {
 					curAction = 89;
 					stage = 1;
+					SOUNDMANAGER->play("캐릭_스킬사운드_부동_구생성");
 				}
 				if (curAction == 77) {
 					atk.mindmg = 0;
@@ -102,7 +105,7 @@ void wavespin::update()
 				if (balls[i].effect > 5)
 					balls[i].effect = 0;
 
-				if (count % 3 == 0) {
+				if (count % 10== 0) {
 					atk.isCrit = rand() % 100 > 80 ? true : false;
 					atk.mindmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon().magdmgmin * 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon().magdmgmin * 2;
 					atk.maxdmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel)*2.5f + pl->getWeapon().magdmgmax * 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel)*2.5f + pl->getWeapon().magdmgmax * 2;
@@ -116,7 +119,7 @@ void wavespin::update()
 					atk.area.minx = balls[i].x - 45;
 					atk.pushX = 0;
 					atk.pushY = 0;												//추후 스킬레벨에따라 띄우기능력변경
-					atk.staytime = 5;
+					atk.staytime = 2;
 					atk.time = GetTickCount();
 					pl->addAttack(atk);
 				}
@@ -162,15 +165,18 @@ void wavespin::update()
 						atk.isAbnormal = true;
 						atk.abnormal = 51;
 						atk.area.miny = -150; atk.area.maxy = -50;
-						atk.area.minz = balls[i].z - 200; atk.area.maxz = balls[i].z + 200;
-						atk.area.maxx = balls[i].x + 200;
-						atk.area.minx = balls[i].x - 200;
+						atk.area.minz = balls[i].z - 500; atk.area.maxz = balls[i].z + 500;
+						atk.area.maxx = balls[i].x + 400;
+						atk.area.minx = balls[i].x - 400;
 						atk.pushX = balls[i].x<x ? -4.f : 4.f;
 						atk.pushY = -6.f;												//추후 스킬레벨에따라 띄우기능력변경
 						atk.staytime = 10;
 						atk.time = GetTickCount();
 						pl->addAttack(atk);
 					}
+					SOUNDMANAGER->play("캐릭_스킬_부동_폭발");
+					SOUNDMANAGER->play("캐릭_스킬사운드_부동_구폭발");
+					SOUNDMANAGER->stop("캐릭_스킬사운드_부동_마법진_루프");
 				}
 				if (curAction > 175) {/*
 					curAction = 175;

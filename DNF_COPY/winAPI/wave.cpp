@@ -28,6 +28,7 @@ void wave::cast(FLOAT x, FLOAT y, FLOAT z)
 	cooldownstartfrom = GetTickCount();
 	onCooldown = true;
 	curcharge = 0;
+	SOUNDMANAGER->play("캐릭_스킬_웨이브");
 }
 
 void wave::update()
@@ -53,6 +54,7 @@ void wave::update()
 				atk.staytime = 10;
 				atk.time = GetTickCount();
 				pl->addAttack(atk);
+				SOUNDMANAGER->play("캐릭_스킬사운드_웨이브");
 			}
 			if (curAction > 41) {
 				finished = true;

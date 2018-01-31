@@ -34,6 +34,7 @@ void vacslash::cast(FLOAT x, FLOAT y, FLOAT z)
 	curcharge = 0;
 	chargeFrame = fullchargeFrame = chargeStatus = 0;
 	sl.onshow = false;
+	SOUNDMANAGER->play("캐릭_스킬_충전");
 }
 
 void vacslash::update()
@@ -55,9 +56,11 @@ void vacslash::update()
 			onCharge = false;
 			if (chargeStatus > 0) {
 				sl.dmg = 30;
+				SOUNDMANAGER->play("캐릭_스킬_진공참");
 			}
 			else {
 				sl.dmg = 15;
+				SOUNDMANAGER->play("캐릭_스킬_수라진공참");
 			}
 		}
 		switch (chargeStatus) {

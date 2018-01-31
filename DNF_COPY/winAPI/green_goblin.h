@@ -7,6 +7,7 @@ public:
 
 	HRESULT init();
 	HRESULT init(int x, int z);
+	void reset();
 	void update();
 	void render();
 	void renderdc();

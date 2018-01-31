@@ -172,6 +172,8 @@ private:
 
 
 	long movebegin;
+
+	bool test;
 public:
 	bool reset;
 	Item emptyWeapon;
@@ -186,6 +188,7 @@ public:
 	void render(void);
 	void renderdc(void);
 	void gainEXP(int amount);
+	void resetPlayer();
 
 
 

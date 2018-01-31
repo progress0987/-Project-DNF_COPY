@@ -32,6 +32,7 @@ protected:
 	monStat stat;
 	FLOAT x, y, z;
 	FLOAT fromX, fromY, fromZ;//스킬사용시 이동하는것
+	FLOAT backupx, backupz;
 	FLOAT destX, destY, destZ;
 	FLOAT moveSpeedX, moveSpeedZ;
 	FLOAT moveSpeedMaxX, moveSpeedMaxZ;
@@ -82,6 +83,7 @@ protected:
 public:
 	bool isDead;
 	virtual HRESULT init();
+	virtual void reset() {};
 	virtual void update();
 	virtual void render();
 	virtual void renderdc();
