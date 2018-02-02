@@ -6,10 +6,6 @@ HRESULT goblin_thrower::init()
 {
 	goblin_base::init();
 	sprintf(stat.name, "투석 고블린");
-	x = rand() % curMap->getWidth();
-	y = 0;
-	int range = WINSIZEY - 350;
-	z = (rand() % range + 350) * 2;
 
 	aggressive = 60;
 	atkcooldown = 1000;
@@ -25,12 +21,15 @@ HRESULT goblin_thrower::init()
 	stat.dmgmin = 100;
 	stat.dmgmax = 150;
 
+	dropItems.clear();
 	Item it = itemList.find("블루베리")->second;
 	it.stack = 1;
 	dropItems.push_back(it);
 	it = itemList.find("라미화 잎")->second;
 	it.stack = 1;
 	dropItems.push_back(it);
+	//it = itemList.find("사이포스")->second;
+	//dropItems.push_back(it);
 	return S_OK;
 }
 
@@ -42,14 +41,6 @@ HRESULT goblin_thrower::init(int x, int z)
 	backupx = x;
 	backupz = z;
 	return S_OK;
-}
-
-void goblin_thrower::reset()
-{
-	x = backupx;
-	z = backupz;
-	stat.curHP = stat.maxHP;
-	curStatus = mon_Idle;
 }
 
 void goblin_thrower::update()

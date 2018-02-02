@@ -6,10 +6,6 @@ HRESULT TauAssaulter::init()
 {
 	Tau_Base::init();
 	sprintf(stat.name, "타우 어설터");
-	x = rand() % curMap->getWidth();
-	y = 0;
-	int range = WINSIZEY - 350;
-	z = (rand() % range + 350) * 2;
 
 	aggressive = 80;
 	atkcooldown = 1000;
@@ -26,6 +22,7 @@ HRESULT TauAssaulter::init()
 	stat.dmgmin = 250;
 	stat.dmgmax = 400;
 
+	dropItems.clear();
 	Item it = itemList.find("타코야끼")->second;
 	it.stack = 1;
 	dropItems.push_back(it);

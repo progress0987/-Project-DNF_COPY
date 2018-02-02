@@ -140,6 +140,9 @@ HRESULT Village::init()
 
 void Village::update()
 {
+	if (!SOUNDMANAGER->isPlaySound("BGM_마을")) {
+		playBGM("BGM_마을");
+	}
 	count++;
 	showSmoke();
 	showFlame();

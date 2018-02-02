@@ -24,6 +24,9 @@ HRESULT goblin_base::init()
 	wakeupfrom = wakeupto = 10;
 	walkfrom = 11;
 	walkto = 16;
+	y = 0;
+	deadSound = "몬스터_고블린_사망";
+	hitSound = "몬스터_고블린_피격";
 	return S_OK;
 }
 

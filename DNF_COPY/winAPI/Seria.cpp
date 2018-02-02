@@ -51,6 +51,9 @@ HRESULT Seria::init()
 
 void Seria::update()
 {
+	if (!SOUNDMANAGER->isPlaySound("BGM_技府酒")) {
+		playBGM("BGM_技府酒");
+	}
 	seria.update();
 	MapBase::update();
 }

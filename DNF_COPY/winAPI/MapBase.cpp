@@ -180,11 +180,6 @@ void MapBase::resetMonsters()
 	//else {
 	//	curMap->resetMonsters();
 	//}
-	monsterList.clear();
-	for (vector<MonsterBase*>::iterator i = monsterBackup.begin(); i != monsterBackup.end(); i++) {
-		(*i)->reset();
-		monsterList.push_back(*i);
-	}
 }
 
 int MapBase::aboveItem(FLOAT x, FLOAT z)

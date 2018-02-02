@@ -104,7 +104,7 @@ HRESULT mainGame::init(void)
 	mirkwood->setPlayer(pl);
 	mirkwood->init();
 
-	pl->setCurScene(mirkwood);/////////////////////////////////////////////////현재맵설정
+	pl->setCurScene(seriaRoom);/////////////////////////////////////////////////현재맵설정
 	pl->init();
 
 
@@ -121,7 +121,7 @@ HRESULT mainGame::init(void)
 
 
 	dunselected = -1;
-	onOpening = false;///////////////////////////////////////////////////오프닝플레이
+	onOpening = true;///////////////////////////////////////////////////오프닝플레이
 	openingPhase = 0;
 	openingTick = 0;
 
@@ -160,7 +160,7 @@ HRESULT mainGame::init(void)
 	 if (KEYMANAGER->isOnceKeyUp(VK_RBUTTON)) {
 		 rclicked = false;
 	 }
-	 if (!showDungeonSelect || !showDungeonMoveScene) {
+	 if (!showDungeonSelect && !showDungeonMoveScene&&!onOpening) {
 		 pl->update();
 		 pl->getCurMap()->update();
 	 }
@@ -176,6 +176,7 @@ HRESULT mainGame::init(void)
 		 dunmovetick++;
 		 if (dunmovetick > 800) {
 			 showDungeonMoveScene = false;
+			 playBGM("BGM_던전_일반");
 		 }
 	 }
 	 if (showDungeonSelect) {
@@ -254,7 +255,7 @@ HRESULT mainGame::init(void)
 			 }
 			 g_pd3dSprite->End();
 		 }
-		 if (!showDungeonSelect) {
+		 if (!showDungeonSelect&&!showDungeonMoveScene&&!onOpening) {
 			 g_pd3dSurface->GetDC(&hdc);
 			 paintDC();
 			 g_pd3dSurface->ReleaseDC(hdc);
@@ -446,6 +447,7 @@ HRESULT mainGame::init(void)
 	 IMAGEMANAGER->addImage("UI_하단_기본창", "sprites/UI/hud.img/0.png");
 	 IMAGEMANAGER->addImage("UI_하단_기본창_확장", "sprites/UI/hud.img/133.png");
 	 IMAGEMANAGER->addImage("UI_하단_기본창_조각", "sprites/UI/hud.img/134.png");
+	 IMAGEMANAGER->addImage("UI_하단_경험치", "sprites/UI/hud.img/4.png");
 	 IMAGEMANAGER->addImage("UI_HP", "sprites/UI/hud.img/1.png");
 	 IMAGEMANAGER->addImage("UI_MP", "sprites/UI/hud.img/2.png");
 
@@ -1083,6 +1085,21 @@ HRESULT mainGame::init(void)
 	 SOUNDMANAGER->addSound("UI_아이템획득", "Sounds/UI/get_item.ogg", false, false);
 	 SOUNDMANAGER->addSound("UI_이어하기", "Sounds/UI/coin_in.ogg", false, false);
 
+	 SOUNDMANAGER->addSound("몬스터_고블린_사망", "Sounds/monster/goblin/gbn_die_01.ogg", false, false);
+	 SOUNDMANAGER->addSound("몬스터_고블린_피격", "Sounds/monster/goblin/gbn_dmg_03.ogg", false, false);
+	 SOUNDMANAGER->addSound("몬스터_고블린_투척", "Sounds/monster/goblin/gbn_thw.ogg", false, false);
+
+	 //////////////////////////////////////BGM
+
+
+	 SOUNDMANAGER->addSound("BGM_마을", "Sounds/bgm/hendonmyre.ogg", true, true);
+	 bgmNames.push_back("BGM_마을");
+	 SOUNDMANAGER->addSound("BGM_던전_일반", "Sounds/bgm/mirkwood.ogg", true, true);
+	 bgmNames.push_back("BGM_던전_일반");
+	 SOUNDMANAGER->addSound("BGM_던전_보스", "Sounds/bgm/mirkwood_boss.ogg", true, true);
+	 bgmNames.push_back("BGM_던전_보스");
+	 SOUNDMANAGER->addSound("BGM_세리아", "Sounds/bgm/seria_gate.ogg", true, true);
+	 bgmNames.push_back("BGM_세리아");
 
  }
 

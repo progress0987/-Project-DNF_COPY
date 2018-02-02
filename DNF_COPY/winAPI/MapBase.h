@@ -101,11 +101,11 @@ public:
 	virtual void setMinZ(int a) { minZ = a; }
 	virtual void setMaxZ(int a) { maxZ = a; }
 	virtual void resetDungeon() {};
+	virtual void resetMonsters();
 
 	void setPeaceful(bool p) { peaceful = p; }
 	void setRunnable(bool r) { runnable = r; }
 	void setAttackable(bool a) { attackable = a; }
-	void resetMonsters();
 	int aboveItem(FLOAT x, FLOAT z);
 	DropItemStruct rootItem(FLOAT x, FLOAT z);
 	Item* adddroppedItem(Item t) { droppedItemList.push_back(t);return &droppedItemList.back(); }

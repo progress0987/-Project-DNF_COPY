@@ -15,6 +15,8 @@ HRESULT NPC_Linus::init()
 	isMerchant = false;
 	Merchant.clear();
 	Merchant.push_back(itemList.find("일반검")->second);
+	//Merchant.push_back(itemList.find("디아볼리카")->second);
+	//Merchant.push_back(itemList.find("사이포스")->second);
 	Merchant.push_back(itemList.find("창성의 구원자 - 소검")->second);
 	Merchant.push_back(itemList.find("메탈라인 아머 상의")->second);
 	Merchant.push_back(itemList.find("메탈라인 아머 하의")->second);

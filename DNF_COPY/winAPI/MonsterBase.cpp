@@ -117,6 +117,7 @@ void MonsterBase::update()
 					hit.x = x;
 					hit.y = y + translate(z)-100;//머리위쪽으로 출력하기위함
 					hitQueue.push_back(hit);
+					SOUNDMANAGER->play(hitSound);
 				}
 				if (hitYvel < 0) {
 					onAir = true; curStatus = mon_Falldown; frame = falldownfrom;
@@ -241,6 +242,7 @@ void MonsterBase::update()
 		deadcount++;
 		if (deadcount >= 128) {
 			//사망처리 완료
+			SOUNDMANAGER->play(deadSound);
 			pl->gainEXP(expamount);
 			//여기서 아이템드롭!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			for (vector<Item>::iterator i = dropItems.begin(); i != dropItems.end(); i++) {

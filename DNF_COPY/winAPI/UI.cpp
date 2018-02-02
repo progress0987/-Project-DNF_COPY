@@ -388,6 +388,7 @@ void UI::update(void)
 	if (pl->getCurMap()->showresult) {
 		if (PtInRect(&RectMake(WINSIZEX - 300 + 67, 167, 165, 23), ptMouse)&&clicked) {
 			pl->reset = true;
+			playBGM("BGM_마을");
 		}
 	}
 }
@@ -400,6 +401,8 @@ void UI::render(void)
 	IMAGEMANAGER->findImage("UI_하단_기본창_조각")->DFuirender(0, WINSIZEY- IMAGEMANAGER->findImage("UI_하단_기본창_조각")->getHeight());
 	IMAGEMANAGER->findImage("UI_하단_기본창")->DFuirender(0, UI_top);
 	IMAGEMANAGER->findImage("UI_하단_기본창_확장")->DFuirender(508, UI_top);
+	float t_width = (((float)pl->getStatus().curEXP / (float)pl->getStatus().reqEXP) + 0.000000001f)*IMAGEMANAGER->findImage("UI_하단_경험치")->getWidth();
+	IMAGEMANAGER->findImage("UI_하단_경험치")->render(102,WINSIZEY - 6,0,0, t_width,3);
 
 	IMAGEMANAGER->findImage("UI_HP")->render(35, UI_top+9 + (IMAGEMANAGER->findImage("UI_HP")->getHeight() *(1-(float)pl->Stat.curHP / (float)pl->Stat.maxHP)),0,IMAGEMANAGER->findImage("UI_HP")->getHeight() * (1.f-((float)pl->Stat.curHP/(float)pl->Stat.maxHP)),0, IMAGEMANAGER->findImage("UI_HP")->getHeight() * (float)pl->Stat.curHP/(float)pl->Stat.maxHP);
 	IMAGEMANAGER->findImage("UI_MP")->render(730, UI_top+9 + (IMAGEMANAGER->findImage("UI_MP")->getHeight() *(1 - (float)pl->Stat.curMP / (float)pl->Stat.maxMP)), 0, IMAGEMANAGER->findImage("UI_MP")->getHeight() * (1.f - ((float)pl->Stat.curMP / (float)pl->Stat.maxMP)), 0, IMAGEMANAGER->findImage("UI_MP")->getHeight() * (float)pl->Stat.curMP / (float)pl->Stat.maxMP);
@@ -991,6 +994,48 @@ void UI::renderdc(void)
 
 	//Rectangle(hdc, qa.left, qa.top, qa.right, qa.bottom);
 	//Rectangle(hdc, qq.left, qq.top, qq.right, qq.bottom);
+
+	if (!showStat&&!showShop) {
+		sprintf(test, "lv %d %s", pl->getStatus().level, "테스트");
+		d3dFont->DrawTextA(
+			NULL,
+			test,
+			-1,
+			&RectMakeCenter(pl->getX() - cam.x, pl->getY() + translate(pl->getZ()) - 120 - cam.y, strlen(test) * 10, 10),
+			DT_CENTER | DT_VCENTER,
+			D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	}
+
+	int UI_top = WINSIZEY - IMAGEMANAGER->findImage("UI_하단_기본창")->getHeight();
+	sprintf(test, "%d / %d",pl->getStatus().curEXP,pl->getStatus().reqEXP);
+	d3dFont->DrawTextA(
+		NULL,
+		test,
+		-1,
+		&RectMakeCenter(WINSIZEX / 2, WINSIZEY - 10, strlen(test)*10, 10),
+		DT_CENTER | DT_VCENTER,
+		D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+
+	int amount = ((float)pl->getStatus().curHP / (float)pl->getStatus().maxHP) * 100;
+	sprintf(test, "%d%%", amount);
+	d3dFont->DrawTextA(
+		NULL,
+		test,
+		-1,
+		&RectMake(40, UI_top + 17, 45, 44),
+		DT_CENTER|DT_VCENTER,
+		D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+	amount = ((float)pl->getStatus().curMP / (float)pl->getStatus().maxMP) * 100;
+	sprintf(test, "%d%%", amount);
+	d3dFont->DrawTextA(
+		NULL,
+		test,
+		-1,
+		&RectMake(736,UI_top + 17,45,44),
+		DT_CENTER|DT_VCENTER,
+		D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+
+
 	if (showInv) {
 
 #pragma region 돈 출력부분
@@ -1514,8 +1559,8 @@ void UI::renderdc(void)
 				test,
 				-1,
 				&q1,
-				DT_LEFT | DT_TOP,
-				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+				DT_RIGHT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
 	if (pl->getQuick2().id > 0) {
@@ -1526,8 +1571,8 @@ void UI::renderdc(void)
 				test,
 				-1,
 				&q2,
-				DT_LEFT | DT_TOP,
-				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+				DT_RIGHT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
 	if (pl->getQuick3().id > 0) {
@@ -1538,8 +1583,8 @@ void UI::renderdc(void)
 				test,
 				-1,
 				&q3,
-				DT_LEFT | DT_TOP,
-				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+				DT_RIGHT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
 	if (pl->getQuick4().id > 0) {
@@ -1550,8 +1595,8 @@ void UI::renderdc(void)
 				test,
 				-1,
 				&q4,
-				DT_LEFT | DT_TOP,
-				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+				DT_RIGHT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
 	if (pl->getQuick5().id > 0) {
@@ -1562,8 +1607,8 @@ void UI::renderdc(void)
 				test,
 				-1,
 				&q5,
-				DT_LEFT | DT_TOP,
-				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+				DT_RIGHT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
 	if (pl->getQuick6().id > 0) {
@@ -1574,8 +1619,8 @@ void UI::renderdc(void)
 				test,
 				-1,
 				&q6,
-				DT_LEFT | DT_TOP,
-				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+				DT_RIGHT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
 }

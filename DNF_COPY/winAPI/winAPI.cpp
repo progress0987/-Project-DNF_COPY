@@ -25,6 +25,7 @@ vector<string> itemNames;
 bool onDebug;
 bool clicked;
 bool lstay;
+vector<string> bgmNames;
 bool rclicked;
 ////////////////////////////////////////전역변수들
 

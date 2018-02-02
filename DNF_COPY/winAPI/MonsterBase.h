@@ -77,13 +77,22 @@ protected:
 	MapBase* curMap;
 	RECT terColRect;
 	bool printblood;
+	string hitSound;
+	string deadSound;
 	vector<string> effectNames;
 	list<HitQueue> hitQueue;
 	vector<Item> dropItems;
 public:
 	bool isDead;
 	virtual HRESULT init();
-	virtual void reset() {};
+	void reset() {
+		init();
+		x = backupx;
+		z = backupz;
+		stat.curHP = stat.maxHP;
+		curStatus = mon_Idle;
+		isDead = false;
+	};
 	virtual void update();
 	virtual void render();
 	virtual void renderdc();

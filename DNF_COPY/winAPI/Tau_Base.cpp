@@ -19,6 +19,7 @@ HRESULT Tau_Base::init()
 	walkto = 27;
 	skill2from = 28;
 	skill2to = 31;
+	y = 0;
 	return S_OK;
 }
 

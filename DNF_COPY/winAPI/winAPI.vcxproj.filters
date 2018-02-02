@@ -127,6 +127,9 @@
     <Filter Include="MainGame\Enemy\Monster\Tau">
       <UniqueIdentifier>{bb840a85-dca5-4108-bf5f-e489d44f38d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Map\Dungeon\lorienDeep">
+      <UniqueIdentifier>{5424545a-060c-4cad-97a2-7383f69ffd05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -342,12 +345,12 @@
     <ClInclude Include="goblin_thrower.h">
       <Filter>MainGame\Enemy\Monster\goblin</Filter>
     </ClInclude>
+    <ClInclude Include="lorienDeep.h">
+      <Filter>MainGame\Map\Dungeon\lorienDeep</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="winAPI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="gameNode.cpp">
@@ -532,6 +535,12 @@
     </ClCompile>
     <ClCompile Include="goblin_thrower.cpp">
       <Filter>MainGame\Enemy\Monster\goblin</Filter>
+    </ClCompile>
+    <ClCompile Include="winAPI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="lorienDeep.cpp">
+      <Filter>MainGame\Map\Dungeon\lorienDeep</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -118,6 +118,15 @@ extern bool lstay;
 extern bool rclicked;
 
 
+extern vector<string> bgmNames;
+static void playBGM(string bgm) {
+	for (vector<string>::iterator i = bgmNames.begin(); i != bgmNames.end(); i++) {
+		SOUNDMANAGER->stop(*i);
+	}
+	SOUNDMANAGER->play(bgm);
+}
+
+
 static FLOAT translate(FLOAT zval)
 {
 	FLOAT transVal = zval / 2;

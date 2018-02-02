@@ -11,7 +11,7 @@ void mainGame::initItems()
 			it.id = -1;
 			it.name = "무기없음";
 			it.reachx = 140;
-			it.reachz = 140;
+			it.reachz = 110;
 			it.phydmgmin = 5;
 			it.phydmgmax = 10;
 			it.magdmgmin = 5;
@@ -42,27 +42,70 @@ void mainGame::initItems()
 			it.reachz = 150;
 			it.branch = 1;
 			it.reqlvl = 5;
+			it.price = 1200000;
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
 		//일반검
 		{
-			it.id = 146;
+			it.id = 25;
 			it.name = "일반검";
 			itemNames.push_back(it.name);
-			sprintf(it.imgName, "sswd4400");
+			sprintf(it.imgName, "bswd0100");
 			it.type = item_weapon;
 			it.detail = wp_sswd;
 			it.phydmgmin = 100;
-			it.phydmgmax = 300;
-			it.magdmgmin = 50;
-			it.magdmgmax = 150;
-			it.reachx = 180;
-			it.reachz = 150;
-			it.reqlvl = 5;
+			it.phydmgmax = 120;
+			it.magdmgmin = 70;
+			it.magdmgmax = 100;
+			it.reachx = 150;
+			it.reachz = 120;
+			it.branch = 1;
+			it.reqlvl = 3;
+			it.price = 300;
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
+		//// 디아볼리카
+		//{
+		//	it.id = 29;
+		//	it.name = "디아볼리카";
+		//	itemNames.push_back(it.name);
+		//	sprintf(it.imgName, "bswd0100");
+		//	it.type = item_weapon;
+		//	it.detail = wp_sswd;
+		//	it.phydmgmin = 120;
+		//	it.phydmgmax = 150;
+		//	it.magdmgmin = 120;
+		//	it.magdmgmax = 200;
+		//	it.reachx = 150;
+		//	it.reachz = 120;
+		//	it.branch = 5;
+		//	it.reqlvl = 30;
+		//	it.price = 50000;
+		//	itemList.insert(make_pair(it.name, it));
+		//	it = Item();
+		//}
+		//// 사이포스
+		//{
+		//	it.id = 26;
+		//	it.name = "사이포스";
+		//	itemNames.push_back(it.name);
+		//	sprintf(it.imgName, "bswd0100");
+		//	it.type = item_weapon;
+		//	it.detail = wp_sswd;
+		//	it.phydmgmin = 100;
+		//	it.phydmgmax = 150;
+		//	it.magdmgmin = 200;
+		//	it.magdmgmax = 250;
+		//	it.reachx = 150;
+		//	it.reachz = 120;
+		//	it.branch = 3;
+		//	it.reqlvl = 5;
+		//	it.price = 15000;
+		//	itemList.insert(make_pair(it.name, it));
+		//	it = Item();
+		//}
 		//메탈라인 아머 상의
 		{
 			it.id = 66;

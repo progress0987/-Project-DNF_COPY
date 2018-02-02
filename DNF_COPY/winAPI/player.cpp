@@ -35,12 +35,12 @@ HRESULT player::init(void)
 	}
 
 	rootItem(itemList.find("일반검")->second);
-	rootItem(itemList.find("창성의 구원자 - 소검")->second);
-	rootItem(itemList.find("메탈라인 아머 상의")->second);
-	rootItem(itemList.find("메탈라인 아머 하의")->second);
-	rootItem(itemList.find("메탈라인 아머 어깨")->second);
-	rootItem(itemList.find("메탈라인 아머 벨트")->second);
-	rootItem(itemList.find("메탈라인 아머 신발")->second);
+	//rootItem(itemList.find("창성의 구원자 - 소검")->second);
+	//rootItem(itemList.find("메탈라인 아머 상의")->second);
+	//rootItem(itemList.find("메탈라인 아머 하의")->second);
+	//rootItem(itemList.find("메탈라인 아머 어깨")->second);
+	//rootItem(itemList.find("메탈라인 아머 벨트")->second);
+	//rootItem(itemList.find("메탈라인 아머 신발")->second);
 
 	for (int i = 0; i < 10; i++) {
 		rootItem(itemList.find("블루베리")->second);
@@ -482,7 +482,7 @@ void player::update(void)
 
 
 			if (KEYMANAGER->isOnceKeyDown('X')) {
-				if (curMap->aboveItem(x, z)) {
+				if (y==0&&curMap->aboveItem(x, z)) {
 					frame = stance_sit;
 					curStance = stance_sit;
 					DropItemStruct it = curMap->rootItem(x, z);
@@ -594,6 +594,13 @@ void player::update(void)
 				//onDebug = !onDebug;
 				//levelupEffect = true;
 				//onLevelup = true;
+
+				rootItem(itemList.find("창성의 구원자 - 소검")->second);
+				rootItem(itemList.find("메탈라인 아머 상의")->second);
+				rootItem(itemList.find("메탈라인 아머 하의")->second);
+				rootItem(itemList.find("메탈라인 아머 어깨")->second);
+				rootItem(itemList.find("메탈라인 아머 벨트")->second);
+				rootItem(itemList.find("메탈라인 아머 신발")->second);
 			}
 			//if (KEYMANAGER->isOnceKeyDown('V')) {
 			//	test = !test;

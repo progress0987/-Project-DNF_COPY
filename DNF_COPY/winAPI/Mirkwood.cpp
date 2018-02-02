@@ -415,6 +415,7 @@ void Mirkwood::resetDungeon()
 {
 	for (vector<MapBase*>::iterator i = Maps.begin(); i != Maps.end(); i++) {
 		(*i)->resetMonsters();
+		(*i)->resetDungeon();
 	}
 }
 
@@ -466,10 +467,14 @@ void MirkwoodMap::update()
 	MapBase::update();
 	if (playendsound && !SOUNDMANAGER->isPlaySound("효과_결과출력") ) {
 		SOUNDMANAGER->play("효과_결과출력");
+		SOUNDMANAGER->stop("BGM_던전_보스");
 		playedendsound = true;
 		playendsound = false;
 	}
 	if (isBossMap) {
+		if (!SOUNDMANAGER->isPlaySound("BGM_던전_보스")&&!playedendsound) {
+			playBGM("BGM_던전_보스");
+		}
 		if (Boss->getCurStat() == mon_onDead) {
 			if(!playedendsound&&!playendsound)		playendsound = true;
 			showresult = true;
@@ -477,6 +482,10 @@ void MirkwoodMap::update()
 				(*i)->setCurStat(mon_onDeadProcess);
 			}
 		}
+	}
+	else {
+		if (!SOUNDMANAGER->isPlaySound("BGM_던전_일반"))
+			playBGM("BGM_던전_일반");
 	}
 }
 
@@ -647,8 +656,24 @@ void MirkwoodMap::renderdc()
 
 void MirkwoodMap::resetMonsters()
 {
-	for (vector<MonsterBase*>::iterator i = monsterBackup.begin();i!=monsterBackup.end();i++){
+	monsterList.clear();
+	for (vector<MonsterBase*>::iterator i = monsterBackup.begin(); i != monsterBackup.end(); i++) {
 		(*i)->reset();
+		monsterList.push_back(*i);
+	}
+}
+
+void MirkwoodMap::resetDungeon()
+{
+
+	dropList.clear();
+	movable = false;
+	peaceful = false;
+	runnable = true;
+	attackable = true;
+	showresult = playendsound = playedendsound = false;
+	for (int i = 0; i < 4; i++) {
+		Gates[i].movable = false;
 	}
 }
 

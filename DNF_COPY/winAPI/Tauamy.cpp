@@ -6,10 +6,6 @@ HRESULT Tau::init()
 {
 	Tau_Base::init();
 	sprintf(stat.name, "타우 아미");
-	x = rand() % curMap->getWidth();
-	y = 0;
-	int range = WINSIZEY - 350;
-	z = (rand() % range + 350) * 2;
 
 	aggressive = 80;
 	atkcooldown = 1000;
@@ -28,11 +24,14 @@ HRESULT Tau::init()
 
 	//드랍아이템 설정
 
+	dropItems.clear();
 	Item it = itemList.find("블루베리")->second;
 	it.stack = 1;
 	dropItems.push_back(it);
 	it = itemList.find("라미화 잎")->second;
 	it.stack = 1;
+	dropItems.push_back(it);
+	it = itemList.find("디아볼리카")->second;
 	dropItems.push_back(it);
 	return S_OK;
 }
