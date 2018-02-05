@@ -81,7 +81,7 @@ void firewave::update()
 			atk.isOnetime = true;
 			atk.isProjectile = false;
 			atk.area.miny = -170; atk.area.maxy = 0;
-			atk.area.minz = f.z - 300; atk.area.maxz = f.z + 300;
+			atk.area.minz = f.z - 100; atk.area.maxz = f.z + 100;
 			atk.area.maxx = head ? f.x + 300 : f.x+10;
 			atk.area.minx = head ? f.x-10 : f.x - 300;
 			atk.pushX = head? 1.5f : -1.5f;

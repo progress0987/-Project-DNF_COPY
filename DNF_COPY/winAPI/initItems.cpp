@@ -66,6 +66,7 @@ void mainGame::initItems()
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
+
 		//// µð¾Æº¼¸®Ä«
 		//{
 		//	it.id = 29;
@@ -106,6 +107,7 @@ void mainGame::initItems()
 		//	itemList.insert(make_pair(it.name, it));
 		//	it = Item();
 		//}
+
 		//¸ÞÅ»¶óÀÎ ¾Æ¸Ó »óÀÇ
 		{
 			it.id = 66;
@@ -118,6 +120,7 @@ void mainGame::initItems()
 			it.gainSpirit = 110;
 			it.phydef = 7286;
 			it.reqlvl = 5;
+			it.price = 300000;
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
@@ -133,6 +136,7 @@ void mainGame::initItems()
 			it.gainSpirit = 110;
 			it.phydef = 3698;
 			it.reqlvl = 5;
+			it.price = 250000;
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
@@ -148,6 +152,7 @@ void mainGame::initItems()
 			it.gainSpirit = 110;
 			it.phydef = 4914;
 			it.reqlvl = 5;
+			it.price = 200000;
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
@@ -163,6 +168,7 @@ void mainGame::initItems()
 			it.gainSpirit = 110;
 			it.phydef = 2532;
 			it.reqlvl = 5;
+			it.price = 200000;
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}
@@ -178,6 +184,130 @@ void mainGame::initItems()
 			it.gainSpirit = 110;
 			it.phydef = 3698;
 			it.reqlvl = 5;
+			it.price = 200000;
+			itemList.insert(make_pair(it.name, it));
+			it = Item();
+		}
+
+
+		//³°Àº ÆÇ±Ý°©¿Ê »óÀÇ
+		{
+			it.id = 1;
+			it.name = "³°Àº ÆÇ±Ý°©¿Ê »óÀÇ";
+			it.type = item_coat;
+			it.detail = arm_plate;
+			it.gainStr = 5;
+			it.gainInt = 5;
+			it.gainHealth = 5;
+			it.gainSpirit = 5;
+			it.phydef = 500;
+			it.reqlvl = 1;
+			it.price = 1000;
+			itemList.insert(make_pair(it.name, it));
+			it = Item();
+		}
+		//³°Àº ÆÇ±Ý°©¿Ê ÇÏÀÇ
+		{
+			it.id = 1;
+			it.name = "³°Àº ÆÇ±Ý°©¿Ê ÇÏÀÇ";
+			it.type = item_pants;
+			it.detail = arm_plate;
+			it.gainStr = 5;
+			it.gainInt = 5;
+			it.gainHealth = 5;
+			it.gainSpirit = 5;
+			it.phydef = 300;
+			it.reqlvl = 1;
+			it.price = 800;
+			itemList.insert(make_pair(it.name, it));
+			it = Item();
+		}
+		//³°Àº ÆÇ±Ý°©¿Ê ¾î±ú
+		{
+			it.id = 1;
+			it.name = "³°Àº ÆÇ±Ý°©¿Ê ¾î±ú";
+			it.type = item_shoulder;
+			it.detail = arm_plate;
+			it.gainStr = 4;
+			it.gainInt = 4;
+			it.gainHealth = 4;
+			it.gainSpirit = 4;
+			it.phydef = 250;
+			it.reqlvl = 1;
+			it.price = 500;
+			itemList.insert(make_pair(it.name, it));
+			it = Item();
+		}
+		//³°Àº ÆÇ±Ý°©¿Ê º§Æ®
+		{
+			it.id = 1;
+			it.name = "³°Àº ÆÇ±Ý°©¿Ê º§Æ®";
+			it.type = item_belt;
+			it.detail = arm_plate;
+			it.gainStr = 3;
+			it.gainInt = 3;
+			it.gainHealth = 3;
+			it.gainSpirit = 3;
+			it.phydef = 300;
+			it.reqlvl = 1;
+			it.price = 500;
+			itemList.insert(make_pair(it.name, it));
+			it = Item();
+		}
+		//³°Àº ÆÇ±Ý°©¿Ê ½Å¹ß
+		{
+			it.id = 1;
+			it.name = "³°Àº ÆÇ±Ý°©¿Ê ½Å¹ß";
+			it.type = item_shoes;
+			it.detail = arm_plate;
+			it.gainStr = 3;
+			it.gainInt = 3;
+			it.gainHealth = 3;
+			it.gainSpirit = 3;
+			it.phydef = 400;
+			it.reqlvl = 1;
+			it.price = 500;
+			itemList.insert(make_pair(it.name, it));
+			it = Item();
+		}
+
+
+		//³°Àº ¸ñ°ÉÀÌ
+		{
+			it.id = 50;
+			it.name = "³°Àº ¸ñ°ÉÀÌ";
+			it.type = item_necklace;
+			it.gainInt = 3;
+			it.gainSpirit = 3;
+			it.magdef = 250;
+			it.reqlvl = 1;
+			it.price = 1000;
+			itemList.insert(make_pair(it.name, it));
+			it = Item();
+		}
+		//³°Àº ¹ÝÁö
+		{
+			it.id = 1;
+			it.name = "³°Àº ¹ÝÁö";
+			it.type = item_ring;
+			it.gainInt = 3;
+			it.gainStr = 3;
+			it.magdef = 250;
+			it.reqlvl = 1;
+			it.price = 1000;
+			itemList.insert(make_pair(it.name, it));
+			it = Item();
+		}
+		//³°Àº ÆÈÂî
+		{
+			it.id = 46;
+			it.name = "³°Àº ÆÈÂî";
+			it.type = item_braclet;
+			it.gainStr = 3;
+			it.gainHealth = 3;
+			it.magdef = 250;
+			it.reqlvl = 1;
+			it.price = 1000;
 			itemList.insert(make_pair(it.name, it));
 			it = Item();
 		}

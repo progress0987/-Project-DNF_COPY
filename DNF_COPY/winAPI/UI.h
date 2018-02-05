@@ -15,7 +15,7 @@ private:
 	RECT inv, stat, shop;
 	RECT shopClose;
 	RECT shopItemRC[12];
-	RECT Weapon, Armor, Shoulder, Pants, Belt, Shoes;
+	RECT Weapon, Armor, Shoulder, Pants, Belt, Shoes, Necklace, Braclet, Ring;
 	RECT q1, q2, q3, q4, q5, q6;
 	RECT qa, qs, qd, qf, qg, qh, qq, qw, qe, qr, qt;
 	RECT tabEquip, tabConsume;

@@ -29,6 +29,12 @@ HRESULT TauAssaulter::init()
 	it = itemList.find("¼¤ÆäÀÎ")->second;
 	it.stack = 1;
 	dropItems.push_back(it);
+	it = itemList.find("³°Àº ¸ñ°ÉÀÌ")->second;
+	dropItems.push_back(it);
+	it = itemList.find("³°Àº ÆÈÂî")->second;
+	dropItems.push_back(it);
+	it = itemList.find("³°Àº ¹ÝÁö")->second;
+	dropItems.push_back(it);
 
 	return S_OK;
 }

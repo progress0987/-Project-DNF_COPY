@@ -17,12 +17,14 @@ HRESULT NPC_Linus::init()
 	Merchant.push_back(itemList.find("ÀÏ¹Ý°Ë")->second);
 	//Merchant.push_back(itemList.find("µð¾Æº¼¸®Ä«")->second);
 	//Merchant.push_back(itemList.find("»çÀÌÆ÷½º")->second);
-	Merchant.push_back(itemList.find("Ã¢¼ºÀÇ ±¸¿øÀÚ - ¼Ò°Ë")->second);
-	Merchant.push_back(itemList.find("¸ÞÅ»¶óÀÎ ¾Æ¸Ó »óÀÇ")->second);
-	Merchant.push_back(itemList.find("¸ÞÅ»¶óÀÎ ¾Æ¸Ó ÇÏÀÇ")->second);
-	Merchant.push_back(itemList.find("¸ÞÅ»¶óÀÎ ¾Æ¸Ó ¾î±ú")->second);
-	Merchant.push_back(itemList.find("¸ÞÅ»¶óÀÎ ¾Æ¸Ó º§Æ®")->second);
-	Merchant.push_back(itemList.find("¸ÞÅ»¶óÀÎ ¾Æ¸Ó ½Å¹ß")->second);
+	Merchant.push_back(itemList.find("³°Àº ÆÇ±Ý°©¿Ê »óÀÇ")->second);
+	Merchant.push_back(itemList.find("³°Àº ÆÇ±Ý°©¿Ê ÇÏÀÇ")->second);
+	Merchant.push_back(itemList.find("³°Àº ÆÇ±Ý°©¿Ê ¾î±ú")->second);
+	Merchant.push_back(itemList.find("³°Àº ÆÇ±Ý°©¿Ê º§Æ®")->second);
+	Merchant.push_back(itemList.find("³°Àº ÆÇ±Ý°©¿Ê ½Å¹ß")->second);
+	Merchant.push_back(itemList.find("³°Àº ¸ñ°ÉÀÌ")->second);
+	Merchant.push_back(itemList.find("³°Àº ÆÈÂî")->second);
+	Merchant.push_back(itemList.find("³°Àº ¹ÝÁö")->second);
 
 	x = 1821;
 	y = 325;

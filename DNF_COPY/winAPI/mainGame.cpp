@@ -58,6 +58,7 @@ HRESULT mainGame::init(void)
 	seriaRoom = new Seria;
 	village = new Village;
 	mirkwood = new Mirkwood;
+	loriendeep = new lorienDeep;
 
 
 	seriaRoom->init();
@@ -104,7 +105,10 @@ HRESULT mainGame::init(void)
 	mirkwood->setPlayer(pl);
 	mirkwood->init();
 
-	pl->setCurScene(seriaRoom);/////////////////////////////////////////////////ÇöÀç¸Ê¼³Á¤
+	loriendeep->setPlayer(pl);
+	loriendeep->init();
+
+	pl->setCurScene(mirkwood);/////////////////////////////////////////////////ÇöÀç¸Ê¼³Á¤
 	pl->init();
 
 
@@ -118,10 +122,11 @@ HRESULT mainGame::init(void)
 	dunName.push_back("´øÀü_¼±ÅÃ_ºô¸¶¸£Å©");
 
 	Maps.push_back(mirkwood);
+	Maps.push_back(loriendeep);
 
 
 	dunselected = -1;
-	onOpening = true;///////////////////////////////////////////////////¿ÀÇÁ´×ÇÃ·¹ÀÌ
+	onOpening = false;///////////////////////////////////////////////////¿ÀÇÁ´×ÇÃ·¹ÀÌ
 	openingPhase = 0;
 	openingTick = 0;
 
@@ -184,7 +189,15 @@ HRESULT mainGame::init(void)
 			 if (PtInRect(&dunRect[i], ptMouse)&&clicked) {
 				 clicked = false;
 				 if (i == dunselected) {
-					 if (i == 0) {																	//ÇÏ³ª¸¸ ³Ö¾î³ö¼­ ¾îÂ¿¼ö¾øÀÌ 0¸¸µÇ°ÔÇØ³õÀ½
+					 if (i == 0) {//·Î¸®¿£
+						 Maps[i]->resetDungeon();
+						 pl->setCurScene(Maps[i], 150, (WINSIZEY - 50) * 2);
+						 pl->setDirection(true);
+						 dunselected = -1;
+						 showDungeonSelect = false;
+						 showDungeonMoveScene = true;
+						 dunmovetick = 0;
+					 }else if (i == 1) {//·Î¸®¿£ ±íÀº°÷
 						 Maps[i]->resetDungeon();
 						 pl->setCurScene(Maps[i], 150, (WINSIZEY - 50) * 2);
 						 pl->setDirection(true);
@@ -1135,18 +1148,20 @@ HRESULT mainGame::init(void)
 	 switch (openingPhase) {
 	 case 0://¶³¾îÁö´Â°Í
 		 IMAGEMANAGER->findImage("¿ÀÇÁ´×_¹è°æ")->render(0,0);
-		 if (300<openingTick&&openingTick < 400) {
+		 if (300<openingTick&&openingTick < 350) {
 			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í_°­Á¶")->DFpointrender(13, 23,0,0,(300.f/(float)openingTick)*1.5f);
 		 }
-		 else if (400 <= openingTick && openingTick < 500) {
-			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í_¸ÕÁö")->DFpointrender(210, 114,0,0,openingTick/400.f);
+		 else if (350 <= openingTick && openingTick < 500) {
+			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í_¸ÕÁö")->DFpointrender(210, 114, 0, 0, openingTick / 350.f, 255 * ((float)(520 - openingTick) / 170.f));
 			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í")->render(237, 189);
 		 }
 		 else if (500 <= openingTick&&openingTick<510) {
+			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í_¸ÕÁö")->DFpointrender(210, 114, 0, 0, openingTick / 350.f, 255 * ((float)(520 - openingTick) / 170.f));
 			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í")->render(237, 189);
 			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í_ºû³²_1")->render(237, 189);
 		 }
 		 else if (510 <= openingTick && openingTick<520) {
+			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í_¸ÕÁö")->DFpointrender(210, 114, 0, 0, openingTick / 350.f, 255 * ((float)(520 - openingTick) / 170.f));
 			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í")->render(237, 189);
 			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í_ºû³²_2")->render(237, 189);
 		 }
@@ -1161,7 +1176,7 @@ HRESULT mainGame::init(void)
 	 case 1://µî±Þº¸¿©ÁÖ´Â°Í
 		 IMAGEMANAGER->findImage("¿ÀÇÁ´×_¹è°æ")->render(0, 0);
 		 if (900 < openingTick&&openingTick < 1000) {
-			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í")->DFpointrender(237, 189,0,0,1.f,255.f*(1000.f - (float)openingTick/100.f));
+			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_·Î°í")->DFpointrender(237, 189,0,0,1.f,255.f*((1000.f - (float)openingTick)/100.f));
 			 //900~1000 -> 1 ~ 0
 			 //1000 - openingtick / 100?
 		 }
@@ -1180,13 +1195,13 @@ HRESULT mainGame::init(void)
 		 if (1060 < openingTick&&openingTick<1076) {
 			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_µî±Þ")->DFpointrender(0, 0, 0, 0,1.f,(255.f * ((1076.f - (float)openingTick)*16.f -1)));
 		 }
-		 if (1076 <= openingTick) {
-			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_º×_4")->DFpointrender(237, 189, 0, 0);
+		 if (1120 <= openingTick&&openingTick<=1800) {
+			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_º×_4")->DFpointrender(153, 208, 0, 0);
 			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_µî±Þ")->render();
 		 }
 		 if (1800 < openingTick&&openingTick < 2000) {
-			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_º×_4")->DFpointrender(237, 189, 0, 0,1.f,255.f*(2000.f - (float)openingTick)/200.f);
-			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_µî±Þ")->DFpointrender(0,0,0,0,1.f,255.f*(2000.f - (float)openingTick)/200.f);
+			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_º×_4")->DFpointrender(153, 208, 0, 0,1.f,255.f*((2000.f - (float)openingTick))/200.f);
+			 IMAGEMANAGER->findImage("¿ÀÇÁ´×_µî±Þ")->DFpointrender(0,0,0,0,1.f,255.f*((2000.f - (float)openingTick))/200.f);
 
 		 }
 		 break;

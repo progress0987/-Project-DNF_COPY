@@ -30,7 +30,7 @@ public:
 	void render();
 	void renderz();
 	void renderdc();
-	void setBoss(MonsterBase *b) { Boss = b; };
+	void setBoss(MonsterBase *b) { Boss = b; isBossMap = true; };
 	void resetMonsters();
 	void resetDungeon();
 	void addMonster(MonsterBase* m) { monsterList.push_back(m); monsterBackup.push_back(m); }

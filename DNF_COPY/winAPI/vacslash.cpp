@@ -34,7 +34,7 @@ void vacslash::cast(FLOAT x, FLOAT y, FLOAT z)
 	curcharge = 0;
 	chargeFrame = fullchargeFrame = chargeStatus = 0;
 	sl.onshow = false;
-	SOUNDMANAGER->play("캐릭_스킬_충전");
+	playedchargesound = false;
 }
 
 void vacslash::update()
@@ -49,6 +49,10 @@ void vacslash::update()
 				if (curcharge > chargemax) {
 					chargeStatus = 1;
 					curcharge = chargemax;
+					if (!playedchargesound) {
+						SOUNDMANAGER->play("캐릭_스킬_충전");
+						playedchargesound = true;
+					}
 				}
 			}
 		}
@@ -114,7 +118,7 @@ void vacslash::update()
 	}
 	if (sl.onshow) {
 		sl.dmgtick++;
-		sl.x += (head?7:-7);
+		sl.x += (head?3:-3);
 		if (sl.dmgtick % 20 == 0) {
 			effectedOnTime atk;
 			atk.isCrit = rand() % 100 > 80 ? true : false;

@@ -225,6 +225,9 @@ public:
 	Item getBelt() { return Belt; }
 	Item getBoots() { return Boots; }
 	Item getShoes() { return Boots; }
+	Item getNecklace() { return Necklece; }
+	Item getBraclet() { return Bracelet; }
+	Item getRing() { return Ring; }
 	Item getQuick1() { return q1; }
 	Item getQuick2() { return q2; }
 	Item getQuick3() { return q3; }

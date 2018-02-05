@@ -77,17 +77,6 @@ HRESULT Mirkwood::init()
 		m1->addMonster(g);
 	}
 
-	//Tau* tau = new Tau();
-	//tau->setCurmap(m1);
-	//tau->init(800 + 100, WINSIZEY * 2 - 500);
-	//m1->addMonster(tau);
-
-	//TauAssaulter* ta = new TauAssaulter();
-	//ta->setCurmap(m1);
-	//ta->init(800 - 100, WINSIZEY * 2 - 300);
-	//m1->addMonster(ta);
-
-
 	t.rc = RectMake(1485, 390, 50, 50);
 	t.type = 0;
 	t.moveindex = 0;
@@ -388,7 +377,7 @@ HRESULT Mirkwood::init()
 	Maps.push_back(m3);
 	Maps.push_back(m4);
 
-	curMap = Maps[3];
+	curMap = Maps[0];
 	return S_OK;
 }
 

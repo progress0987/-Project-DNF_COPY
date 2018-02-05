@@ -356,9 +356,6 @@
     <ClCompile Include="gameNode.cpp">
       <Filter>2DGameFramework</Filter>
     </ClCompile>
-    <ClCompile Include="mainGame.cpp">
-      <Filter>MainGame</Filter>
-    </ClCompile>
     <ClCompile Include="KeyManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
@@ -541,6 +538,9 @@
     </ClCompile>
     <ClCompile Include="lorienDeep.cpp">
       <Filter>MainGame\Map\Dungeon\lorienDeep</Filter>
+    </ClCompile>
+    <ClCompile Include="mainGame.cpp">
+      <Filter>MainGame\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

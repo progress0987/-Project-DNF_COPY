@@ -117,7 +117,9 @@ void MonsterBase::update()
 					hit.x = x;
 					hit.y = y + translate(z)-100;//머리위쪽으로 출력하기위함
 					hitQueue.push_back(hit);
-					SOUNDMANAGER->play(hitSound);
+					if (!SOUNDMANAGER->isPlaySound(hitSound)) {
+						SOUNDMANAGER->play(hitSound);
+					}
 				}
 				if (hitYvel < 0) {
 					onAir = true; curStatus = mon_Falldown; frame = falldownfrom;

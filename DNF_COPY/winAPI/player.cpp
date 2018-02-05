@@ -35,6 +35,9 @@ HRESULT player::init(void)
 	}
 
 	rootItem(itemList.find("일반검")->second);
+	rootItem(itemList.find("낡은 목걸이")->second);
+	rootItem(itemList.find("낡은 팔찌")->second);
+	rootItem(itemList.find("낡은 반지")->second);
 	//rootItem(itemList.find("창성의 구원자 - 소검")->second);
 	//rootItem(itemList.find("메탈라인 아머 상의")->second);
 	//rootItem(itemList.find("메탈라인 아머 하의")->second);
@@ -106,11 +109,17 @@ void player::update(void)
 		/////////////////////////////////////////////////////////////////////////////////////////////////////체력/마력 적을때 회복, 회복효과
 		{
 			if (Stat.curMP < Stat.maxMP) {
+				if (!curMap->isRunnable()) {
+					Stat.curMP = Stat.maxMP;
+				}
 				if (tick % 20 == 0) {
 					Stat.curMP += 2;
 				}
 			}
 			if (Stat.curHP < Stat.maxHP) {
+				if (!curMap->isRunnable()) {
+					Stat.curHP = Stat.maxHP;
+				}
 				if (tick % 20 == 0) {
 					Stat.curHP += 3;
 				}
@@ -1020,15 +1029,15 @@ void player::render(void)
 void player::renderdc(void)
 {
 	//Rectangle(hdc, terColRect.left -cam.x, terColRect.top -cam.y, terColRect.right -cam.x, terColRect.bottom-cam.y);
-	char t[100];
-	sprintf(t, "x : %f y : %f z : %f z/2 : %f", x, y, z,z/2);
-	TextOut(hdc, 50, 100, t, strlen(t));
+	//char t[100];
+	//sprintf(t, "x : %f y : %f z : %f z/2 : %f", x, y, z,z/2);
+	//TextOut(hdc, 50, 100, t, strlen(t));
 
 	//POINT tmp;
 	//tmp.x = ptMouse.x + cam.x;
 	//tmp.y = ptMouse.y + cam.y;
-	sprintf(t, "x : %d y : %d", ptMouse.x+(int)cam.x, ptMouse.y+(int)cam.y);
-	TextOut(hdc, 50, 150, t, strlen(t));
+	//sprintf(t, "x : %d y : %d", ptMouse.x+(int)cam.x, ptMouse.y+(int)cam.y);
+	//TextOut(hdc, 50, 150, t, strlen(t));
 	//sprintf(t, "queuesize : %d", inputQueue.size());
 	//TextOut(hdc, 50, 200, t, strlen(t));
 
@@ -1396,6 +1405,48 @@ void player::useItem(int tab, int x, int y)
 				equipments[y * 8 + x] = t;
 			}
 			break;
+		case item_necklace:
+			if (Necklece.name == "없음") {
+				equipments[y * 8 + x].equipped = true;
+				Necklece = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
+			}
+			else {
+				Necklece.equipped = false;
+				Item t = Necklece;
+				equipments[y * 8 + x].equipped = true;
+				Necklece = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
+			}
+			break;
+		case item_braclet:
+			if (Bracelet.name == "없음") {
+				equipments[y * 8 + x].equipped = true;
+				Bracelet = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
+			}
+			else {
+				Bracelet.equipped = false;
+				Item t = Bracelet;
+				equipments[y * 8 + x].equipped = true;
+				Bracelet = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
+			}
+			break;
+		case item_ring:
+			if (Ring.name == "없음") {
+				equipments[y * 8 + x].equipped = true;
+				Ring = equipments[y * 8 + x];
+				equipments[y * 8 + x] = empty;
+			}
+			else {
+				Ring.equipped = false;
+				Item t = Ring;
+				equipments[y * 8 + x].equipped = true;
+				Ring = equipments[y * 8 + x];
+				equipments[y * 8 + x] = t;
+			}
+			break;
 		}
 		break;
 	case 1:
@@ -1431,10 +1482,10 @@ void player::useItem(int tab, int x, int y)
 	}
 
 
-	Stat.a_str		= Weapon. gainStr	+ Armor. gainStr	+ Shoulder.gainStr		+ Belt.gainStr		+ Pants. gainStr	+ Boots.gainStr	;
-	Stat.a_intel	= Weapon. gainInt	+ Armor. gainInt	+ Shoulder.gainInt		+ Belt.gainInt		+ Pants. gainInt	+ Boots.gainInt	;
-	Stat.a_health	= Weapon. gainHealth+ Armor. gainHealth	+ Shoulder.gainHealth	+ Belt.gainHealth	+ Pants. gainHealth	+ Boots.gainHealth;
-	Stat.a_spirit	= Weapon. gainSpirit+ Armor. gainSpirit	+ Shoulder.gainSpirit	+ Belt.gainSpirit	+ Pants. gainSpirit	+ Boots.gainSpirit;
+	Stat.a_str		= Weapon. gainStr	+ Armor. gainStr	+ Shoulder.gainStr		+ Belt.gainStr		+ Pants. gainStr	+ Boots.gainStr		+ Necklece.gainStr		 + Bracelet.gainStr		 + Ring.gainStr		;
+	Stat.a_intel	= Weapon. gainInt	+ Armor. gainInt	+ Shoulder.gainInt		+ Belt.gainInt		+ Pants. gainInt	+ Boots.gainInt		+ Necklece.gainInt		 + Bracelet.gainInt		 + Ring.gainInt		;
+	Stat.a_health	= Weapon. gainHealth+ Armor. gainHealth	+ Shoulder.gainHealth	+ Belt.gainHealth	+ Pants. gainHealth	+ Boots.gainHealth	+ Necklece.gainHealth	 + Bracelet.gainHealth	 + Ring.gainHealth	;
+	Stat.a_spirit	= Weapon. gainSpirit+ Armor. gainSpirit	+ Shoulder.gainSpirit	+ Belt.gainSpirit	+ Pants. gainSpirit	+ Boots.gainSpirit	+ Necklece.gainSpirit	 + Bracelet.gainSpirit	 + Ring.gainSpirit	;
 
 	Stat.maxHP = (Stat.health + Stat.a_health) * 10 + (Stat.str + Stat.a_str) * 5		+500;
 	Stat.maxMP = (Stat.spirit + Stat.a_spirit) * 10 + (Stat.intel + Stat.a_intel) * 5	+500;
@@ -1448,7 +1499,7 @@ void player::useItem(int tab, int x, int y)
 	Stat.phyDef = (Stat.health + Stat.a_health) * 2 + (Stat.str + Stat.a_str);
 	Stat.a_phyDef = Armor.phydef + Shoulder.phydef + Belt.phydef + Pants.phydef + Boots.phydef;
 	Stat.magDef = (Stat.spirit + Stat.a_spirit) * 10 + (Stat.intel + Stat.a_intel);
-	Stat.a_magDef = Armor.magdef + Shoulder.magdef + Belt.magdef + Pants.magdef + Boots.magdef;
+	Stat.a_magDef = Necklece.magdef + Bracelet.magdef + Ring.magdef;
 
 	Stat.a_phyAtt = Weapon.phydmgmin;
 	Stat.a_magAtt = Weapon.magdmgmin;
@@ -1461,15 +1512,44 @@ void player::useIteminQS(int qs)
 void player::rootItem(Item it)
 {
 	int last=-1;
+	bool got = false;
 	switch (it.type) {
 	case item_consume:
-		for (int i = 0; i < 32; i++) {
-			if (consume[i].name == it.name) {
-				consume[i].stack++;
-				last = -1;
-				break;
-			}else if (consume[i].name == "없음"&&last<0) {
-				last = i;
+		if (q1.name == it.name&&!got) {
+			q1.stack++;
+			got = true;
+		}
+		if (q2.name == it.name&&!got) {
+			q2.stack++;
+			got = true;
+		}
+		if (q3.name == it.name&&!got) {
+			q3.stack++;
+			got = true;
+		}
+		if (q4.name == it.name&&!got) {
+			q4.stack++;
+			got = true;
+		}
+		if (q5.name == it.name&&!got) {
+			q5.stack++;
+			got = true;
+		}
+		if (q6.name == it.name&&!got) {
+			q6.stack++;
+			got = true;
+		}
+
+		if (!got) {
+			for (int i = 0; i < 32; i++) {
+				if (consume[i].name == it.name) {
+					consume[i].stack++;
+					last = -1;
+					break;
+				}
+				else if (consume[i].name == "없음"&&last < 0) {
+					last = i;
+				}
 			}
 		}
 		if (last != -1) {
@@ -1482,6 +1562,9 @@ void player::rootItem(Item it)
 	case item_belt:
 	case item_pants:
 	case item_shoes:
+	case item_necklace:
+	case item_braclet:
+	case item_ring:
 		for (int i = 0; i < 32; i++) {
 			if (equipments[i].name == "없음") {
 				equipments[i] = it; break;
@@ -1564,7 +1647,36 @@ void player::unequip(int pos)
 			}
 		}
 		Weapon = emptyWeapon;
+		break;
+	case 6:
+		Necklece.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Necklece; break;
+			}
+		}
+		Necklece = empty;
+		break;
+	case 7:
+		Bracelet.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Bracelet; break;
+			}
+		}
+		Bracelet = empty;
+		break;
+	case 8:
+		Ring.equipped = false;
+		for (int i = 0; i < 32; i++) {
+			if (equipments[i].name == "없음") {
+				equipments[i] = Ring; break;
+			}
+		}
+		Ring = empty;
+		break;
 	}
+
 	useItem(-1, 0, 0);
 }
 

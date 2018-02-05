@@ -105,7 +105,7 @@ void wavespin::update()
 				if (balls[i].effect > 5)
 					balls[i].effect = 0;
 
-				if (count % 10== 0) {
+				if (count % 30== 0) {
 					atk.isCrit = rand() % 100 > 80 ? true : false;
 					atk.mindmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon().magdmgmin * 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel)*1.5f + pl->getWeapon().magdmgmin * 2;
 					atk.maxdmg = atk.isCrit?((pl->getStatus().intel + pl->getStatus().a_intel)*2.5f + pl->getWeapon().magdmgmax * 2)*1.5: (pl->getStatus().intel + pl->getStatus().a_intel)*2.5f + pl->getWeapon().magdmgmax * 2;
@@ -114,11 +114,11 @@ void wavespin::update()
 					atk.isHold = true;
 					atk.isAbnormal = false;
 					atk.area.miny = -150; atk.area.maxy = -50;
-					atk.area.minz = balls[i].z - 45; atk.area.maxz =balls[i]. z + 45;
-					atk.area.maxx = balls[i].x + 45;
-					atk.area.minx = balls[i].x - 45;
+					atk.area.minz = balls[i].z - 100; atk.area.maxz =balls[i]. z + 100;
+					atk.area.maxx = balls[i].x + 100;
+					atk.area.minx = balls[i].x - 100;
 					atk.pushX = 0;
-					atk.pushY = 0;												//추후 스킬레벨에따라 띄우기능력변경
+					atk.pushY = 0;
 					atk.staytime = 2;
 					atk.time = GetTickCount();
 					pl->addAttack(atk);
@@ -136,25 +136,6 @@ void wavespin::update()
 		case 2:
 			if (count % 8 == 0) {
 				curAction++;
-				//if (curAction == 165) {
-				//	atk.dmg = 0;
-				//	atk.isOnetime = true;
-				//	atk.isProjectile = false;
-				//	atk.isHold = true;
-				//	atk.isAbnormal = true;
-				//	atk.attr1 = skilldiameter;
-				//	atk.attr2 = ballHeight;
-				//	atk.abnormal = 51;											//홀딩 시전 준비
-				//	atk.area.miny = -150; atk.area.maxy = -50;
-				//	atk.area.minz = z - 140; atk.area.maxz = z + 140;
-				//	atk.area.maxx = x + 200;
-				//	atk.area.minx = x - 200;
-				//	atk.pushX = 0;
-				//	atk.pushY = -6.f;												//추후 스킬레벨에따라 띄우기능력변경
-				//	atk.staytime = 10;
-				//	atk.time = GetTickCount();
-				//	pl->addAttack(atk);
-				//}
 				if (curAction == 166) {
 					for (int i = 0; i < 5; i++) {
 						atk.mindmg = (pl->getStatus().intel + pl->getStatus().a_intel)*4 + pl->getWeapon().magdmgmin;
@@ -169,7 +150,7 @@ void wavespin::update()
 						atk.area.maxx = balls[i].x + 400;
 						atk.area.minx = balls[i].x - 400;
 						atk.pushX = balls[i].x<x ? -4.f : 4.f;
-						atk.pushY = -6.f;												//추후 스킬레벨에따라 띄우기능력변경
+						atk.pushY = balls[i].x<pl->getX()?-6.f:6.f;
 						atk.staytime = 10;
 						atk.time = GetTickCount();
 						pl->addAttack(atk);

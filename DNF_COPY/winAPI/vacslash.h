@@ -17,6 +17,7 @@ private:
 	int fullchargeFrame;
 	int travelDist;
 	bool head;
+	bool playedchargesound;
 	slash sl;
 public:
 	HRESULT init();

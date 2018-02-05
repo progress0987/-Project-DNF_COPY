@@ -5,6 +5,7 @@
 #include "Seria.h"
 #include "Village.h"
 #include "Mirkwood.h"
+#include "lorienDeep.h"
 
 
 
@@ -16,6 +17,7 @@ private:
 	Seria* seriaRoom;
 	Village* village;
 	Mirkwood* mirkwood;
+	lorienDeep* loriendeep;
 	vector<MapBase*> Maps;
 	bool showDungeonSelect;
 	bool showDungeonMoveScene;

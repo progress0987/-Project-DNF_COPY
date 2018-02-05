@@ -28,6 +28,7 @@ void icewave::cast(FLOAT x, FLOAT y, FLOAT z)
 	isbuff = false;
 	cooldownstartfrom = GetTickCount();
 	onCooldown = true;
+	head = pl->getCurDir();
 	curcharge = 0;
 	SOUNDMANAGER->play("캐릭_스킬_파동검빙인");
 }
@@ -40,7 +41,6 @@ void icewave::update()
 			curAction++;
 			if (curAction == 35) {//공격
 				begin = true;
-				head = pl->getCurDir();
 				waveBegin = GetTickCount();
 			}
 			if (curAction > 41) {

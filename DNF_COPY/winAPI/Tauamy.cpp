@@ -31,7 +31,15 @@ HRESULT Tau::init()
 	it = itemList.find("¶ó¹ÌÈ­ ÀÙ")->second;
 	it.stack = 1;
 	dropItems.push_back(it);
-	it = itemList.find("µð¾Æº¼¸®Ä«")->second;
+	it = itemList.find("³°Àº ÆÇ±Ý°©¿Ê »óÀÇ")->second;
+	dropItems.push_back(it);
+	it = itemList.find("³°Àº ÆÇ±Ý°©¿Ê ÇÏÀÇ")->second;
+	dropItems.push_back(it);
+	it = itemList.find("³°Àº ÆÇ±Ý°©¿Ê ¾î±ú")->second;
+	dropItems.push_back(it);
+	it = itemList.find("³°Àº ÆÇ±Ý°©¿Ê º§Æ®")->second;
+	dropItems.push_back(it);
+	it = itemList.find("³°Àº ÆÇ±Ý°©¿Ê ½Å¹ß")->second;
 	dropItems.push_back(it);
 	return S_OK;
 }

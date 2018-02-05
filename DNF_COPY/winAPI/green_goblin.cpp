@@ -7,7 +7,7 @@ HRESULT green_goblin::init()
 	sprintf(stat.name,"초록 고블린");
 
 	aggressive = 60;
-	atkcooldown =1000;
+	atkcooldown = 1000;
 	goldAmount = 10;
 	expamount = 50;
 

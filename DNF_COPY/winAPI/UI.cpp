@@ -70,6 +70,11 @@ HRESULT UI::init(void)
 		}
 	}
 	Weapon = RectMake(inv.left + 15 + 178, inv.top + 30 + 4, 28, 28);
+
+	Necklace = RectMake(inv.left + 15 + 178+32, inv.top + 30 + 4+32, 28, 28);
+	Braclet = RectMake(inv.left + 15 + 178, inv.top + 30 + 4+32, 28, 28);
+	Ring = RectMake(inv.left + 15 + 178+32, inv.top + 30 + 4+64, 28, 28);
+
 	Armor = RectMake(inv.left + 51, inv.top + 34, 28, 28);
 	Pants = RectMake(inv.left + 15 + 4, inv.top + 30 + 36, 28, 28);
 	Shoulder = RectMake(inv.left + 15 + 4, inv.top + 30 + 4, 28, 28);
@@ -333,34 +338,85 @@ void UI::update(void)
 			}
 		}
 
-		if (PtInRect(&Weapon, ptMouse)) {
-			if (rclicked && pl->getWeapon().id != -1) {
+		if (PtInRect(&Weapon, ptMouse) && pl->getWeapon().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getWeapon();
+			if (rclicked) {
 				pl->unequip(5);
+				showPopup = false;
+				popupItem = nullptr;
 			}
 		}
-		if (PtInRect(&Armor, ptMouse)) {
-			if (rclicked && pl->getArmor().id != -1) {
+		if (PtInRect(&Armor, ptMouse) && pl->getArmor().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getArmor();
+			if (rclicked) {
 				pl->unequip(0);
+				showPopup = false;
+				popupItem = nullptr;
 			}
 		}
-		if (PtInRect(&Pants, ptMouse)) {
-			if (rclicked && pl->getPants().id != -1) {
+		if (PtInRect(&Pants, ptMouse) && pl->getPants().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getPants();
+			if (rclicked) {
 				pl->unequip(1);
+				showPopup = false;
+				popupItem = nullptr;
 			}
 		}
-		if (PtInRect(&Shoulder, ptMouse)) {
-			if (rclicked && pl->getShoulder().id != -1) {
+		if (PtInRect(&Shoulder, ptMouse) && pl->getShoulder().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getShoulder();
+			if (rclicked) {
 				pl->unequip(2);
+				showPopup = false;
+				popupItem = nullptr;
 			}
 		}
-		if (PtInRect(&Belt, ptMouse)) {
-			if (rclicked && pl->getBelt().id != -1) {
+		if (PtInRect(&Belt, ptMouse) && pl->getBelt().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getBelt();
+			if (rclicked) {
 				pl->unequip(3);
+				showPopup = false;
+				popupItem = nullptr;
 			}
 		}
-		if (PtInRect(&Shoes, ptMouse)) {
-			if (rclicked && pl->getShoes().id != -1) {
+		if (PtInRect(&Shoes, ptMouse) && pl->getShoes().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getShoes();
+			if (rclicked) {
 				pl->unequip(4);
+				showPopup = false;
+				popupItem = nullptr;
+			}
+		}
+		if (PtInRect(&Necklace, ptMouse) && pl->getNecklace().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getNecklace();
+			if (rclicked) {
+				pl->unequip(6);
+				showPopup = false;
+				popupItem = nullptr;
+			}
+		}
+		if (PtInRect(&Braclet, ptMouse) && pl->getBraclet().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getBraclet();
+			if (rclicked) {
+				pl->unequip(7);
+				showPopup = false;
+				popupItem = nullptr;
+			}
+		}
+		if (PtInRect(&Ring, ptMouse) && pl->getRing().id != -1) {
+			//showPopup = true;
+			//popupItem = &pl->getRing();
+			if (rclicked) {
+				pl->unequip(8);
+				showPopup = false;
+				popupItem = nullptr;
 			}
 		}
 	}
@@ -561,6 +617,21 @@ void UI::render(void)
 			}
 		}
 
+		if (pl->getNecklace().id != -1) {
+			sprintf(tmp, "목걸이_%d", pl->getNecklace().id);
+			IMAGEMANAGER->findImage(tmp)->render(Necklace.left, Necklace.top);
+		}
+
+		if (pl->getBraclet().id != -1) {
+			sprintf(tmp, "팔찌_%d", pl->getBraclet().id);
+			IMAGEMANAGER->findImage(tmp)->render(Braclet.left, Braclet.top);
+		}
+
+		if (pl->getRing().id != -1) {
+			sprintf(tmp, "반지_%d", pl->getRing().id);
+			IMAGEMANAGER->findImage(tmp)->render(Ring.left, Ring.top);
+		}
+
 		if (curActiveTab == 0) {
 			IMAGEMANAGER->findImage("UI_인벤토리_활성탭")->render(tabEquip.left, tabEquip.top);
 		}
@@ -711,6 +782,18 @@ void UI::render(void)
 						}
 					}
 					break;
+				case item_necklace:
+					sprintf(tmp, "목걸이_%d", i->id);
+					IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
+					break;
+				case item_braclet:
+					sprintf(tmp, "팔찌_%d", i->id);
+					IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
+					break;
+				case item_ring:
+					sprintf(tmp, "반지_%d", i->id);
+					IMAGEMANAGER->findImage(tmp)->render(itemrects[invcount % 8][invcount / 8].left + 1, itemrects[invcount % 8][invcount / 8].top + 1);
+					break;
 				case -1:
 					break;
 				}
@@ -802,6 +885,18 @@ void UI::render(void)
 				break;
 			}
 		}
+		if (pl->getNecklace().id != -1) {
+			sprintf(tmp, "목걸이_%d", pl->getNecklace().id);
+			IMAGEMANAGER->findImage(tmp)->render(Necklace.left-278, Necklace.top-3);
+		}
+		if (pl->getBraclet().id != -1) {
+			sprintf(tmp, "팔찌_%d", pl->getBraclet().id);
+			IMAGEMANAGER->findImage(tmp)->render(Braclet.left-278, Braclet.top-3);
+		}
+		if (pl->getRing().id != -1) {
+			sprintf(tmp, "반지_%d", pl->getRing().id);
+			IMAGEMANAGER->findImage(tmp)->render(Ring.left-278, Ring.top-3);
+		}
 	}
 	if (showShop) {
 		drawWindow(shop.left, shop.top, shop.right - shop.left, shop.bottom - shop.top);
@@ -870,6 +965,15 @@ void UI::render(void)
 						break;
 					}
 					break;
+				case item_necklace:
+					sprintf(tmp, "목걸이_%d", merch[i].id);
+					break;
+				case item_braclet:
+					sprintf(tmp, "팔찌_%d", merch[i].id);
+					break;
+				case item_ring:
+					sprintf(tmp, "반지_%d", merch[i].id);
+					break;
 				default:
 					break;
 				}
@@ -925,6 +1029,15 @@ void UI::render(void)
 				sprintf(tmp, "판금_신발_%d", popupItem->id);
 				break;
 			}
+			break;
+		case item_necklace:
+			sprintf(tmp, "목걸이_%d", popupItem->id);
+			break;
+		case item_braclet:
+			sprintf(tmp, "팔찌_%d", popupItem->id);
+			break;
+		case item_ring:
+			sprintf(tmp, "반지_%d", popupItem->id);
 			break;
 		case item_consume:
 			sprintf(tmp, "소모_%d", popupItem->id);
@@ -995,7 +1108,7 @@ void UI::renderdc(void)
 	//Rectangle(hdc, qa.left, qa.top, qa.right, qa.bottom);
 	//Rectangle(hdc, qq.left, qq.top, qq.right, qq.bottom);
 
-	if (!showStat&&!showShop) {
+	if (!showStat&&!showShop&&pl->getStatus().curHP>0) {
 		sprintf(test, "lv %d %s", pl->getStatus().level, "테스트");
 		d3dFont->DrawTextA(
 			NULL,
@@ -1074,138 +1187,6 @@ void UI::renderdc(void)
 				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 		}
 
-		if (showPopup) {//팝업출력(아이템 이름등등
-			switch (popupItem->type) {
-			case item_weapon:
-			{
-				sprintf(test, "%s", popupItem->name.c_str());
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
-					DT_LEFT | DT_TOP,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-				sprintf(test, "물리공격 +%d\n마법공격 +%d", popupItem->phydmgmin, popupItem->magdmgmin);
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
-					DT_LEFT,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-			}
-			break;
-			case item_coat:
-			case item_pants:
-			case item_belt:
-			case item_shoulder:
-			case item_shoes:
-				sprintf(test, "%s", popupItem->name.c_str());
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
-					DT_LEFT | DT_TOP,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-
-				sprintf(test, "물리방어 +%d", popupItem->phydef);
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
-					DT_LEFT | DT_TOP,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-
-				sprintf(test, "힘 +%d", popupItem->gainStr);
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 80, 110, 15),
-					DT_LEFT | DT_VCENTER,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-
-				sprintf(test, "지능 +%d", popupItem->gainInt);
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 95, 110, 15),
-					DT_LEFT | DT_VCENTER,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-
-				sprintf(test, "체력 +%d", popupItem->gainHealth);
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 110, 110, 15),
-					DT_LEFT | DT_VCENTER,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-
-				sprintf(test, "정신력 +%d", popupItem->gainSpirit);
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 125, 110, 15),
-					DT_LEFT | DT_VCENTER,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-				break;
-			case item_consume:
-				sprintf(test, "%s", popupItem->name.c_str());//이름
-				d3dFont->DrawTextA(
-					NULL,
-					test,
-					-1,
-					&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
-					DT_LEFT|DT_TOP,
-					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-				if (popupItem->gainHP > 0 && popupItem->gainMP > 0) {
-					sprintf(test, "체력 +%d%c\n마나 +%d%c", popupItem->gainHP, popupItem->detail > 0 ? '%' : ' ', popupItem->gainMP, popupItem->detail > 0 ? '%' : ' ');
-					d3dFont->DrawTextA(
-						NULL,
-						test,
-						-1,
-						&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
-						DT_LEFT,
-						D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-				}
-				else if (popupItem->gainHP > 0) {
-					sprintf(test, "체력 +%d%c", popupItem->gainHP, popupItem->detail > 0 ? '%' : ' ');
-					d3dFont->DrawTextA(
-						NULL,
-						test,
-						-1,
-						&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
-						DT_LEFT,
-						D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-				}
-				else if (popupItem->gainMP > 0) {
-					sprintf(test, "마나 +%d%c", popupItem->gainMP, popupItem->detail > 0 ? '%' : ' ');
-					d3dFont->DrawTextA(
-						NULL,
-						test,
-						-1,
-						&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
-						DT_LEFT,
-						D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-				}
-				break;
-			}
-
-			sprintf(test, "%d 골드", popupItem->price);
-			d3dFont->DrawTextA(
-				NULL,
-				test,
-				-1,
-				&RectMake(ptMouse.x, ptMouse.y+175, 190, 20),
-				DT_RIGHT | DT_VCENTER,
-				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
-		}
 		if (curActiveTab == 1) {//소모품일때
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 8; j++) {
@@ -1217,8 +1198,8 @@ void UI::renderdc(void)
 								test,
 								-1,
 								&itemrects[j][i],
-								DT_RIGHT | DT_BOTTOM,
-								D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+								DT_RIGHT | DT_TOP,
+								D3DCOLOR_ARGB(0xff, 0xEE, 0xEE, 0xEE));
 						}
 					}
 				}
@@ -1549,6 +1530,156 @@ void UI::renderdc(void)
 		//for (int i = 0; i < 12; i++) {
 		//	Rectangle(hdc, shopItemRC[i].left, shopItemRC[i].top, shopItemRC[i].right, shopItemRC[i].bottom);
 		//}
+	}
+	if (showPopup) {//팝업출력(아이템 이름등등
+		switch (popupItem->type) {
+		case item_weapon:
+		{
+				sprintf(test, "%s", popupItem->name.c_str());
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
+					DT_LEFT | DT_TOP,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+				sprintf(test, "물리공격 +%d\n마법공격 +%d", popupItem->phydmgmin, popupItem->magdmgmin);
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					DT_LEFT,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+		break;
+		case item_coat:
+		case item_pants:
+		case item_belt:
+		case item_shoulder:
+		case item_shoes:
+		case item_necklace:
+		case item_braclet:
+		case item_ring:
+			sprintf(test, "%s", popupItem->name.c_str());
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
+				DT_LEFT | DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			if (popupItem->phydef > 0) {
+				sprintf(test, "물리방어 +%d", popupItem->phydef);
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					DT_LEFT | DT_TOP,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			else if (popupItem->magdef > 0) {
+				sprintf(test, "마법방어 +%d", popupItem->phydef);
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					DT_LEFT | DT_TOP,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			if (popupItem->gainStr > 0) {
+				sprintf(test, "힘 +%d", popupItem->gainStr);
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 80, 110, 15),
+					DT_LEFT | DT_VCENTER,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			if (popupItem->gainInt > 0) {
+				sprintf(test, "지능 +%d", popupItem->gainInt);
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 95, 110, 15),
+					DT_LEFT | DT_VCENTER,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			if (popupItem->gainHealth > 0) {
+				sprintf(test, "체력 +%d", popupItem->gainHealth);
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 110, 110, 15),
+					DT_LEFT | DT_VCENTER,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			if (popupItem->gainSpirit > 0) {
+				sprintf(test, "정신력 +%d", popupItem->gainSpirit);
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 125, 110, 15),
+					DT_LEFT | DT_VCENTER,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			break;
+		case item_consume:
+			sprintf(test, "%s", popupItem->name.c_str());//이름
+			d3dFont->DrawTextA(
+				NULL,
+				test,
+				-1,
+				&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
+				DT_LEFT|DT_TOP,
+				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			if (popupItem->gainHP > 0 && popupItem->gainMP > 0) {
+				sprintf(test, "체력 +%d%c\n마나 +%d%c", popupItem->gainHP, popupItem->detail > 0 ? '%' : ' ', popupItem->gainMP, popupItem->detail > 0 ? '%' : ' ');
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					DT_LEFT,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			else if (popupItem->gainHP > 0) {
+				sprintf(test, "체력 +%d%c", popupItem->gainHP, popupItem->detail > 0 ? '%' : ' ');
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					DT_LEFT,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			else if (popupItem->gainMP > 0) {
+				sprintf(test, "마나 +%d%c", popupItem->gainMP, popupItem->detail > 0 ? '%' : ' ');
+				d3dFont->DrawTextA(
+					NULL,
+					test,
+					-1,
+					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					DT_LEFT,
+					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
+			}
+			break;
+		}
+
+		sprintf(test, "%d 골드", popupItem->price);
+		d3dFont->DrawTextA(
+			NULL,
+			test,
+			-1,
+			&RectMake(ptMouse.x, ptMouse.y+175, 190, 20),
+			DT_RIGHT | DT_VCENTER,
+			D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 	}
 
 	if (pl->getQuick1().id > 0) {
