@@ -27,6 +27,7 @@ HRESULT lorienDeep::init()
 	int zheight;
 #pragma region 1번맵
 	m1->init();
+	m1->isfirstmap = true;
 	m1->setPlayer(pl);
 	m1->setPeaceful(false);
 	int tileNum = 4;
@@ -119,6 +120,7 @@ HRESULT lorienDeep::init()
 
 #pragma region 2번맵
 	m2->init();
+	m2->isfirstmap = false;
 	m2->setPlayer(pl);
 	m2->setPeaceful(false);
 	tileNum = 4;
@@ -210,6 +212,7 @@ HRESULT lorienDeep::init()
 
 #pragma region 3번맵
 	m3->init();
+	m3->isfirstmap = false;
 	m3->setPlayer(pl);
 	m3->setPeaceful(false);
 	tileNum = 4;
@@ -318,6 +321,7 @@ HRESULT lorienDeep::init()
 
 #pragma region 4번맵
 	m4->init();
+	m4->isfirstmap = false;
 	m4->setPlayer(pl);
 	m4->setPeaceful(false);
 	tileNum = 4;
@@ -427,6 +431,7 @@ HRESULT lorienDeep::init()
 
 #pragma region 5번맵
 	m5->init();
+	m5->isfirstmap = false;
 	m5->setPlayer(pl);
 	m5->setPeaceful(false);
 	for (int i = 0; i < tileNum; i++) {
@@ -512,6 +517,7 @@ HRESULT lorienDeep::init()
 
 #pragma region 6번맵
 	m6->init();
+	m6->isfirstmap = false;
 	m6->setPlayer(pl);
 	m6->setPeaceful(false);
 	for (int i = 0; i < tileNum; i++) {
@@ -654,8 +660,10 @@ HRESULT lorienDeepMap::init()
 	runnable = true;
 	attackable = true;
 	showresult = false;
-	isBossMap = false;
+	showdungeonName = false;
 	playendsound = playedendsound = false;
+	dunshowTick = 0;
+	isBossMap = false;
 	MapBase::init();
 	return S_OK;
 }
@@ -664,6 +672,17 @@ void lorienDeepMap::update()
 {
 	monBack.clear();
 	monFront.clear();
+	if (showdungeonName&& beginTime + 8000 > GetTickCount()) {
+		if (GetTickCount() % 50 == 0) {
+			dunshowTick++;
+			if (dunshowTick > 13) {
+				dunshowTick = 0;
+			}
+		}
+	}
+	else {
+		showdungeonName = false;
+	}
 	for (vector<MonsterBase*>::iterator i = monsterList.begin(); i != monsterList.end(); ) {
 		(*i)->update();
 		if ((*i)->isDead) {							//죽었으면 삭제함
@@ -871,6 +890,28 @@ void lorienDeepMap::render()
 
 void lorienDeepMap::renderz()
 {
+	char tmp[50];
+	if (showdungeonName) {
+		sprintf(tmp, "던전_로리엔안쪽_이름_%d", dunshowTick);
+		if (GetTickCount() < beginTime + 512) {
+			IMAGEMANAGER->findImage(tmp)->blurredrender(WINSIZEX / 2 - 130, WINSIZEY / 2 - 40, (GetTickCount() - beginTime) / 2);
+		}
+		else if (GetTickCount() > beginTime + 8000 - 512) {
+			IMAGEMANAGER->findImage(tmp)->blurredrender(WINSIZEX / 2 - 130, WINSIZEY / 2 - 40, 255 - (GetTickCount() - beginTime - 8000 + 512) / 2);
+		}
+		else {
+			IMAGEMANAGER->findImage(tmp)->render(WINSIZEX / 2 - 130, WINSIZEY / 2 - 40);
+		}
+	}
+
+	int bossHPX = 10;
+	int bossHPY = 100;
+	if (isBossMap&&Boss->getCurHP()>0) {
+		IMAGEMANAGER->findImage("UI_몬스터_일반_체력바_배경")->render(bossHPX, bossHPY);
+		IMAGEMANAGER->findImage("UI_몬스터_일반_체력바_뒤뚜껑")->render(bossHPX + IMAGEMANAGER->findImage("UI_몬스터_일반_체력바_배경")->getWidth(), bossHPY+IMAGEMANAGER->findImage("UI_몬스터_일반_체력바_배경")->getHeight()- IMAGEMANAGER->findImage("UI_몬스터_일반_체력바_뒤뚜껑")->getHeight());
+		IMAGEMANAGER->findImage("UI_몬스터_얼굴_타우아미")->render(bossHPX + 2, bossHPY + 2);
+		IMAGEMANAGER->findImage("UI_몬스터_일반_체력바_빨강")->render(bossHPX + 29, bossHPY + 17, 0, 0, (float)IMAGEMANAGER->findImage("UI_몬스터_일반_체력바_빨강")->getWidth()*((float)Boss->getCurHP() / (float)Boss->getMaxHP()), IMAGEMANAGER->findImage("UI_몬스터_일반_체력바_빨강")->getHeight());
+	}
 }
 
 void lorienDeepMap::renderdc()
@@ -903,6 +944,10 @@ void lorienDeepMap::resetMonsters()
 
 void lorienDeepMap::resetDungeon()
 {
+	if (isfirstmap) {
+		showdungeonName = true;
+		beginTime = GetTickCount();
+	}
 	dropList.clear();
 	movable = false;
 	peaceful = false;

@@ -59,7 +59,7 @@ void Tau::update()
 {
 	MonsterBase::update();
 	//АјАн
-	if (curatkcooldown <= 0 && !onAttack&&!onSkill) {
+	if (curatkcooldown <= 0 && !onAttack&&!onSkill&&(curStatus!=mon_onDeadProcess||curStatus!=mon_onDead)) {
 		if (x - 200 < curMap->getPlayer()->getX() && curMap->getPlayer()->getX() < x + 200 &&
 			z - 100 < curMap->getPlayer()->getZ() && curMap->getPlayer()->getZ() < z + 100) {
 			int atk = rand() % 99 + 1;
@@ -132,8 +132,8 @@ void Tau::render()
 
 void Tau::renderdc()
 {
-	RECT rc = RectMakeCenter(x -cam.x, translate(z) -cam.y, 120, 60 / 2);
-	Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
+	//RECT rc = RectMakeCenter(x -cam.x, translate(z) -cam.y, 120, 60 / 2);
+	//Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
 }
 
 void Tau::setAttack()

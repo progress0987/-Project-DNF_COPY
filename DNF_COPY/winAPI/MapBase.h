@@ -45,6 +45,7 @@ protected:
 	bool attackable;
 	bool playendsound;
 	bool playedendsound;
+	bool showdungeonName;
 	int tilewidth;
 	dungeonGate Gates[4];
 

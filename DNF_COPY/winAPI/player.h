@@ -228,12 +228,12 @@ public:
 	Item getNecklace() { return Necklece; }
 	Item getBraclet() { return Bracelet; }
 	Item getRing() { return Ring; }
-	Item getQuick1() { return q1; }
-	Item getQuick2() { return q2; }
-	Item getQuick3() { return q3; }
-	Item getQuick4() { return q4; }
-	Item getQuick5() { return q5; }
-	Item getQuick6() { return q6; }
+	Item* getQuick1() { return &q1; }
+	Item* getQuick2() { return &q2; }
+	Item* getQuick3() { return &q3; }
+	Item* getQuick4() { return &q4; }
+	Item* getQuick5() { return &q5; }
+	Item* getQuick6() { return &q6; }
 	Item getItem(int curTab, int x, int y);
 
 	Skill* getQSkill() { return QSkill; }

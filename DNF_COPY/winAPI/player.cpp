@@ -16,7 +16,7 @@ HRESULT player::init(void)
 	onDebug = onJump = onSkill = printblood = false;
 	ui = new UI;
 	ui->init();
-	gold = 1000000;
+	gold = 1000;
 	movebegin = 0;
 	setOnCombat(!curMap->isPeaceful());
 	Coin = 3;
@@ -35,9 +35,9 @@ HRESULT player::init(void)
 	}
 
 	rootItem(itemList.find("ÀÏ¹Ý°Ë")->second);
-	rootItem(itemList.find("³°Àº ¸ñ°ÉÀÌ")->second);
-	rootItem(itemList.find("³°Àº ÆÈÂî")->second);
-	rootItem(itemList.find("³°Àº ¹ÝÁö")->second);
+	//rootItem(itemList.find("³°Àº ¸ñ°ÉÀÌ")->second);
+	//rootItem(itemList.find("³°Àº ÆÈÂî")->second);
+	//rootItem(itemList.find("³°Àº ¹ÝÁö")->second);
 	//rootItem(itemList.find("Ã¢¼ºÀÇ ±¸¿øÀÚ - ¼Ò°Ë")->second);
 	//rootItem(itemList.find("¸ÞÅ»¶óÀÎ ¾Æ¸Ó »óÀÇ")->second);
 	//rootItem(itemList.find("¸ÞÅ»¶óÀÎ ¾Æ¸Ó ÇÏÀÇ")->second);
@@ -603,6 +603,7 @@ void player::update(void)
 				//onDebug = !onDebug;
 				//levelupEffect = true;
 				//onLevelup = true;
+				//hitDmg(9999);
 
 				rootItem(itemList.find("Ã¢¼ºÀÇ ±¸¿øÀÚ - ¼Ò°Ë")->second);
 				rootItem(itemList.find("¸ÞÅ»¶óÀÎ ¾Æ¸Ó »óÀÇ")->second);
@@ -844,6 +845,7 @@ void player::update(void)
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////»ç¸Á½Ã
 	else {
+		if (Stat.curHP < 0) Stat.curHP = 0;
 		if (reset) {
 			Stat.curHP = Stat.maxHP;
 			deadTick = 9;

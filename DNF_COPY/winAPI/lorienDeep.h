@@ -23,7 +23,10 @@ private:
 
 	MonsterBase * Boss;
 	bool movable;
+	int dunshowTick;
+	DWORD beginTime;
 public:
+	bool isfirstmap;
 	bool isBossMap;
 	HRESULT init();
 	void update();

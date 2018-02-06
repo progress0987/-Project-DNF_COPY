@@ -83,6 +83,7 @@ HRESULT UI::init(void)
 
 	onHold = new Item();
 	onHold = &pl->empty;
+	onHoldPosX = onHoldPosY = -9;
 
 	d3dFont = NULL;
 	if (FAILED(D3DXCreateFont(g_pd3dDevice,
@@ -124,7 +125,7 @@ void UI::release(void)
 void UI::update(void)
 {
 	showPopup = false;
-	if(onHoldPosX==-1||onHoldPosY==-1)
+	if(onHoldPosX==-9||onHoldPosY==-9)
 	popupItem = &pl->empty;
 
 	///////////퀵슬롯에서 우클릭
@@ -223,7 +224,69 @@ void UI::update(void)
 				}
 			}
 		}
-
+		//인벤보이는상태에서 퀵슬롯 아이템을 클릭했을때
+		{
+			if (PtInRect(&q1, ptMouse)&&pl->getQuick1()->id>0) {
+				popupItem = pl->getQuick1();
+				showPopup = true;
+				if (clicked) {
+					onHoldPosX = onHoldPosY = -1;
+					onHold = pl->getQuick1();
+					clicked = false;
+					showPopup = false;
+				}
+			}
+			if (PtInRect(&q2, ptMouse) && pl->getQuick2()->id>0) {
+				popupItem = pl->getQuick2();
+				showPopup = true;
+				if (clicked) {
+					onHoldPosX = onHoldPosY = -2;
+					onHold = pl->getQuick2();
+					clicked = false;
+					showPopup = false;
+				}
+			}
+			if (PtInRect(&q3, ptMouse) && pl->getQuick3()->id>0) {
+				popupItem = pl->getQuick3();
+				showPopup = true;
+				if (clicked) {
+					onHoldPosX = onHoldPosY = -3;
+					onHold = pl->getQuick3();
+					clicked = false;
+					showPopup = false;
+				}
+			}
+			if (PtInRect(&q4, ptMouse) && pl->getQuick4()->id>0) {
+				popupItem = pl->getQuick4();
+				showPopup = true;
+				if (clicked) {
+					onHoldPosX = onHoldPosY = -4;
+					onHold = pl->getQuick4();
+					clicked = false;
+					showPopup = false;
+				}
+			}
+			if (PtInRect(&q5, ptMouse) && pl->getQuick5()->id>0) {
+				popupItem = pl->getQuick5();
+				showPopup = true;
+				if (clicked) {
+					onHoldPosX = onHoldPosY = -5;
+					onHold = pl->getQuick5();
+					clicked = false;
+					showPopup = false;
+				}
+			}
+			if (PtInRect(&q6, ptMouse) && pl->getQuick6()->id>0) {
+				popupItem = pl->getQuick6();
+				showPopup = true;
+				if (clicked) {
+					onHoldPosX = onHoldPosY = -6;
+					onHold = pl->getQuick6();
+					clicked = false;
+					showPopup = false;
+				}
+			}
+		}
 		if (!lstay) {										//마우스를뗐을때
 			if (onHold->id > 0) {													//잡고있는게 아이템일경우
 																					//마우스를 놓은 지점이 놓아도 되는곳이 아닌경우
@@ -263,8 +326,19 @@ void UI::update(void)
 							if (PtInRect(&itemrects[j][i], ptMouse)) {
 								if (onHold->type == item_consume) {
 									Item t = *onHold;
-									pl->consume[onHoldPosX + onHoldPosY * 8] = pl->consume[j + i * 8];
-									pl->consume[j + i * 8] = t;
+									if (onHoldPosX >= 0 && onHoldPosY >= 0) {
+										pl->consume[onHoldPosX + onHoldPosY * 8] = pl->consume[j + i * 8];
+										pl->consume[j + i * 8] = t;
+									}
+									else if (onHoldPosX > -7 && onHoldPosY > -7) {
+										if (pl->consume[j + i * 8].id < 0) {
+											pl->setquickslot(abs(onHoldPosX + onHoldPosY) / 2, pl->empty);
+										}
+										else {
+											pl->setquickslot(abs(onHoldPosX + onHoldPosY) / 2, pl->consume[j + i * 8]);
+										}
+										pl->consume[j + i * 8] = t;
+									}
 									onHold = &pl->empty;
 								}
 								else {
@@ -308,8 +382,8 @@ void UI::update(void)
 					}
 				}
 				onHold = &pl->empty;
-				onHoldPosX = -1;
-				onHoldPosY = -1;
+				onHoldPosX = -9;
+				onHoldPosY = -9;
 			}
 		}
 
@@ -462,29 +536,59 @@ void UI::render(void)
 
 	IMAGEMANAGER->findImage("UI_HP")->render(35, UI_top+9 + (IMAGEMANAGER->findImage("UI_HP")->getHeight() *(1-(float)pl->Stat.curHP / (float)pl->Stat.maxHP)),0,IMAGEMANAGER->findImage("UI_HP")->getHeight() * (1.f-((float)pl->Stat.curHP/(float)pl->Stat.maxHP)),0, IMAGEMANAGER->findImage("UI_HP")->getHeight() * (float)pl->Stat.curHP/(float)pl->Stat.maxHP);
 	IMAGEMANAGER->findImage("UI_MP")->render(730, UI_top+9 + (IMAGEMANAGER->findImage("UI_MP")->getHeight() *(1 - (float)pl->Stat.curMP / (float)pl->Stat.maxMP)), 0, IMAGEMANAGER->findImage("UI_MP")->getHeight() * (1.f - ((float)pl->Stat.curMP / (float)pl->Stat.maxMP)), 0, IMAGEMANAGER->findImage("UI_MP")->getHeight() * (float)pl->Stat.curMP / (float)pl->Stat.maxMP);
-	if (pl->getQuick1().id > 0) {
-		sprintf(tmp, "소모_%d", pl->getQuick1().id);
-		IMAGEMANAGER->findImage(tmp)->render(q1.left+1,q1.top+1);
+	if (pl->getQuick1()->id > 0) {
+		sprintf(tmp, "소모_%d", pl->getQuick1()->id);
+		if (onHold->id == pl->getQuick1()->id) {
+			IMAGEMANAGER->findImage(tmp)->render(ptMouse.x - 10, ptMouse.y - 10);
+		}
+		else {
+			IMAGEMANAGER->findImage(tmp)->render(q1.left + 1, q1.top + 1);
+		}
 	}
-	if (pl->getQuick2().id > 0) {
-		sprintf(tmp, "소모_%d", pl->getQuick2().id);
-		IMAGEMANAGER->findImage(tmp)->render(q2.left + 1, q2.top + 1);
+	if (pl->getQuick2()->id > 0) {
+		sprintf(tmp, "소모_%d", pl->getQuick2()->id);
+		if (onHold->id == pl->getQuick2()->id) {
+			IMAGEMANAGER->findImage(tmp)->render(ptMouse.x - 10, ptMouse.y - 10);
+		}
+		else {
+			IMAGEMANAGER->findImage(tmp)->render(q2.left + 1, q2.top + 1);
+		}
 	}
-	if (pl->getQuick3().id > 0) {
-		sprintf(tmp, "소모_%d", pl->getQuick3().id);
-		IMAGEMANAGER->findImage(tmp)->render(q3.left + 1, q3.top + 1);
+	if (pl->getQuick3()->id > 0) {
+		sprintf(tmp, "소모_%d", pl->getQuick3()->id);
+		if (onHold->id == pl->getQuick3()->id) {
+			IMAGEMANAGER->findImage(tmp)->render(ptMouse.x - 10, ptMouse.y - 10);
+		}
+		else {
+			IMAGEMANAGER->findImage(tmp)->render(q3.left + 1, q3.top + 1);
+		}
 	}
-	if (pl->getQuick4().id > 0) {
-		sprintf(tmp, "소모_%d", pl->getQuick4().id);
-		IMAGEMANAGER->findImage(tmp)->render(q4.left + 1, q4.top + 1);
+	if (pl->getQuick4()->id > 0) {
+		sprintf(tmp, "소모_%d", pl->getQuick4()->id);
+		if (onHold->id == pl->getQuick4()->id) {
+			IMAGEMANAGER->findImage(tmp)->render(ptMouse.x - 10, ptMouse.y - 10);
+		}
+		else {
+			IMAGEMANAGER->findImage(tmp)->render(q4.left + 1, q4.top + 1);
+		}
 	}
-	if (pl->getQuick5().id > 0) {
-		sprintf(tmp, "소모_%d", pl->getQuick5().id);
+	if (pl->getQuick5()->id > 0) {
+		sprintf(tmp, "소모_%d", pl->getQuick5()->id);
+		if (onHold->id == pl->getQuick5()->id) {
+			IMAGEMANAGER->findImage(tmp)->render(ptMouse.x - 10, ptMouse.y - 10);
+		}
+	else {
 		IMAGEMANAGER->findImage(tmp)->render(q5.left + 1, q5.top + 1);
 	}
-	if (pl->getQuick6().id > 0) {
-		sprintf(tmp, "소모_%d", pl->getQuick6().id);
-		IMAGEMANAGER->findImage(tmp)->render(q6.left + 1, q6.top + 1);
+		}
+	if (pl->getQuick6()->id > 0) {
+		sprintf(tmp, "소모_%d", pl->getQuick6()->id);
+		if (onHold->id == pl->getQuick6()->id) {
+			IMAGEMANAGER->findImage(tmp)->render(ptMouse.x - 10, ptMouse.y - 10);
+		}
+		else {
+			IMAGEMANAGER->findImage(tmp)->render(q6.left + 1, q6.top + 1);
+		}
 	}
 	if (pl->getASkill() != nullptr) {
 		sprintf(tmp, "스킬_아이콘_%d", pl->getASkill()->skillInactive);
@@ -803,10 +907,12 @@ void UI::render(void)
 		case 1:								//소모품
 			for (vector<Item>::iterator i = pl->consume.begin(); i != pl->consume.end(); i++) {
 				if (i->id > 0) {
-					if (onHold->id>0&&i == (pl->consume.begin() + onHoldPosX + onHoldPosY * 8)) {
-						sprintf(tmp, "소모_%d", i->id);
-						IMAGEMANAGER->findImage(tmp)->render(ptMouse.x,ptMouse.y);
-						invcount++;
+					if (onHold->id>0&&(onHoldPosX>=0&&onHoldPosY>=0)){
+						if (i == (pl->consume.begin() + onHoldPosX + onHoldPosY * 8)) {
+							sprintf(tmp, "소모_%d", i->id);
+							IMAGEMANAGER->findImage(tmp)->render(ptMouse.x, ptMouse.y);
+							invcount++;
+						}
 					}
 					else {
 						sprintf(tmp, "소모_%d", i->id);
@@ -982,7 +1088,15 @@ void UI::render(void)
 		}
 	}
 	if (showPopup) {//팝업 보여주는거면
-		drawWindow(ptMouse.x, ptMouse.y, 200, 200);
+		int ankorX = 0;
+		int ankorY = 0;
+		if (ptMouse.x + 200 > WINSIZEX) {
+			ankorX = -200;
+		}
+		if (ptMouse.y + 200 > WINSIZEY) {
+			ankorY = -200;
+		}
+		drawWindow(ptMouse.x + ankorX, ptMouse.y+ankorY, 200, 200);
 		switch (popupItem->type) {
 		case item_weapon:
 			switch (popupItem->detail) {
@@ -1042,7 +1156,7 @@ void UI::render(void)
 		case item_consume:
 			sprintf(tmp, "소모_%d", popupItem->id);
 		}
-		IMAGEMANAGER->findImage(tmp)->render(ptMouse.x + 15, ptMouse.y + 15);
+		IMAGEMANAGER->findImage(tmp)->render(ptMouse.x + ankorX + 15, ptMouse.y + ankorY + 15);
 	}
 
 	IMAGEMANAGER->findImage("키보드_숏컷_1")->render(q1.left+1, q1.top+1);
@@ -1532,6 +1646,17 @@ void UI::renderdc(void)
 		//}
 	}
 	if (showPopup) {//팝업출력(아이템 이름등등
+
+
+		int ankorX = 0;
+		int ankorY = 0;
+		if (ptMouse.x + 200 > WINSIZEX) {
+			ankorX = -200;
+		}
+		if (ptMouse.y + 200 > WINSIZEY) {
+			ankorY = -200;
+		}
+
 		switch (popupItem->type) {
 		case item_weapon:
 		{
@@ -1540,7 +1665,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
+					&RectMake(ptMouse.x + ankorX + 60, ptMouse.y + ankorY + 15, 150, 28),
 					DT_LEFT | DT_TOP,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 				sprintf(test, "물리공격 +%d\n마법공격 +%d", popupItem->phydmgmin, popupItem->magdmgmin);
@@ -1548,7 +1673,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 50, 110, 25),
 					DT_LEFT,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1566,7 +1691,7 @@ void UI::renderdc(void)
 				NULL,
 				test,
 				-1,
-				&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
+				&RectMake(ptMouse.x + ankorX + 60, ptMouse.y + ankorY + 15, 150, 28),
 				DT_LEFT | DT_TOP,
 				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			if (popupItem->phydef > 0) {
@@ -1575,7 +1700,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 50, 110, 25),
 					DT_LEFT | DT_TOP,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1585,7 +1710,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 50, 110, 25),
 					DT_LEFT | DT_TOP,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1595,7 +1720,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 80, 110, 15),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 80, 110, 15),
 					DT_LEFT | DT_VCENTER,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1605,7 +1730,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 95, 110, 15),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 95, 110, 15),
 					DT_LEFT | DT_VCENTER,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1615,7 +1740,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 110, 110, 15),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 110, 110, 15),
 					DT_LEFT | DT_VCENTER,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1625,7 +1750,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 125, 110, 15),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 125, 110, 15),
 					DT_LEFT | DT_VCENTER,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1636,7 +1761,7 @@ void UI::renderdc(void)
 				NULL,
 				test,
 				-1,
-				&RectMake(ptMouse.x + 60, ptMouse.y + 15, 150, 28),
+				&RectMake(ptMouse.x + ankorX + 60, ptMouse.y + ankorY + 15, 150, 28),
 				DT_LEFT|DT_TOP,
 				D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			if (popupItem->gainHP > 0 && popupItem->gainMP > 0) {
@@ -1645,7 +1770,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 50, 110, 25),
 					DT_LEFT,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1655,7 +1780,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 50, 110, 25),
 					DT_LEFT,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1665,7 +1790,7 @@ void UI::renderdc(void)
 					NULL,
 					test,
 					-1,
-					&RectMake(ptMouse.x + 10, ptMouse.y + 50, 110, 25),
+					&RectMake(ptMouse.x + ankorX + 10, ptMouse.y + ankorY + 50, 110, 25),
 					DT_LEFT,
 					D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 			}
@@ -1677,14 +1802,14 @@ void UI::renderdc(void)
 			NULL,
 			test,
 			-1,
-			&RectMake(ptMouse.x, ptMouse.y+175, 190, 20),
+			&RectMake(ptMouse.x + ankorX, ptMouse.y + ankorY+175, 190, 20),
 			DT_RIGHT | DT_VCENTER,
 			D3DCOLOR_ARGB(0xff, 0x99, 0x99, 0x99));
 	}
 
-	if (pl->getQuick1().id > 0) {
-		if (pl->getQuick1().stack > 1) {	//2개이상만 출력
-			sprintf(test, "%d", pl->getQuick1().stack);
+	if (pl->getQuick1()->id > 0) {
+		if (pl->getQuick1()->stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick1()->stack);
 			d3dFont->DrawTextA(
 				NULL,
 				test,
@@ -1694,9 +1819,9 @@ void UI::renderdc(void)
 				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
-	if (pl->getQuick2().id > 0) {
-		if (pl->getQuick2().stack > 1) {	//2개이상만 출력
-			sprintf(test, "%d", pl->getQuick2().stack);
+	if (pl->getQuick2()->id > 0) {
+		if (pl->getQuick2()->stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick2()->stack);
 			d3dFont->DrawTextA(
 				NULL,
 				test,
@@ -1706,9 +1831,9 @@ void UI::renderdc(void)
 				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
-	if (pl->getQuick3().id > 0) {
-		if (pl->getQuick3().stack > 1) {	//2개이상만 출력
-			sprintf(test, "%d", pl->getQuick3().stack);
+	if (pl->getQuick3()->id > 0) {
+		if (pl->getQuick3()->stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick3()->stack);
 			d3dFont->DrawTextA(
 				NULL,
 				test,
@@ -1718,9 +1843,9 @@ void UI::renderdc(void)
 				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
-	if (pl->getQuick4().id > 0) {
-		if (pl->getQuick4().stack > 1) {	//2개이상만 출력
-			sprintf(test, "%d", pl->getQuick4().stack);
+	if (pl->getQuick4()->id > 0) {
+		if (pl->getQuick4()->stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick4()->stack);
 			d3dFont->DrawTextA(
 				NULL,
 				test,
@@ -1730,9 +1855,9 @@ void UI::renderdc(void)
 				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
-	if (pl->getQuick5().id > 0) {
-		if (pl->getQuick5().stack > 1) {	//2개이상만 출력
-			sprintf(test, "%d", pl->getQuick5().stack);
+	if (pl->getQuick5()->id > 0) {
+		if (pl->getQuick5()->stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick5()->stack);
 			d3dFont->DrawTextA(
 				NULL,
 				test,
@@ -1742,9 +1867,9 @@ void UI::renderdc(void)
 				D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 		}
 	}
-	if (pl->getQuick6().id > 0) {
-		if (pl->getQuick6().stack > 1) {	//2개이상만 출력
-			sprintf(test, "%d", pl->getQuick6().stack);
+	if (pl->getQuick6()->id > 0) {
+		if (pl->getQuick6()->stack > 1) {	//2개이상만 출력
+			sprintf(test, "%d", pl->getQuick6()->stack);
 			d3dFont->DrawTextA(
 				NULL,
 				test,

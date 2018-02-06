@@ -108,7 +108,7 @@ HRESULT mainGame::init(void)
 	loriendeep->setPlayer(pl);
 	loriendeep->init();
 
-	pl->setCurScene(mirkwood);/////////////////////////////////////////////////현재맵설정
+	pl->setCurScene(seriaRoom);/////////////////////////////////////////////////현재맵설정
 	pl->init();
 
 
@@ -126,7 +126,7 @@ HRESULT mainGame::init(void)
 
 
 	dunselected = -1;
-	onOpening = false;///////////////////////////////////////////////////오프닝플레이
+	onOpening = true;///////////////////////////////////////////////////오프닝플레이
 	openingPhase = 0;
 	openingTick = 0;
 
@@ -372,7 +372,7 @@ HRESULT mainGame::init(void)
 	 }
 #pragma endregion 판금의 모든 인벤토리 아이템 이미지 저장
 	 
-	 #pragma region 아이템 - 무기
+	 #pragma region 아이템 아이콘 - 무기
 	 for (int i = 0; i < 169; i++) {
 		 if (i < 160) {
 			 sprintf(tmp2, "sprites/item/icons/sswd.img/%d.png", i);
@@ -385,7 +385,7 @@ HRESULT mainGame::init(void)
 	 }
 #pragma endregion 소검, 도 만 추가
 	 
-	 #pragma region 아이템 - 악세서리
+	 #pragma region 아이템 아이콘 - 악세서리
 	 for (int i = 0; i < 197; i++) {
 		 sprintf(tmp2, "sprites/item/icons/bracelet.img/%d.png", i);
 		 sprintf(tmp, "팔찌_%d", i);
@@ -403,7 +403,7 @@ HRESULT mainGame::init(void)
 	 }
 #pragma endregion 팔찌, 반지, 목걸이
 	 
-	 #pragma region 소모품
+	 #pragma region 소모품 아이콘
 	 for (int i = 0; i < 30; i++) {
 		 sprintf(tmp2, "sprites/item/icons/consumption.img/%d.png", i);
 		 sprintf(tmp, "소모_%d", i);
@@ -464,15 +464,7 @@ HRESULT mainGame::init(void)
 	 IMAGEMANAGER->addImage("UI_HP", "sprites/UI/hud.img/1.png");
 	 IMAGEMANAGER->addImage("UI_MP", "sprites/UI/hud.img/2.png");
 
-
-	 //IMAGEMANAGER->addImage("UI_구입_기본", "sprites/UI/hud.img/2.png");
-	 //IMAGEMANAGER->addImage("UI_구입_오버", "sprites/UI/hud.img/2.png");
-	 //IMAGEMANAGER->addImage("UI_구입_클릭", "sprites/UI/hud.img/2.png");
-	 //IMAGEMANAGER->addImage("UI_확인_", "sprites/UI/hud.img/2.png");
-
-
 	 IMAGEMANAGER->addImage("UI_상점_슬롯", "sprites/UI/shop_slot.img/0.png");
-	 //IMAGEMANAGER->addImage("UI_상점_슬롯", "sprites/UI/shop_slot.img/0.png");
 
 
 
@@ -485,9 +477,7 @@ HRESULT mainGame::init(void)
 	 IMAGEMANAGER->addImage("UI_인벤토리_활성탭", "sprites/UI/windowcommon.img/31.png");
 	 IMAGEMANAGER->addImage("UI_인벤토리_비활성탭", "sprites/UI/windowcommon.img/29.png");
 	 IMAGEMANAGER->addImage("UI_인벤토리_장비베이스", "sprites/UI/inventory.img/21.png");
-	 //IMAGEMANAGER->addImage("UI_인벤토리_아이템_라인베이스", "sprites/UI/inventory.img/39.png");
 	 IMAGEMANAGER->addImage("UI_인벤토리_아이템_개별", "sprites/UI/inventory.img/49.png");
-	 //IMAGEMANAGER->addImage("UI_인벤토리_기본창", "sprites/UI/inventory.img/0.png");
 	 for (int i = 0; i < 9; i++) {
 		 sprintf(tmp2, "sprites/UI/windowcommon.img/%d.png", i);
 		 sprintf(tmp, "창_%d", i);
@@ -571,6 +561,23 @@ HRESULT mainGame::init(void)
 			 sprintf(tmp, "키보드_숏컷_T");
 			 IMAGEMANAGER->addImage(tmp, tmp2);
 		 }
+
+	 IMAGEMANAGER->addImage("UI_몬스터_일반_체력바_배경", "sprites/UI/monster_hp.img/1.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_일반_체력바_빨강", "sprites/UI/monster_hp.img/2.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_일반_체력바_뒤뚜껑", "sprites/UI/monster_hp.img/8.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_엘리트_체력바_배경", "sprites/UI/monster_hp.img/9.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_엘리트_체력바_뒤뚜껑", "sprites/UI/monster_hp.img/10.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_보스_체력바_배경", "sprites/UI/monster_hp.img/11.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_보스_체력바_배경", "sprites/UI/monster_hp.img/12.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_보스_체력바_빨강_조각", "sprites/UI/monster_hp.img/13.png");
+
+	 IMAGEMANAGER->addImage("UI_몬스터_얼굴_고블린", "sprites/monster/faces/0.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_얼굴_고블린투석", "sprites/monster/faces/4.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_얼굴_타우아미", "sprites/monster/faces/15.png");
+	 IMAGEMANAGER->addImage("UI_몬스터_얼굴_타우어설트", "sprites/monster/faces/18.png");
+
+
+
 #pragma endregion
 
 	 #pragma region 몬스터
@@ -626,6 +633,8 @@ HRESULT mainGame::init(void)
 		 IMAGEMANAGER->addImage(tmp, tmp2);
 	 }
 	 
+	 
+
 	 //타우
 	 for (int i = 0; i < 31; i++) {
 		 sprintf(tmp2, "sprites/monster/tau/sprite_monster_tau/body07.img/%d.png", i);
@@ -654,7 +663,7 @@ HRESULT mainGame::init(void)
 	 }
 #pragma endregion 고블린, 타우
 
-	 #pragma region 맵선택
+	 #pragma region 맵 선택
 	 IMAGEMANAGER->addImage("던전_선택_표시", "sprites/cutscene/onselect/selectdungeon02.img/0.png");
 	 IMAGEMANAGER->addImage("던전_선택_배경", "sprites/cutscene/onselect/granfloris.img/0.png");
 	 IMAGEMANAGER->addImage("던전_선택_로리엔", "sprites/cutscene/onselect/elvengard.img/0.png");
@@ -984,6 +993,16 @@ HRESULT mainGame::init(void)
 
 	 ///기타 이미지
 
+	 //던전 이름 이미지
+	 for (int i = 0; i < 14; i++) {
+		 sprintf(tmp2, "sprites/maps/dungeons/mirkwood/lorien.img/%d.png", i);
+		 sprintf(tmp, "던전_로리엔_이름_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+		 sprintf(tmp2, "sprites/maps/dungeons/lorieninside/lorieninside.img/%d.png", i);
+		 sprintf(tmp, "던전_로리엔안쪽_이름_%d", i);
+		 IMAGEMANAGER->addImage(tmp, tmp2);
+	 }
+
 	 //마우스 포인터
 	 IMAGEMANAGER->addImage("마우스_기본", "sprites/UI/cursor.img/0.png");
 	 IMAGEMANAGER->addImage("마우스_클릭", "sprites/UI/cursor.img/1.png");
@@ -1192,9 +1211,9 @@ HRESULT mainGame::init(void)
 		 if (1090 <= openingTick && openingTick < 1120) {
 			 IMAGEMANAGER->findImage("오프닝_붓_4")->DFpointrender(153, 208, 0, 0);
 		 }
-		 if (1060 < openingTick&&openingTick<1076) {
-			 IMAGEMANAGER->findImage("오프닝_등급")->DFpointrender(0, 0, 0, 0,1.f,(255.f * ((1076.f - (float)openingTick)*16.f -1)));
-		 }
+		 //if (1060 < openingTick&&openingTick<1120) {
+			// IMAGEMANAGER->findImage("오프닝_등급")->DFpointrender(0, 0, 0, 0,1.f,(255.f * ((1120.f - (float)openingTick)*4.f -1)));
+		 //}
 		 if (1120 <= openingTick&&openingTick<=1800) {
 			 IMAGEMANAGER->findImage("오프닝_붓_4")->DFpointrender(153, 208, 0, 0);
 			 IMAGEMANAGER->findImage("오프닝_등급")->render();
